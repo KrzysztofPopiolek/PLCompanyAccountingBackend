@@ -19,6 +19,7 @@ public class BusinessEvent {
 
     @Column(name = "Description of economic event - C.6", nullable = false)
     private String descriptionEconomicEvent;
+    
     @Column(name = "Events notes/comments - C.17")
     private String eventNotesComments;
 
