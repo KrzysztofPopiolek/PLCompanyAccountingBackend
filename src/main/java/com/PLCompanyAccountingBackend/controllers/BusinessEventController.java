@@ -15,8 +15,8 @@ public class BusinessEventController {
     @Autowired
     private BusinessEventRepository businessEventRepository;
 
-    @GetMapping("/businessEventController")
-    public List<BusinessEvent> getAllBusinessEvents(){
+    @GetMapping("/getAllBusinessEvents")
+    public List<BusinessEvent> getAllBusinessEvents() {
         return businessEventRepository.findAll();
     }
 }
