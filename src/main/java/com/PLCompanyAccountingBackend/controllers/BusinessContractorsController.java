@@ -15,7 +15,7 @@ public class BusinessContractorsController {
     @Autowired
     private BusinessContractorsRepository businessContractorsRepository;
 
-    @GetMapping("/businessContractorsController")
+    @GetMapping("/getAllBusinessContractors")
     public List<BusinessContractors> getAllBusinessContractors() {
         return businessContractorsRepository.findAll();
     }
