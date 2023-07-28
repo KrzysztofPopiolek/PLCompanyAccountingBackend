@@ -10,10 +10,10 @@ public class PurchaseGoodsServices {
     private Long id;
 
     @Column(name = "Purchase goods and services - C.10")
-    private String purchaseGoodsServices;
+    private Double purchaseGoodsServices;
 
     public PurchaseGoodsServices(){}
-    public PurchaseGoodsServices(String purchaseGoodsServices) {
+    public PurchaseGoodsServices(Double purchaseGoodsServices) {
         this.purchaseGoodsServices = purchaseGoodsServices;
     }
 
@@ -21,11 +21,11 @@ public class PurchaseGoodsServices {
         return id;
     }
 
-    public String getPurchaseGoodsServices() {
+    public Double getPurchaseGoodsServices() {
         return purchaseGoodsServices;
     }
 
-    public void setPurchaseGoodsServices(String purchaseGoodsServices) {
+    public void setPurchaseGoodsServices(Double purchaseGoodsServices) {
         this.purchaseGoodsServices = purchaseGoodsServices;
     }
 }

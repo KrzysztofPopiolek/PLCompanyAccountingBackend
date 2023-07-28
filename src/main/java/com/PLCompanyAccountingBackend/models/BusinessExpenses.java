@@ -2,6 +2,8 @@ package com.PLCompanyAccountingBackend.models;
 
 import jakarta.persistence.*;
 
+import java.util.Currency;
+
 @Entity
 @Table(name = "BusinessExpenses")
 public class BusinessExpenses {
@@ -10,58 +12,53 @@ public class BusinessExpenses {
     private Long id;
 
     @Column(name = "Remuneration - C.12")
-    private String remuneration;
+    private Double remuneration;
 
     @Column(name = "Other expenses - C.13")
-    private String otherExpenses;
+    private Double otherExpenses;
     @Column(name = "Total expenses - C.14")
-    private String totalExpenses;
+    private Double totalExpenses;
     @Column(name = "Financial economic issues - C.15")
-    private String financialEconomicIssues;
+    private Double financialEconomicIssues;
 
     public BusinessExpenses() {
     }
 
-    public BusinessExpenses(String remuneration, String otherExpenses, String totalExpenses, String financialEconomicIssues) {
-        this.remuneration = remuneration;
-        this.otherExpenses = otherExpenses;
-        this.totalExpenses = totalExpenses;
-        this.financialEconomicIssues = financialEconomicIssues;
-    }
+
 
     public Long getId() {
         return id;
     }
 
-    public String getRemuneration() {
+    public Double getRemuneration() {
         return remuneration;
     }
 
-    public String getOtherExpenses() {
-        return otherExpenses;
-    }
-
-    public String getTotalExpenses() {
-        return totalExpenses;
-    }
-
-    public String getFinancialEconomicIssues() {
-        return financialEconomicIssues;
-    }
-
-    public void setRemuneration(String remuneration) {
+    public void setRemuneration(Double remuneration) {
         this.remuneration = remuneration;
     }
 
-    public void setOtherExpenses(String otherExpenses) {
+    public Double getOtherExpenses() {
+        return otherExpenses;
+    }
+
+    public void setOtherExpenses(Double otherExpenses) {
         this.otherExpenses = otherExpenses;
     }
 
-    public void setTotalExpenses(String totalExpenses) {
+    public Double getTotalExpenses() {
+        return totalExpenses;
+    }
+
+    public void setTotalExpenses(Double totalExpenses) {
         this.totalExpenses = totalExpenses;
     }
 
-    public void setFinancialEconomicIssues(String financialEconomicIssues) {
+    public Double getFinancialEconomicIssues() {
+        return financialEconomicIssues;
+    }
+
+    public void setFinancialEconomicIssues(Double financialEconomicIssues) {
         this.financialEconomicIssues = financialEconomicIssues;
     }
 }

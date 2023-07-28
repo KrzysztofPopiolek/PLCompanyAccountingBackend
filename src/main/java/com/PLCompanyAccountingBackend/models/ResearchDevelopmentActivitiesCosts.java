@@ -9,11 +9,11 @@ public class ResearchDevelopmentActivitiesCosts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "Research and development activities costs - C.16")
-    private String researchDevelopmentActivitiesCosts;
+    private Double researchDevelopmentActivitiesCosts;
 
     public ResearchDevelopmentActivitiesCosts(){}
 
-    public ResearchDevelopmentActivitiesCosts(String researchDevelopmentActivitiesCosts) {
+    public ResearchDevelopmentActivitiesCosts(Double researchDevelopmentActivitiesCosts) {
         this.researchDevelopmentActivitiesCosts = researchDevelopmentActivitiesCosts;
     }
 
@@ -21,11 +21,11 @@ public class ResearchDevelopmentActivitiesCosts {
         return id;
     }
 
-    public String getResearchDevelopmentActivitiesCosts() {
+    public Double getResearchDevelopmentActivitiesCosts() {
         return researchDevelopmentActivitiesCosts;
     }
 
-    public void setResearchDevelopmentActivitiesCosts(String researchDevelopmentActivitiesCosts) {
+    public void setResearchDevelopmentActivitiesCosts(Double researchDevelopmentActivitiesCosts) {
         this.researchDevelopmentActivitiesCosts = researchDevelopmentActivitiesCosts;
     }
 }

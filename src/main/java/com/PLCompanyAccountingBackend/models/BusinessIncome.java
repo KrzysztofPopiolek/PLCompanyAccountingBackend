@@ -10,18 +10,18 @@ public class BusinessIncome {
     private Long id;
 
     @Column(name = "Sale value - C.7")
-    private String saleValue;
+    private Double saleValue;
 
     @Column(name = "Other income - C.8")
-    private String otherIncome;
+    private Double otherIncome;
 
     @Column(name = "Total revenue - C.9", nullable = false)
-    private String totalRevenue;
+    private Double totalRevenue;
 
     public BusinessIncome() {
     }
 
-    public BusinessIncome(String saleValue, String otherIncome, String totalRevenue) {
+    public BusinessIncome(Double saleValue, Double otherIncome, Double totalRevenue) {
         this.saleValue = saleValue;
         this.otherIncome = otherIncome;
         this.totalRevenue = totalRevenue;
@@ -31,27 +31,27 @@ public class BusinessIncome {
         return this.id;
     }
 
-    public String getSaleValue() {
+    public Double getSaleValue() {
         return this.saleValue;
     }
 
-    public void setSaleValue(String saleValue) {
+    public void setSaleValue(Double saleValue) {
         this.saleValue = saleValue;
     }
 
-    public String getOtherIncome() {
+    public Double getOtherIncome() {
         return this.otherIncome;
     }
 
-    public void setOtherIncome(String otherIncome) {
+    public void setOtherIncome(Double otherIncome) {
         this.otherIncome = otherIncome;
     }
 
-    public String getTotalRevenue() {
+    public Double getTotalRevenue() {
         return this.totalRevenue;
     }
 
-    public void setTotalRevenue(String totalRevenue) {
+    public void setTotalRevenue(Double totalRevenue) {
         this.totalRevenue = totalRevenue;
     }
 }

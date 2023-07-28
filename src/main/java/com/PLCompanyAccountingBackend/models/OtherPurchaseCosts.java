@@ -10,12 +10,12 @@ public class OtherPurchaseCosts {
     private Long id;
 
     @Column(name = "Other purchase costs - C.11")
-    private String otherPurchaseCosts;
+    private Double otherPurchaseCosts;
 
     public OtherPurchaseCosts() {
     }
 
-    public OtherPurchaseCosts(String otherPurchaseCosts) {
+    public OtherPurchaseCosts(Double otherPurchaseCosts) {
         this.otherPurchaseCosts = otherPurchaseCosts;
     }
 
@@ -23,11 +23,11 @@ public class OtherPurchaseCosts {
         return id;
     }
 
-    public String getOtherPurchaseCosts() {
+    public Double getOtherPurchaseCosts() {
         return otherPurchaseCosts;
     }
 
-    public void setOtherPurchaseCosts(String otherPurchaseCosts) {
+    public void setOtherPurchaseCosts(Double otherPurchaseCosts) {
         this.otherPurchaseCosts = otherPurchaseCosts;
     }
 }
