@@ -9,7 +9,7 @@ import java.util.Date;
 public class BusinessEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "Date of economic event - C.2", nullable = false)
     private Date dateEconomicEvent;
@@ -33,7 +33,7 @@ public class BusinessEvent {
         this.eventNotesComments = eventNotesComments;
     }
 
-    public int getId() {
+    public Long getId() {
         return this.id;
     }
 
