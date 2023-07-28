@@ -9,10 +9,10 @@ public class BusinessContractors {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Business/Contractors name - C.4", nullable = false)
+    @Column(name = "Business/Contractors name - C.4")
     private String businessContractorsName;
 
-    @Column(name = "Business/Contractors address - C.5", nullable = false)
+    @Column(name = "Business/Contractors address - C.5")
     private String businessContractorsAddress;
 
     public BusinessContractors() {
