@@ -37,7 +37,7 @@ public class BusinessExpensesController {
         businessExpensesRepository.deleteById(id);
     }
     @PutMapping("/editBusinessExpenses/{id}")
-    BusinessExpenses editBusinessExpenses(@RequestBody BusinessExpenses newBusinessExpenses, @PathVariable Long id) {
+    BusinessExpenses editBusinessExpense(@RequestBody BusinessExpenses newBusinessExpenses, @PathVariable Long id) {
         return businessExpensesRepository.findById(id).map(
                 businessExpenses -> {
                     businessExpenses.setRemuneration(newBusinessExpenses.getRemuneration());
