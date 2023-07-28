@@ -27,7 +27,7 @@ public class BusinessExpensesController {
         return ResponseEntity.ok(businessExpenses);
     }
 
-    @PostMapping("/addBusinessExpenses")
+    @PostMapping("/addBusinessExpense")
     public BusinessExpenses addBusinessExpenses(@RequestBody BusinessExpenses businessExpenses) {
         return businessExpensesRepository.save(businessExpenses);
     }
