@@ -28,7 +28,7 @@ public class BusinessExpensesController {
     }
 
     @PostMapping("/addBusinessExpense")
-    public BusinessExpenses addBusinessExpenses(@RequestBody BusinessExpenses businessExpenses) {
+    public BusinessExpenses addBusinessExpense(@RequestBody BusinessExpenses businessExpenses) {
         return businessExpensesRepository.save(businessExpenses);
     }
 
