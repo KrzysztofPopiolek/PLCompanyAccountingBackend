@@ -21,7 +21,7 @@ public class BusinessExpensesController {
         return businessExpensesRepository.findAll();
     }
 
-    @GetMapping("/getBusinessExpenses/{id}")
+    @GetMapping("/getBusinessExpense/{id}")
     public ResponseEntity<BusinessExpenses> getBusinessExpensesById(@PathVariable Long id) {
         BusinessExpenses businessExpenses = businessExpensesRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
         return ResponseEntity.ok(businessExpenses);
