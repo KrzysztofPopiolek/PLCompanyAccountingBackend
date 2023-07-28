@@ -32,7 +32,7 @@ public class BusinessExpensesController {
         return businessExpensesRepository.save(businessExpenses);
     }
 
-    @DeleteMapping("/deleteBusinessExpenses/{id}")
+    @DeleteMapping("/deleteBusinessExpense/{id}")
     public void deleteBusinessExpenses(@PathVariable Long id) {
         businessExpensesRepository.deleteById(id);
     }
