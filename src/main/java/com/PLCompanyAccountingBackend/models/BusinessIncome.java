@@ -15,7 +15,7 @@ public class BusinessIncome {
     @Column(name = "Other income - C.8")
     private String otherIncome;
 
-    @Column(name = "Total revenue - C.9")
+    @Column(name = "Total revenue - C.9", nullable = false)
     private String totalRevenue;
 
     public BusinessIncome() {
