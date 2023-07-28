@@ -1,13 +1,14 @@
 package com.PLCompanyAccountingBackend.controllers;
 
+import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.BusinessEvent;
 import com.PLCompanyAccountingBackend.repository.BusinessEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/v_1/")
@@ -19,4 +20,34 @@ public class BusinessEventController {
     public List<BusinessEvent> getAllBusinessEvents() {
         return businessEventRepository.findAll();
     }
+
+    @GetMapping("/getBusinessEvent/{id}")
+    public ResponseEntity<BusinessEvent> getBusinessEventById(@PathVariable Long id) {
+        BusinessEvent businessEvent = businessEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Event not found!"));
+        return ResponseEntity.ok(businessEvent);
+    }
+
+    @PostMapping("/addBusinessEvent")
+    public BusinessEvent addBusinessEvent(@RequestBody BusinessEvent businessEvent) {
+        return businessEventRepository.save(businessEvent);
+    }
+
+    @DeleteMapping("/deleteBusinessEvent/{id}")
+    public void deleteBusinessEvent(@PathVariable Long id) {
+        businessEventRepository.deleteById(id);
+    }
+
+    @PutMapping("/editBusinessEvent/{id}")
+    BusinessEvent editBusinessEvent(@RequestBody BusinessEvent newBusinessEvent, @PathVariable Long id) {
+        return businessEventRepository.findById(id).map(
+                businessEvent -> {
+                    businessEvent.setDateEconomicEvent(newBusinessEvent.getDateEconomicEvent());
+                    businessEvent.setAccountingDocumentNumber(newBusinessEvent.getAccountingDocumentNumber());
+                    businessEvent.setDescriptionEconomicEvent(newBusinessEvent.getDescriptionEconomicEvent());
+                    businessEvent.setEventNotesComments(newBusinessEvent.getEventNotesComments());
+                    return businessEventRepository.save(businessEvent);
+                }
+        ).orElseThrow(() -> new ResourceNotFoundException("Business event not found!"));
+    }
+
 }

@@ -9,7 +9,7 @@ import java.util.Date;
 public class BusinessContractors {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "Business/Contractors name - C.4", nullable = false)
     private String businessContractorsName;
@@ -25,7 +25,7 @@ public class BusinessContractors {
         this.businessContractorsAddress = businessContractorsAddress;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
