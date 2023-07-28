@@ -33,7 +33,7 @@ public class BusinessExpensesController {
     }
 
     @DeleteMapping("/deleteBusinessExpense/{id}")
-    public void deleteBusinessExpenses(@PathVariable Long id) {
+    public void deleteBusinessExpense(@PathVariable Long id) {
         businessExpensesRepository.deleteById(id);
     }
     @PutMapping("/editBusinessExpenses/{id}")
