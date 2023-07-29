@@ -33,7 +33,12 @@ public class BusinessEventController {
 
     @DeleteMapping("/deleteBusinessEvent/{id}")
     public void deleteBusinessEvent(@PathVariable Long id) {
-        businessEventRepository.deleteById(id);
+
+        if (businessEventRepository.existsById(id)) {
+            businessEventRepository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("Item not found!");
+        }
     }
 
     @PutMapping("/editBusinessEvent/{id}")

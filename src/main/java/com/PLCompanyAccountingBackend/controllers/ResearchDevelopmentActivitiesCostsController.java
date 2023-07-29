@@ -33,7 +33,11 @@ public class ResearchDevelopmentActivitiesCostsController {
 
     @DeleteMapping("/deleteResearchDevelopmentActivitiesCosts/{id}")
     public void deleteResearchDevelopmentActivitiesCosts(@PathVariable Long id) {
-        researchDevelopmentActivitiesCostsRepository.deleteById(id);
+        if (researchDevelopmentActivitiesCostsRepository.existsById(id)) {
+            researchDevelopmentActivitiesCostsRepository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("Item not found!");
+        }
     }
 
     @PutMapping("/editResearchDevelopmentActivitiesCosts/{id}")

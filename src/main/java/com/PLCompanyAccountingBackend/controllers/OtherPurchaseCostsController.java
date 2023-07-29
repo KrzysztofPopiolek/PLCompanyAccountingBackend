@@ -19,11 +19,13 @@ public class OtherPurchaseCostsController {
     public List<OtherPurchaseCosts> getAllOtherPurchaseCosts() {
         return otherPurchaseCostsRepository.findAll();
     }
+
     @GetMapping("/getOtherPurchaseCosts/{id}")
     public ResponseEntity<OtherPurchaseCosts> getOtherPurchaseCostsById(@PathVariable Long id) {
         OtherPurchaseCosts otherPurchaseCosts = otherPurchaseCostsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
         return ResponseEntity.ok(otherPurchaseCosts);
     }
+
     @PostMapping("/addOtherPurchaseCosts")
     public OtherPurchaseCosts addOtherPurchaseCosts(@RequestBody OtherPurchaseCosts otherPurchaseCosts) {
         return otherPurchaseCostsRepository.save(otherPurchaseCosts);
@@ -31,7 +33,11 @@ public class OtherPurchaseCostsController {
 
     @DeleteMapping("/deleteOtherPurchaseCosts/{id}")
     public void deleteOtherPurchaseCosts(@PathVariable Long id) {
-        otherPurchaseCostsRepository.deleteById(id);
+        if (otherPurchaseCostsRepository.existsById(id)) {
+            otherPurchaseCostsRepository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("Item not found!");
+        }
     }
 
     @PutMapping("/editOtherPurchaseCosts/{id}")

@@ -33,7 +33,12 @@ public class PurchaseGoodsServicesController {
 
     @DeleteMapping("/deletePurchaseGoodsServices/{id}")
     public void deletePurchaseGoodsServices(@PathVariable Long id) {
-        purchaseGoodsServicesRepository.deleteById(id);
+
+        if (purchaseGoodsServicesRepository.existsById(id)){
+            purchaseGoodsServicesRepository.deleteById(id);
+        }else {
+            throw new ResourceNotFoundException("Item not found!");
+        }
     }
 
     @PutMapping("/editPurchaseGoodsServices/{id}")

@@ -34,8 +34,14 @@ public class BusinessExpensesController {
 
     @DeleteMapping("/deleteBusinessExpense/{id}")
     public void deleteBusinessExpense(@PathVariable Long id) {
-        businessExpensesRepository.deleteById(id);
+
+        if (businessExpensesRepository.existsById(id)) {
+            businessExpensesRepository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("Item not found!");
+        }
     }
+
     @PutMapping("/editBusinessExpenses/{id}")
     BusinessExpenses editBusinessExpense(@RequestBody BusinessExpenses newBusinessExpenses, @PathVariable Long id) {
         return businessExpensesRepository.findById(id).map(

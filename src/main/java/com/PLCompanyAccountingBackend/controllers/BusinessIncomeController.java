@@ -34,7 +34,11 @@ public class BusinessIncomeController {
 
     @DeleteMapping("/deleteBusinessIncome/{id}")
     public void deleteBusinessIncome(@PathVariable Long id) {
-        businessIncomeRepository.deleteById(id);
+        if (businessIncomeRepository.existsById(id)) {
+            businessIncomeRepository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("Item not found!");
+        }
     }
 
     @PutMapping("/editBusinessIncome/{id}")
