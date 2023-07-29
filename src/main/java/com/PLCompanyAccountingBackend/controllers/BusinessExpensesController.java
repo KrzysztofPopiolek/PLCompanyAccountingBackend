@@ -21,23 +21,23 @@ public class BusinessExpensesController {
         return businessExpensesRepository.findAll();
     }
 
-    @GetMapping("/getBusinessExpenses/{id}")
+    @GetMapping("/getBusinessExpense/{id}")
     public ResponseEntity<BusinessExpenses> getBusinessExpensesById(@PathVariable Long id) {
         BusinessExpenses businessExpenses = businessExpensesRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
         return ResponseEntity.ok(businessExpenses);
     }
 
-    @PostMapping("/addBusinessExpenses")
-    public BusinessExpenses addBusinessExpenses(@RequestBody BusinessExpenses businessExpenses) {
+    @PostMapping("/addBusinessExpense")
+    public BusinessExpenses addBusinessExpense(@RequestBody BusinessExpenses businessExpenses) {
         return businessExpensesRepository.save(businessExpenses);
     }
 
-    @DeleteMapping("/deleteBusinessExpenses/{id}")
-    public void deleteBusinessExpenses(@PathVariable Long id) {
+    @DeleteMapping("/deleteBusinessExpense/{id}")
+    public void deleteBusinessExpense(@PathVariable Long id) {
         businessExpensesRepository.deleteById(id);
     }
     @PutMapping("/editBusinessExpenses/{id}")
-    BusinessExpenses editBusinessExpenses(@RequestBody BusinessExpenses newBusinessExpenses, @PathVariable Long id) {
+    BusinessExpenses editBusinessExpense(@RequestBody BusinessExpenses newBusinessExpenses, @PathVariable Long id) {
         return businessExpensesRepository.findById(id).map(
                 businessExpenses -> {
                     businessExpenses.setRemuneration(newBusinessExpenses.getRemuneration());
