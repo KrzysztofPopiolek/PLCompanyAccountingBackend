@@ -23,7 +23,7 @@ public class BusinessIncomeController {
 
     @GetMapping("/getBusinessIncome/{id}")
     public ResponseEntity<BusinessIncome> getBusinessIncomeById(@PathVariable Long id) {
-        BusinessIncome businessIncome = businessIncomeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Event not found!"));
+        BusinessIncome businessIncome = businessIncomeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
         return ResponseEntity.ok(businessIncome);
     }
 

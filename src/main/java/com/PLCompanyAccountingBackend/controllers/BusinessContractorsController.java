@@ -22,7 +22,7 @@ public class BusinessContractorsController {
 
     @GetMapping("/getBusinessContractor/{id}")
     public ResponseEntity<BusinessContractors> getBusinessContractorById(@PathVariable Long id) {
-        BusinessContractors businessContractor = businessContractorsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Event not found!"));
+        BusinessContractors businessContractor = businessContractorsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
         return ResponseEntity.ok(businessContractor);
     }
 

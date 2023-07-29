@@ -2,6 +2,8 @@ package com.PLCompanyAccountingBackend.models;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "BusinessIncome")
 public class BusinessIncome {
@@ -10,18 +12,18 @@ public class BusinessIncome {
     private Long id;
 
     @Column(name = "Sale value - C.7")
-    private String saleValue;
+    private BigDecimal saleValue;
 
     @Column(name = "Other income - C.8")
-    private String otherIncome;
+    private BigDecimal otherIncome;
 
     @Column(name = "Total revenue - C.9", nullable = false)
-    private String totalRevenue;
+    private BigDecimal totalRevenue;
 
     public BusinessIncome() {
     }
 
-    public BusinessIncome(String saleValue, String otherIncome, String totalRevenue) {
+    public BusinessIncome(BigDecimal saleValue, BigDecimal otherIncome, BigDecimal totalRevenue) {
         this.saleValue = saleValue;
         this.otherIncome = otherIncome;
         this.totalRevenue = totalRevenue;
@@ -31,27 +33,27 @@ public class BusinessIncome {
         return this.id;
     }
 
-    public String getSaleValue() {
+    public BigDecimal getSaleValue() {
         return this.saleValue;
     }
 
-    public void setSaleValue(String saleValue) {
+    public void setSaleValue(BigDecimal saleValue) {
         this.saleValue = saleValue;
     }
 
-    public String getOtherIncome() {
+    public BigDecimal getOtherIncome() {
         return this.otherIncome;
     }
 
-    public void setOtherIncome(String otherIncome) {
+    public void setOtherIncome(BigDecimal otherIncome) {
         this.otherIncome = otherIncome;
     }
 
-    public String getTotalRevenue() {
+    public BigDecimal getTotalRevenue() {
         return this.totalRevenue;
     }
 
-    public void setTotalRevenue(String totalRevenue) {
+    public void setTotalRevenue(BigDecimal totalRevenue) {
         this.totalRevenue = totalRevenue;
     }
 }
