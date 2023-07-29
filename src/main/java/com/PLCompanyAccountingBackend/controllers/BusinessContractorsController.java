@@ -33,8 +33,16 @@ public class BusinessContractorsController {
 
     @DeleteMapping("/deleteBusinessContractor/{id}")
     public void deleteBusinessContractor(@PathVariable Long id) {
-        businessContractorsRepository.deleteById(id);
+
+        if (businessContractorsRepository.existsById(id)) {
+            businessContractorsRepository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("Item not found!");
+        }
+//        businessContractorsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Item not found!"));
+//        businessContractorsRepository.deleteById(id);
     }
+
     @PutMapping("/editBusinessContractor/{id}")
     BusinessContractors editBusinessContractor(@RequestBody BusinessContractors newBusinessContractor, @PathVariable Long id) {
         return businessContractorsRepository.findById(id).map(

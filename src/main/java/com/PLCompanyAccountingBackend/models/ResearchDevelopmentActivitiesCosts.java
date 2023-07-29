@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "ResearchDevelopmentActivitiesCosts")
+
+// Wydatki na działalność badawczo-rozwojową (B+R)
 public class ResearchDevelopmentActivitiesCosts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
