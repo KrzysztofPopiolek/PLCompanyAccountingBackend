@@ -2,6 +2,8 @@ package com.PLCompanyAccountingBackend.models;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "ResearchDevelopmentActivitiesCosts")
 public class ResearchDevelopmentActivitiesCosts {
@@ -9,11 +11,12 @@ public class ResearchDevelopmentActivitiesCosts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "Research and development activities costs - C.16")
-    private Double researchDevelopmentActivitiesCosts;
+    private BigDecimal researchDevelopmentActivitiesCosts;
 
-    public ResearchDevelopmentActivitiesCosts(){}
+    public ResearchDevelopmentActivitiesCosts() {
+    }
 
-    public ResearchDevelopmentActivitiesCosts(Double researchDevelopmentActivitiesCosts) {
+    public ResearchDevelopmentActivitiesCosts(BigDecimal researchDevelopmentActivitiesCosts) {
         this.researchDevelopmentActivitiesCosts = researchDevelopmentActivitiesCosts;
     }
 
@@ -21,11 +24,11 @@ public class ResearchDevelopmentActivitiesCosts {
         return id;
     }
 
-    public Double getResearchDevelopmentActivitiesCosts() {
+    public BigDecimal getResearchDevelopmentActivitiesCosts() {
         return researchDevelopmentActivitiesCosts;
     }
 
-    public void setResearchDevelopmentActivitiesCosts(Double researchDevelopmentActivitiesCosts) {
+    public void setResearchDevelopmentActivitiesCosts(BigDecimal researchDevelopmentActivitiesCosts) {
         this.researchDevelopmentActivitiesCosts = researchDevelopmentActivitiesCosts;
     }
 }

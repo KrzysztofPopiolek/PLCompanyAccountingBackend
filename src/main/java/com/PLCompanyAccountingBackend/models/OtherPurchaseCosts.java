@@ -2,6 +2,8 @@ package com.PLCompanyAccountingBackend.models;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "OtherPurchaseCostsController")
 public class OtherPurchaseCosts {
@@ -10,12 +12,12 @@ public class OtherPurchaseCosts {
     private Long id;
 
     @Column(name = "Other purchase costs - C.11")
-    private Double otherPurchaseCosts;
+    private BigDecimal otherPurchaseCosts;
 
     public OtherPurchaseCosts() {
     }
 
-    public OtherPurchaseCosts(Double otherPurchaseCosts) {
+    public OtherPurchaseCosts(BigDecimal otherPurchaseCosts) {
         this.otherPurchaseCosts = otherPurchaseCosts;
     }
 
@@ -23,11 +25,11 @@ public class OtherPurchaseCosts {
         return id;
     }
 
-    public Double getOtherPurchaseCosts() {
+    public BigDecimal getOtherPurchaseCosts() {
         return otherPurchaseCosts;
     }
 
-    public void setOtherPurchaseCosts(Double otherPurchaseCosts) {
+    public void setOtherPurchaseCosts(BigDecimal otherPurchaseCosts) {
         this.otherPurchaseCosts = otherPurchaseCosts;
     }
 }

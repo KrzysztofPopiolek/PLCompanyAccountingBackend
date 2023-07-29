@@ -14,7 +14,7 @@ public class BusinessEvent {
     @Column(name = "Date of economic event - C.2", nullable = false)
     private Date dateEconomicEvent;
 
-    @Column(name = "Accounting document number - C.3")
+    @Column(name = "Accounting document number - C.3", nullable = false)
     private String accountingDocumentNumber;
 
     @Column(name = "Description of economic event - C.6", nullable = false)

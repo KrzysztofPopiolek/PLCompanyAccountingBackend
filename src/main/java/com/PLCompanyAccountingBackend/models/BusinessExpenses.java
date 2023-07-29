@@ -2,7 +2,7 @@ package com.PLCompanyAccountingBackend.models;
 
 import jakarta.persistence.*;
 
-import java.util.Currency;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "BusinessExpenses")
@@ -12,53 +12,58 @@ public class BusinessExpenses {
     private Long id;
 
     @Column(name = "Remuneration - C.12")
-    private Double remuneration;
+    private BigDecimal remuneration;
 
     @Column(name = "Other expenses - C.13")
-    private Double otherExpenses;
-    @Column(name = "Total expenses - C.14")
-    private Double totalExpenses;
+    private BigDecimal otherExpenses;
+    @Column(name = "Total expenses - C.14", nullable = false)
+    private BigDecimal totalExpenses;
     @Column(name = "Financial economic issues - C.15")
-    private Double financialEconomicIssues;
+    private BigDecimal financialEconomicIssues;
 
     public BusinessExpenses() {
     }
 
-
+    public BusinessExpenses(BigDecimal remuneration, BigDecimal otherExpenses, BigDecimal totalExpenses, BigDecimal financialEconomicIssues) {
+        this.remuneration = remuneration;
+        this.otherExpenses = otherExpenses;
+        this.totalExpenses = totalExpenses;
+        this.financialEconomicIssues = financialEconomicIssues;
+    }
 
     public Long getId() {
         return id;
     }
 
-    public Double getRemuneration() {
+    public BigDecimal getRemuneration() {
         return remuneration;
     }
 
-    public void setRemuneration(Double remuneration) {
+    public void setRemuneration(BigDecimal remuneration) {
         this.remuneration = remuneration;
     }
 
-    public Double getOtherExpenses() {
+    public BigDecimal getOtherExpenses() {
         return otherExpenses;
     }
 
-    public void setOtherExpenses(Double otherExpenses) {
+    public void setOtherExpenses(BigDecimal otherExpenses) {
         this.otherExpenses = otherExpenses;
     }
 
-    public Double getTotalExpenses() {
+    public BigDecimal getTotalExpenses() {
         return totalExpenses;
     }
 
-    public void setTotalExpenses(Double totalExpenses) {
+    public void setTotalExpenses(BigDecimal totalExpenses) {
         this.totalExpenses = totalExpenses;
     }
 
-    public Double getFinancialEconomicIssues() {
+    public BigDecimal getFinancialEconomicIssues() {
         return financialEconomicIssues;
     }
 
-    public void setFinancialEconomicIssues(Double financialEconomicIssues) {
+    public void setFinancialEconomicIssues(BigDecimal financialEconomicIssues) {
         this.financialEconomicIssues = financialEconomicIssues;
     }
 }
