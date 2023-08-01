@@ -1,22 +1,21 @@
 package com.PLCompanyAccountingBackend.models;
 
 import jakarta.persistence.*;
-
-import java.math.BigDecimal;
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "IncomeEvent")
-public class IncomeEvent {
+@Table(name = "PurchaseGoodsServicesEvent")
+public class PurchaseGoodsServicesEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,16 +29,9 @@ public class IncomeEvent {
     @Column(name = "Description of economic event - C.6", nullable = false)
     private String descriptionEconomicEvent;
 
-    @Column(name = "Sale value - C.7")
-    private BigDecimal saleValue;
-
-    @Column(name = "Other income - C.8")
-    private BigDecimal otherIncome;
-
-    @Column(name = "Total revenue - C.9", nullable = false)
-    private BigDecimal totalRevenue;
+    @Column(name = "Purchase goods and services - C.10")
+    private BigDecimal purchaseGoodsServices;
 
     @Column(name = "Events notes/comments - C.17")
     private String eventNotesComments;
-
 }

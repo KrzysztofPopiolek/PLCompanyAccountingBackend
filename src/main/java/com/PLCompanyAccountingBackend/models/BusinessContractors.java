@@ -1,7 +1,15 @@
 package com.PLCompanyAccountingBackend.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "BusinessContractors")
 public class BusinessContractors {
@@ -14,32 +22,4 @@ public class BusinessContractors {
 
     @Column(name = "Business/Contractors address - C.5", nullable = false)
     private String businessContractorsAddress;
-
-    public BusinessContractors() {
-    }
-
-    public BusinessContractors(String businessContractorsName, String businessContractorsAddress) {
-        this.businessContractorsName = businessContractorsName;
-        this.businessContractorsAddress = businessContractorsAddress;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getBusinessContractorsName() {
-        return businessContractorsName;
-    }
-
-    public void setBusinessContractorsName(String businessContractorsName) {
-        this.businessContractorsName = businessContractorsName;
-    }
-
-    public String getBusinessContractorsAddress() {
-        return businessContractorsAddress;
-    }
-
-    public void setBusinessContractorsAddress(String businessContractorsAddress) {
-        this.businessContractorsAddress = businessContractorsAddress;
-    }
 }

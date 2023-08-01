@@ -1,7 +1,6 @@
 package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
-import com.PLCompanyAccountingBackend.models.OtherPurchaseCosts;
 import com.PLCompanyAccountingBackend.repository.OtherPurchaseCostsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
