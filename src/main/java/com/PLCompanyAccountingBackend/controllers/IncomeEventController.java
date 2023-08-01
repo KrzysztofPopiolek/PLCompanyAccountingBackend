@@ -1,8 +1,8 @@
 package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
-import com.PLCompanyAccountingBackend.models.IncomeEvent;
 import com.PLCompanyAccountingBackend.repository.IncomeEventRepository;
+import com.PLCompanyAccountingBackend.models.IncomeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class IncomeEventController {
     }
 
     @GetMapping("/getIncome&Event/{id}")
-    public ResponseEntity<IncomeEvent> getBusinessIncomeById(@PathVariable Long id) {
+    public ResponseEntity<IncomeEvent> getIncomeEventById(@PathVariable Long id) {
         IncomeEvent incomeEvent = incomeEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
         return ResponseEntity.ok(incomeEvent);
     }
@@ -55,6 +55,6 @@ public class IncomeEventController {
                     incomeEvent.setEventNotesComments(newIncomeEvent.getEventNotesComments());
                     return incomeEventRepository.save(incomeEvent);
                 }
-        ).orElseThrow(() -> new ResourceNotFoundException("Business income not found!"));
+        ).orElseThrow(() -> new ResourceNotFoundException("Income and event not found!"));
     }
 }

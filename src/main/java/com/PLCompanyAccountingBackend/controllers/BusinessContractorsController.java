@@ -1,8 +1,8 @@
 package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
-import com.PLCompanyAccountingBackend.models.BusinessContractors;
 import com.PLCompanyAccountingBackend.repository.BusinessContractorsRepository;
+import com.PLCompanyAccountingBackend.models.BusinessContractors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +39,6 @@ public class BusinessContractorsController {
         } else {
             throw new ResourceNotFoundException("Item not found!");
         }
-//        businessContractorsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Item not found!"));
-//        businessContractorsRepository.deleteById(id);
     }
 
     @PutMapping("/editBusinessContractor/{id}")
