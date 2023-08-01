@@ -1,7 +1,7 @@
 package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
-import com.PLCompanyAccountingBackend.repository.ResearchDevelopmentActivitiesCostsRepository;
+import com.PLCompanyAccountingBackend.repository.ResearchDevelopmentActivitiesCostsEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/api/v_1/")
 public class ResearchDevelopmentActivitiesCostsController {
     @Autowired
-    private ResearchDevelopmentActivitiesCostsRepository researchDevelopmentActivitiesCostsRepository;
+    private ResearchDevelopmentActivitiesCostsEventRepository researchDevelopmentActivitiesCostsRepository;
 
     @GetMapping("/getAllResearchDevelopmentActivitiesCosts")
     public List<ResearchDevelopmentActivitiesCosts> getAllResearchDevelopmentActivitiesCosts() {

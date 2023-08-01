@@ -1,7 +1,7 @@
 package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
-import com.PLCompanyAccountingBackend.repository.OtherPurchaseCostsRepository;
+import com.PLCompanyAccountingBackend.repository.OtherPurchaseCostsEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/api/v_1/")
 public class OtherPurchaseCostsController {
     @Autowired
-    private OtherPurchaseCostsRepository otherPurchaseCostsRepository;
+    private OtherPurchaseCostsEventRepository otherPurchaseCostsRepository;
 
     @GetMapping("/getAllOtherPurchaseCosts")
     public List<OtherPurchaseCosts> getAllOtherPurchaseCosts() {
