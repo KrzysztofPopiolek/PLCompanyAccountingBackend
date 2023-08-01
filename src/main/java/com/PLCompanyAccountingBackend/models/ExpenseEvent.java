@@ -15,8 +15,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "IncomeEvent")
-public class IncomeEvent {
+@Table(name = "ExpenseEvent")
+public class ExpenseEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,16 +30,18 @@ public class IncomeEvent {
     @Column(name = "Description of economic event - C.6", nullable = false)
     private String descriptionEconomicEvent;
 
-    @Column(name = "Sale value - C.7")
-    private BigDecimal saleValue;
+    @Column(name = "Remuneration - C.12")
+    private BigDecimal remuneration;
 
-    @Column(name = "Other income - C.8")
-    private BigDecimal otherIncome;
+    @Column(name = "Other expenses - C.13")
+    private BigDecimal otherExpenses;
 
-    @Column(name = "Total revenue - C.9", nullable = false)
-    private BigDecimal totalRevenue;
+    @Column(name = "Total expenses - C.14", nullable = false)
+    private BigDecimal totalExpenses;
+
+    @Column(name = "Financial economic issues - C.15")
+    private BigDecimal financialEconomicIssues;
 
     @Column(name = "Events notes/comments - C.17")
     private String eventNotesComments;
-
 }
