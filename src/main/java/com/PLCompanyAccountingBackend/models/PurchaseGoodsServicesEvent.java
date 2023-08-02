@@ -34,4 +34,8 @@ public class PurchaseGoodsServicesEvent {
 
     @Column(name = "Events notes/comments - C.17")
     private String eventNotesComments;
+
+    @ManyToOne
+    @JoinColumn(name = "contractor_id", nullable = false)
+    private BusinessContractor businessContractor;
 }

@@ -2,6 +2,7 @@ package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.PurchaseGoodsServicesEvent;
+import com.PLCompanyAccountingBackend.repository.BusinessContractorRepository;
 import com.PLCompanyAccountingBackend.repository.PurchaseGoodsServicesEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,9 @@ import java.util.List;
 public class PurchaseGoodsServicesEventController {
     @Autowired
     private PurchaseGoodsServicesEventRepository purchaseGoodsServicesEventRepository;
+
+    @Autowired
+    private BusinessContractorRepository businessContractorRepository;
 
     @GetMapping("/getAllPurchaseGoodsServices")
     public List<PurchaseGoodsServicesEvent> getAllPurchaseGoodsServicesEvent() {
@@ -28,6 +32,9 @@ public class PurchaseGoodsServicesEventController {
 
     @PostMapping("/addPurchaseGoodsServices")
     public PurchaseGoodsServicesEvent addPurchaseGoodsServicesEvent(@RequestBody PurchaseGoodsServicesEvent purchaseGoodsServicesEvent) {
+        if (!businessContractorRepository.existsById(purchaseGoodsServicesEvent.getId())) {
+            throw new ResourceNotFoundException("Contractor not found");
+        }
         return purchaseGoodsServicesEventRepository.save(purchaseGoodsServicesEvent);
     }
 
@@ -45,11 +52,15 @@ public class PurchaseGoodsServicesEventController {
     PurchaseGoodsServicesEvent editPurchaseGoodsServicesEvent(@RequestBody PurchaseGoodsServicesEvent newPurchaseGoodsServicesEvent, @PathVariable Long id) {
         return purchaseGoodsServicesEventRepository.findById(id).map(
                 purchaseGoodsServicesEvent -> {
+                    if (!businessContractorRepository.existsById(newPurchaseGoodsServicesEvent.getId())) {
+                        throw new ResourceNotFoundException("Contractor not found");
+                    }
                     purchaseGoodsServicesEvent.setDateEconomicEvent(newPurchaseGoodsServicesEvent.getDateEconomicEvent());
                     purchaseGoodsServicesEvent.setAccountingDocumentNumber(newPurchaseGoodsServicesEvent.getAccountingDocumentNumber());
                     purchaseGoodsServicesEvent.setDescriptionEconomicEvent(newPurchaseGoodsServicesEvent.getDescriptionEconomicEvent());
                     purchaseGoodsServicesEvent.setPurchaseGoodsServices(newPurchaseGoodsServicesEvent.getPurchaseGoodsServices());
                     purchaseGoodsServicesEvent.setEventNotesComments(newPurchaseGoodsServicesEvent.getEventNotesComments());
+                    purchaseGoodsServicesEvent.setBusinessContractor(newPurchaseGoodsServicesEvent.getBusinessContractor());
                     return purchaseGoodsServicesEventRepository.save(purchaseGoodsServicesEvent);
                 }
         ).orElseThrow(() -> new ResourceNotFoundException("Purchase goods services cost not found!"));

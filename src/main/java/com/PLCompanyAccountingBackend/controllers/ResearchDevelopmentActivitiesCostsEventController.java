@@ -2,6 +2,7 @@ package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.ResearchDevelopmentActivitiesCostsEvent;
+import com.PLCompanyAccountingBackend.repository.BusinessContractorRepository;
 import com.PLCompanyAccountingBackend.repository.ResearchDevelopmentActivitiesCostsEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ public class ResearchDevelopmentActivitiesCostsEventController {
     @Autowired
     private ResearchDevelopmentActivitiesCostsEventRepository researchDevelopmentActivitiesCostsEventRepository;
 
+    @Autowired
+    private BusinessContractorRepository businessContractorRepository;
+
     @GetMapping("/getAllResearchDevelopmentActivities&EventCosts")
     public List<ResearchDevelopmentActivitiesCostsEvent> getResearchDevelopmentActivitiesCostsEvent() {
         return researchDevelopmentActivitiesCostsEventRepository.findAll();
@@ -29,6 +33,9 @@ public class ResearchDevelopmentActivitiesCostsEventController {
 
     @PostMapping("/addResearchDevelopmentActivitiesCosts&Event")
     public ResearchDevelopmentActivitiesCostsEvent addResearchDevelopmentActivitiesCostsEvent(@RequestBody ResearchDevelopmentActivitiesCostsEvent researchDevelopmentActivitiesCostsEvent) {
+        if (!businessContractorRepository.existsById(researchDevelopmentActivitiesCostsEvent.getId())) {
+            throw new ResourceNotFoundException("Contractor not found");
+        }
         return researchDevelopmentActivitiesCostsEventRepository.save(researchDevelopmentActivitiesCostsEvent);
     }
 
@@ -45,11 +52,15 @@ public class ResearchDevelopmentActivitiesCostsEventController {
     ResearchDevelopmentActivitiesCostsEvent editResearchDevelopmentActivitiesCostsEvent(@RequestBody ResearchDevelopmentActivitiesCostsEvent newResearchDevelopmentActivitiesCostsEvent, @PathVariable Long id) {
         return researchDevelopmentActivitiesCostsEventRepository.findById(id).map(
                 researchDevelopmentActivitiesCostsEvent -> {
+                    if (!businessContractorRepository.existsById(newResearchDevelopmentActivitiesCostsEvent.getId())) {
+                        throw new ResourceNotFoundException("Contractor not found");
+                    }
                     researchDevelopmentActivitiesCostsEvent.setDateEconomicEvent(newResearchDevelopmentActivitiesCostsEvent.getDateEconomicEvent());
                     researchDevelopmentActivitiesCostsEvent.setAccountingDocumentNumber(newResearchDevelopmentActivitiesCostsEvent.getAccountingDocumentNumber());
                     researchDevelopmentActivitiesCostsEvent.setDescriptionEconomicEvent(newResearchDevelopmentActivitiesCostsEvent.getDescriptionEconomicEvent());
                     researchDevelopmentActivitiesCostsEvent.setResearchDevelopmentActivitiesCosts(newResearchDevelopmentActivitiesCostsEvent.getResearchDevelopmentActivitiesCosts());
                     researchDevelopmentActivitiesCostsEvent.setEventNotesComments(newResearchDevelopmentActivitiesCostsEvent.getEventNotesComments());
+                    researchDevelopmentActivitiesCostsEvent.setBusinessContractor(newResearchDevelopmentActivitiesCostsEvent.getBusinessContractor());
                     return researchDevelopmentActivitiesCostsEventRepository.save(researchDevelopmentActivitiesCostsEvent);
                 }
         ).orElseThrow(() -> new ResourceNotFoundException("Research development activities costs and event not found!"));
