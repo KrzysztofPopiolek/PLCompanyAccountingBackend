@@ -1,4 +1,5 @@
 package com.PLCompanyAccountingBackend.models;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,4 +34,8 @@ public class ResearchDevelopmentActivitiesCostsEvent {
 
     @Column(name = "Events notes/comments - C.17")
     private String eventNotesComments;
+
+    @ManyToOne
+    @JoinColumn(name = "contractor_id", nullable = false)
+    private BusinessContractor businessContractor;
 }

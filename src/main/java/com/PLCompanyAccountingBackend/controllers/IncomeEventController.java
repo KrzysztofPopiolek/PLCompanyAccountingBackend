@@ -1,6 +1,7 @@
 package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
+import com.PLCompanyAccountingBackend.repository.BusinessContractorRepository;
 import com.PLCompanyAccountingBackend.repository.IncomeEventRepository;
 import com.PLCompanyAccountingBackend.models.IncomeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class IncomeEventController {
     @Autowired
     private IncomeEventRepository incomeEventRepository;
 
+    @Autowired
+    private BusinessContractorRepository businessContractorRepository;
+
     @GetMapping("/getAllIncome&Event")
     public List<IncomeEvent> getAllIncomeEvent() {
         return incomeEventRepository.findAll();
@@ -30,6 +34,9 @@ public class IncomeEventController {
 
     @PostMapping("/addIncome&Event")
     public IncomeEvent addIncomeEvent(@RequestBody IncomeEvent incomeEvent) {
+        if (!businessContractorRepository.existsById(incomeEvent.getId())) {
+            throw new ResourceNotFoundException("Contractor not found");
+        }
         return incomeEventRepository.save(incomeEvent);
     }
 
@@ -46,6 +53,9 @@ public class IncomeEventController {
     IncomeEvent editIncomeEvent(@RequestBody IncomeEvent newIncomeEvent, @PathVariable Long id) {
         return incomeEventRepository.findById(id).map(
                 incomeEvent -> {
+                    if (!businessContractorRepository.existsById(newIncomeEvent.getId())) {
+                        throw new ResourceNotFoundException("Contractor not found");
+                    }
                     incomeEvent.setDateEconomicEvent(newIncomeEvent.getDateEconomicEvent());
                     incomeEvent.setAccountingDocumentNumber(newIncomeEvent.getAccountingDocumentNumber());
                     incomeEvent.setDescriptionEconomicEvent(newIncomeEvent.getDescriptionEconomicEvent());
@@ -53,6 +63,7 @@ public class IncomeEventController {
                     incomeEvent.setOtherIncome(newIncomeEvent.getOtherIncome());
                     incomeEvent.setTotalRevenue(newIncomeEvent.getTotalRevenue());
                     incomeEvent.setEventNotesComments(newIncomeEvent.getEventNotesComments());
+                    incomeEvent.setBusinessContractor(newIncomeEvent.getBusinessContractor());
                     return incomeEventRepository.save(incomeEvent);
                 }
         ).orElseThrow(() -> new ResourceNotFoundException("Income and event not found!"));

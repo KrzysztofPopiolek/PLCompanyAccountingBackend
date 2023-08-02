@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "OtherPurchaseCostsControllerEvent")
+@Table(name = "OtherPurchaseCostsEvent")
 public class OtherPurchaseCostsEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +34,8 @@ public class OtherPurchaseCostsEvent {
 
     @Column(name = "Events notes/comments - C.17")
     private String eventNotesComments;
+
+    @ManyToOne
+    @JoinColumn(name = "contractor_id", nullable = false)
+    private BusinessContractor businessContractor;
 }

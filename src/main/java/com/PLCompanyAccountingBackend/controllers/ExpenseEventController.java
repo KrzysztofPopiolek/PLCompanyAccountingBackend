@@ -2,12 +2,14 @@ package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.ExpenseEvent;
+import com.PLCompanyAccountingBackend.repository.BusinessContractorRepository;
 import com.PLCompanyAccountingBackend.repository.ExpenseEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 
 @RestController
@@ -15,6 +17,9 @@ import java.util.List;
 public class ExpenseEventController {
     @Autowired
     private ExpenseEventRepository expenseEventRepository;
+
+    @Autowired
+    private BusinessContractorRepository businessContractorRepository;
 
     @GetMapping("/getAllExpense&Event")
     public List<ExpenseEvent> getAllExpenseEvent() {
@@ -29,6 +34,9 @@ public class ExpenseEventController {
 
     @PostMapping("/addExpense&Event")
     public ExpenseEvent addBusinessExpense(@RequestBody ExpenseEvent expenseEvent) {
+        if (!businessContractorRepository.existsById(expenseEvent.getId())) {
+            throw new ResourceNotFoundException("Contractor not found");
+        }
         return expenseEventRepository.save(expenseEvent);
     }
 
@@ -44,8 +52,12 @@ public class ExpenseEventController {
 
     @PutMapping("/editExpense&Event/{id}")
     ExpenseEvent editExpenseEvent(@RequestBody ExpenseEvent newExpenseEvent, @PathVariable Long id) {
+
         return expenseEventRepository.findById(id).map(
                 expenseEvent -> {
+                    if (!businessContractorRepository.existsById(newExpenseEvent.getId())) {
+                        throw new ResourceNotFoundException("Contractor not found");
+                    }
                     expenseEvent.setDateEconomicEvent(newExpenseEvent.getDateEconomicEvent());
                     expenseEvent.setAccountingDocumentNumber(newExpenseEvent.getAccountingDocumentNumber());
                     expenseEvent.setDescriptionEconomicEvent(newExpenseEvent.getDescriptionEconomicEvent());
@@ -54,6 +66,7 @@ public class ExpenseEventController {
                     expenseEvent.setFinancialEconomicIssues(newExpenseEvent.getFinancialEconomicIssues());
                     expenseEvent.setTotalExpenses(newExpenseEvent.getTotalExpenses());
                     expenseEvent.setEventNotesComments(newExpenseEvent.getEventNotesComments());
+                    expenseEvent.setBusinessContractor((newExpenseEvent.getBusinessContractor()));
                     return expenseEventRepository.save(expenseEvent);
                 }
         ).orElseThrow(() -> new ResourceNotFoundException("Expenses and event not found!"));
