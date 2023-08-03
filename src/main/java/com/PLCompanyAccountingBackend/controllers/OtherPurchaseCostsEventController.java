@@ -1,7 +1,6 @@
 package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
-import com.PLCompanyAccountingBackend.models.BusinessContractor;
 import com.PLCompanyAccountingBackend.models.OtherPurchaseCostsEvent;
 import com.PLCompanyAccountingBackend.repository.BusinessContractorRepository;
 import com.PLCompanyAccountingBackend.repository.OtherPurchaseCostsEventRepository;
