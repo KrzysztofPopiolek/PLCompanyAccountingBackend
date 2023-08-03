@@ -3,6 +3,7 @@ package com.PLCompanyAccountingBackend.controllers;
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.AnnualSummary;
 import com.PLCompanyAccountingBackend.models.MonthlySummary;
+import com.PLCompanyAccountingBackend.models.Summary;
 import com.PLCompanyAccountingBackend.repository.AnnualSummaryRepository;
 import com.PLCompanyAccountingBackend.repository.MonthlySummaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class AnnualSummaryController {
     public AnnualSummary getAnnualSummary(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
         List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
         for (int i = 0; i < annualSummaries.size(); i++) {
-            if (annualSummaries.get(i).getYear().compareTo(date) == 0) {
+            if (annualSummaries.get(i).getDate().compareTo(date) == 0) {
                 return annualSummaries.get(i);
             }
         }
