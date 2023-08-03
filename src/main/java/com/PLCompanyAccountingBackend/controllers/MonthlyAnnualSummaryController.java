@@ -5,12 +5,11 @@ import com.PLCompanyAccountingBackend.models.AnnualSummary;
 import com.PLCompanyAccountingBackend.models.MonthlySummary;
 import com.PLCompanyAccountingBackend.repository.AnnualSummaryRepository;
 import com.PLCompanyAccountingBackend.repository.MonthlySummaryRepository;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -24,25 +23,25 @@ public class MonthlyAnnualSummaryController {
     private MonthlySummaryRepository monthlySummaryRepository;
 
     @PostMapping("/addMonthsAndYearToSummaries/{date}")
-    public AnnualSummary addMonthsAndYearToSummaries(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
+    public AnnualSummary addMonthsAndYearToSummaries(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
-        for (int i = 0; i < annualSummaries.size(); i++) {
-            if (annualSummaries.get(i).getYear().compareTo(date)==0) {
+        for (AnnualSummary annualSummary : annualSummaries) {
+            if (annualSummary.getDate().isEqual(date)) {
                 throw new ResourceAlreadyExistsException("Date exist");
             }
         }
         addMonthsToSummary(date);
         AnnualSummary newAnnualSummary = new AnnualSummary();
-        newAnnualSummary.setYear(date);
+        newAnnualSummary.setDate(date);
         return annualSummaryRepository.save(newAnnualSummary);
     }
 
-    private void addMonthsToSummary(Date date) {
+    private void addMonthsToSummary(LocalDate date) {
         for (int i = 0; i < 12; i++) {
             MonthlySummary newMonthlySummary = new MonthlySummary();
-            newMonthlySummary.setMonthYear(date);
+            newMonthlySummary.setDate(date);
             monthlySummaryRepository.save(newMonthlySummary);
-            date = DateUtils.addMonths(date, 1);
+            date = date.plusMonths(1);
         }
     }
 
