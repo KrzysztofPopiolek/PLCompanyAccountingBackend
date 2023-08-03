@@ -3,6 +3,7 @@ package com.PLCompanyAccountingBackend.models;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ public class ExpenseEvent {
     private Long id;
 
     @Column(name = "Date of economic event - C.2", nullable = false)
-    private Date dateEconomicEvent;
+    private LocalDate dateEconomicEvent;
 
     @Column(name = "Accounting document number - C.3", nullable = false)
     private String accountingDocumentNumber;

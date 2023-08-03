@@ -4,6 +4,5 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "AnnualSummary")
-public class AnnualSummary extends Summary{
-
+public class AnnualSummary extends Summary {
 }

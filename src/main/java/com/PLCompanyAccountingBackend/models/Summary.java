@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -14,14 +15,14 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
-public class Summary{
+public class Summary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "Date", nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @Column(name = "Sale value - C.7")
     private BigDecimal saleValue;

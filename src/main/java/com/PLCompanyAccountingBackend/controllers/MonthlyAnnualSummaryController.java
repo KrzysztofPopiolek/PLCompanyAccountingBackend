@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -25,30 +26,25 @@ public class MonthlyAnnualSummaryController {
     private MonthlySummaryRepository monthlySummaryRepository;
 
     @PostMapping("/addMonthsAndYearToSummaries/{date}")
-    public AnnualSummary addMonthsAndYearToSummaries(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
-        System.out.println("HERE2");
+    public AnnualSummary addMonthsAndYearToSummaries(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
-        System.out.println("HERE4");
-        for (int i = 0; i < annualSummaries.size(); i++) {
-            if (annualSummaries.get(i).getDate().compareTo(date)==0) {
+        for (AnnualSummary annualSummary : annualSummaries) {
+            if (annualSummary.getDate().isEqual(date)) {
                 throw new ResourceAlreadyExistsException("Date exist");
             }
         }
-        System.out.println("HERE3");
         addMonthsToSummary(date);
         AnnualSummary newAnnualSummary = new AnnualSummary();
         newAnnualSummary.setDate(date);
-        System.out.println("HERE");
         return annualSummaryRepository.save(newAnnualSummary);
     }
 
-    private void addMonthsToSummary(Date date) {
+    private void addMonthsToSummary(LocalDate date) {
         for (int i = 0; i < 12; i++) {
             MonthlySummary newMonthlySummary = new MonthlySummary();
             newMonthlySummary.setDate(date);
-            System.out.println("HERE1");
             monthlySummaryRepository.save(newMonthlySummary);
-            date = DateUtils.addMonths(date, 1);
+            date = date.plusMonths(1);
         }
     }
 
