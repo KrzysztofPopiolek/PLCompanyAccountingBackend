@@ -65,12 +65,19 @@ public class ExpenseEventController {
 
     @DeleteMapping("/deleteExpense&Event/{id}")
     public void deleteExpenseEvent(@PathVariable Long id) {
+        ExpenseEvent expenseEvent = expenseEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Event with provided ID does not exist."));
 
-        if (expenseEventRepository.existsById(id)) {
-            expenseEventRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException("Item not found!");
-        }
+        BigDecimal expenseRemuneration = expenseEvent.getRemuneration() == null ? new BigDecimal(0) : expenseEvent.getRemuneration().negate();
+        BigDecimal expenseOtherExpenses = expenseEvent.getOtherExpenses() == null ? new BigDecimal(0) : expenseEvent.getOtherExpenses().negate();
+
+        expenseEvent.setRemuneration(expenseRemuneration);
+        expenseEvent.setOtherExpenses(expenseOtherExpenses);
+        expenseEvent.setTotalExpenses((expenseRemuneration.add(expenseOtherExpenses)));
+
+        updateAnnualSummary(expenseEvent);
+        updateMonthlySummary(expenseEvent);
+        expenseEventRepository.deleteById(id);
+
     }
 
     @PutMapping("/editExpense&Event/{id}")
