@@ -1,0 +1,22 @@
+package com.PLCompanyAccountingBackend.configurations;
+
+import com.PLCompanyAccountingBackend.repository.ExpenseEventRepository;
+import com.PLCompanyAccountingBackend.services.AnnualSummaryService;
+import com.PLCompanyAccountingBackend.services.ExpenseEventService;
+import com.PLCompanyAccountingBackend.services.MonthlySummaryService;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ComponentScan
+public class ExpenseEventConfiguration {
+
+    @Bean
+    public ExpenseEventService expenseEventService(ExpenseEventRepository expenseEventRepository,
+                                                   AnnualSummaryService annualSummaryService,
+                                                   MonthlySummaryService monthlySummaryService) {
+        return new ExpenseEventService(expenseEventRepository, annualSummaryService, monthlySummaryService);
+    }
+
+}

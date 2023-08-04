@@ -3,7 +3,6 @@ package com.PLCompanyAccountingBackend.models;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,19 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "ExpenseEvent")
-public class ExpenseEvent {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "Date of economic event - C.2", nullable = false)
-    private LocalDate dateEconomicEvent;
-
-    @Column(name = "Accounting document number - C.3", nullable = false)
-    private String accountingDocumentNumber;
-
-    @Column(name = "Description of economic event - C.6", nullable = false)
-    private String descriptionEconomicEvent;
+public class ExpenseEvent extends Event{
 
     @Column(name = "Remuneration - C.12")
     private BigDecimal remuneration;
@@ -42,25 +29,11 @@ public class ExpenseEvent {
     @Column(name = "Financial economic issues - C.15")
     private BigDecimal financialEconomicIssues;
 
-    @Column(name = "Events notes/comments - C.17")
-    private String eventNotesComments;
-
-    @ManyToOne
-    @JoinColumn(name = "contractor_id", nullable = false)
-    private BusinessContractor businessContractor;
-
-    //Constructor for deep cloning
-    public ExpenseEvent(ExpenseEvent anotherExpenseEvent){
-        this.id = anotherExpenseEvent.id;
-        this.dateEconomicEvent = anotherExpenseEvent.dateEconomicEvent;
-        this.accountingDocumentNumber = anotherExpenseEvent.accountingDocumentNumber;
-        this.descriptionEconomicEvent = anotherExpenseEvent.descriptionEconomicEvent;
-        this.remuneration = anotherExpenseEvent.remuneration;
-        this.otherExpenses = anotherExpenseEvent.otherExpenses;
-        this.totalExpenses = anotherExpenseEvent.totalExpenses;
-        this.financialEconomicIssues = anotherExpenseEvent.financialEconomicIssues;
-        this.eventNotesComments = anotherExpenseEvent.eventNotesComments;
-        this.businessContractor = anotherExpenseEvent.businessContractor;
-
+    public ExpenseEvent(ExpenseEvent otherExpenseEvent){
+        super(otherExpenseEvent);
+        this.remuneration = otherExpenseEvent.remuneration;
+        this.otherExpenses = otherExpenseEvent.otherExpenses;
+        this.totalExpenses = otherExpenseEvent.totalExpenses;
+        this.financialEconomicIssues = otherExpenseEvent.financialEconomicIssues;
     }
 }

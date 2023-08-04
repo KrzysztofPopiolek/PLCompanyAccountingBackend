@@ -1,13 +1,13 @@
 package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
-import com.PLCompanyAccountingBackend.models.AnnualSummary;
-import com.PLCompanyAccountingBackend.models.ExpenseEvent;
-import com.PLCompanyAccountingBackend.models.MonthlySummary;
-import com.PLCompanyAccountingBackend.models.Summary;
+import com.PLCompanyAccountingBackend.models.*;
 import com.PLCompanyAccountingBackend.repository.*;
+import com.PLCompanyAccountingBackend.services.AnnualSummaryService;
+import com.PLCompanyAccountingBackend.services.BusinessContractorService;
+import com.PLCompanyAccountingBackend.services.ExpenseEventService;
+import com.PLCompanyAccountingBackend.services.MonthlySummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,31 +21,40 @@ public class ExpenseEventController {
     @Autowired
     private ExpenseEventRepository expenseEventRepository;
 
-    @Autowired
-    private AnnualSummaryRepository annualSummaryRepository;
+    private final BusinessContractorService businessContractorService;
 
-    @Autowired
-    private MonthlySummaryRepository monthlySummaryRepository;
+    private final ExpenseEventService expenseEventService;
 
-    @Autowired
-    private BusinessContractorRepository businessContractorRepository;
+    private final MonthlySummaryService monthlySummaryService;
+
+    private final AnnualSummaryService annualSummaryService;
+
+    public ExpenseEventController(BusinessContractorService businessContractorService,
+                                  ExpenseEventService expenseEventService,
+                                  MonthlySummaryService monthlySummaryService,
+                                  AnnualSummaryService annualSummaryService){
+        this.businessContractorService = businessContractorService;
+        this.expenseEventService = expenseEventService;
+        this.monthlySummaryService = monthlySummaryService;
+        this.annualSummaryService = annualSummaryService;
+    }
 
     @GetMapping("/getAllExpense&Event")
     public List<ExpenseEvent> getAllExpenseEvent() {
-        return expenseEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
+        return expenseEventService.getAllExpensesEvents_SortedByDate();
     }
 
     @GetMapping("/getExpense&Event/{id}")
     public ResponseEntity<ExpenseEvent> getExpenseEventById(@PathVariable Long id) {
-        ExpenseEvent expenseEvent = expenseEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
-        return ResponseEntity.ok(expenseEvent);
+        return ResponseEntity.ok(expenseEventService.getExpenseEvent_ById(id));
     }
 
     @PostMapping("/addExpense&Event")
     public ExpenseEvent addBusinessExpense(@RequestBody ExpenseEvent expenseEvent) {
         boolean taxYearExists;
 
-        if (!businessContractorRepository.existsById(expenseEvent.getBusinessContractor().getId())) {
+        boolean contractorExists = businessContractorService.checkIfContractorExists(expenseEvent.getBusinessContractor().getId());
+        if(!contractorExists){
             throw new ResourceNotFoundException("Contractor not found");
         }
 
@@ -53,13 +62,13 @@ public class ExpenseEventController {
         BigDecimal expenseOtherExpenses = expenseEvent.getOtherExpenses() == null ? new BigDecimal(0) : expenseEvent.getOtherExpenses();
 
         expenseEvent.setTotalExpenses(expenseRemuneration.add(expenseOtherExpenses));
-        taxYearExists = updateAnnualSummary(expenseEvent);
+        taxYearExists = this.annualSummaryService.updateAnnualSummary(expenseEvent);
 
         if (!taxYearExists) {
             throw new ResourceNotFoundException("Tax year does not exist");
         }
 
-        updateMonthlySummary(expenseEvent);
+        this.monthlySummaryService.updateMonthlySummary(expenseEvent);
 
         return expenseEventRepository.save(expenseEvent);
     }
@@ -68,7 +77,7 @@ public class ExpenseEventController {
     public void deleteExpenseEvent(@PathVariable Long id) {
         ExpenseEvent expenseEvent = expenseEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Event with provided ID does not exist."));
 
-        deleteEntryFromSummary(expenseEvent);
+        this.expenseEventService.deleteEntryFromSummary(expenseEvent);
         expenseEventRepository.deleteById(id);
     }
 
@@ -76,16 +85,17 @@ public class ExpenseEventController {
     ExpenseEvent editExpenseEvent(@RequestBody ExpenseEvent newExpenseEvent, @PathVariable Long id) {
 
         return expenseEventRepository.findById(id).map(expenseEvent -> {
-            if (!businessContractorRepository.existsById(newExpenseEvent.getBusinessContractor().getId())) {
+            boolean contractorExists = businessContractorService.checkIfContractorExists(expenseEvent.getBusinessContractor().getId());
+            if(!contractorExists){
                 throw new ResourceNotFoundException("Contractor not found");
             }
 
-            deleteEntryFromSummary(expenseEvent);
+            this.expenseEventService.deleteEntryFromSummary(expenseEvent);
 
             newExpenseEvent.setTotalExpenses(newExpenseEvent.getRemuneration().add(newExpenseEvent.getOtherExpenses()));
 
-            updateAnnualSummary(newExpenseEvent);
-            updateMonthlySummary(newExpenseEvent);
+            this.annualSummaryService.updateAnnualSummary(newExpenseEvent);
+            this.monthlySummaryService.updateMonthlySummary(newExpenseEvent);
 
             expenseEvent.setDateEconomicEvent(newExpenseEvent.getDateEconomicEvent());
             expenseEvent.setAccountingDocumentNumber(newExpenseEvent.getAccountingDocumentNumber());
@@ -98,64 +108,5 @@ public class ExpenseEventController {
             expenseEvent.setBusinessContractor((newExpenseEvent.getBusinessContractor()));
             return expenseEventRepository.save(expenseEvent);
         }).orElseThrow(() -> new ResourceNotFoundException("Expenses and event not found!"));
-    }
-
-    private void updateMonthlySummary(ExpenseEvent expenseEvent) {
-        int expenseEventYear = expenseEvent.getDateEconomicEvent().getYear();
-        int expenseEventMonth = expenseEvent.getDateEconomicEvent().getMonthValue();
-
-        List<MonthlySummary> monthlySummaries = monthlySummaryRepository.findAll();
-
-        for (MonthlySummary monthlySummary : monthlySummaries) {
-            int monthlySummariesYear = monthlySummary.getDate().getYear();
-            int monthlySummariesMonth = monthlySummary.getDate().getMonthValue();
-            if (expenseEventYear == monthlySummariesYear && expenseEventMonth == monthlySummariesMonth) {
-                MonthlySummary newMonthlySummary = (MonthlySummary) addEntryToSummary(expenseEvent, monthlySummary);
-                monthlySummaryRepository.save(newMonthlySummary);
-            }
-        }
-    }
-
-    private boolean updateAnnualSummary(ExpenseEvent expenseEvent) {
-        int expenseEventYear = expenseEvent.getDateEconomicEvent().getYear();
-        List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
-
-        for (AnnualSummary annualSummary : annualSummaries) {
-            int annualSummariesYear = annualSummary.getDate().getYear();
-            if (expenseEventYear == annualSummariesYear) {
-                AnnualSummary newAnnualSummary = (AnnualSummary) addEntryToSummary(expenseEvent, annualSummary);
-                annualSummaryRepository.save(newAnnualSummary);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private Summary addEntryToSummary(ExpenseEvent expenseEvent, Summary summary) {
-        BigDecimal remuneration = summary.getRemuneration() == null ? new BigDecimal(0) : summary.getRemuneration();
-        BigDecimal otherExpenses = summary.getOtherExpenses() == null ? new BigDecimal(0) : summary.getOtherExpenses();
-        BigDecimal totalExpenses = summary.getTotalExpenses() == null ? new BigDecimal(0) : summary.getTotalExpenses();
-        BigDecimal financialEconomicIssues = summary.getFinancialEconomicIssues() == null ? new BigDecimal(0) : summary.getFinancialEconomicIssues();
-
-        summary.setRemuneration(remuneration.add(expenseEvent.getRemuneration()));
-        summary.setOtherExpenses(otherExpenses.add(expenseEvent.getOtherExpenses()));
-        summary.setTotalExpenses(totalExpenses.add(expenseEvent.getTotalExpenses()));
-        summary.setFinancialEconomicIssues(financialEconomicIssues.add(expenseEvent.getFinancialEconomicIssues()));
-        return summary;
-    }
-
-    private void deleteEntryFromSummary(ExpenseEvent expenseEvent) {
-        ExpenseEvent expenseEventForSummary = new ExpenseEvent(expenseEvent);
-        BigDecimal expenseRemuneration = expenseEvent.getRemuneration() == null ? new BigDecimal(0) : expenseEvent.getRemuneration().negate();
-        BigDecimal expenseOtherExpenses = expenseEvent.getOtherExpenses() == null ? new BigDecimal(0) : expenseEvent.getOtherExpenses().negate();
-        BigDecimal expenseFinancialEconomicIssues = expenseEvent.getFinancialEconomicIssues() == null ? new BigDecimal(0) : expenseEvent.getFinancialEconomicIssues().negate();
-
-        expenseEventForSummary.setRemuneration(expenseRemuneration);
-        expenseEventForSummary.setOtherExpenses(expenseOtherExpenses);
-        expenseEventForSummary.setFinancialEconomicIssues(expenseFinancialEconomicIssues);
-        expenseEventForSummary.setTotalExpenses((expenseRemuneration.add(expenseOtherExpenses)));
-
-        updateAnnualSummary(expenseEventForSummary);
-        updateMonthlySummary(expenseEventForSummary);
     }
 }
