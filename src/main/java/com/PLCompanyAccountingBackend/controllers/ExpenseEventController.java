@@ -66,12 +66,20 @@ public class ExpenseEventController {
 
     @DeleteMapping("/deleteExpense&Event/{id}")
     public void deleteExpenseEvent(@PathVariable Long id) {
+        ExpenseEvent expenseEvent = expenseEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Event with provided ID does not exist."));
 
-        if (expenseEventRepository.existsById(id)) {
-            expenseEventRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException("Item not found!");
-        }
+        BigDecimal expenseRemuneration = expenseEvent.getRemuneration() == null ? new BigDecimal(0) : expenseEvent.getRemuneration().negate();
+        BigDecimal expenseOtherExpenses = expenseEvent.getOtherExpenses() == null ? new BigDecimal(0) : expenseEvent.getOtherExpenses().negate();
+        BigDecimal expenseFinancialEconomicIssues = expenseEvent.getFinancialEconomicIssues() == null ? new BigDecimal(0) : expenseEvent.getFinancialEconomicIssues().negate();
+
+        expenseEvent.setRemuneration(expenseRemuneration);
+        expenseEvent.setOtherExpenses(expenseOtherExpenses);
+        expenseEvent.setFinancialEconomicIssues(expenseFinancialEconomicIssues);
+        expenseEvent.setTotalExpenses((expenseRemuneration.add(expenseOtherExpenses)));
+
+        updateAnnualSummary(expenseEvent);
+        updateMonthlySummary(expenseEvent);
+        expenseEventRepository.deleteById(id);
     }
 
     @PutMapping("/editExpense&Event/{id}")
@@ -127,7 +135,7 @@ public class ExpenseEventController {
         int expenseEventYear = expenseEvent.getDateEconomicEvent().getYear();
         List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
 
-        for(AnnualSummary annualSummary : annualSummaries) {
+        for (AnnualSummary annualSummary : annualSummaries) {
             int annualSummariesYear = annualSummary.getDate().getYear();
             if (expenseEventYear == annualSummariesYear) {
                 AnnualSummary newAnnualSummary = (AnnualSummary) updateSummaries(expenseEvent, annualSummary);
@@ -138,7 +146,7 @@ public class ExpenseEventController {
         return false;
     }
 
-    private Summary updateSummaries(ExpenseEvent expenseEvent, Summary summary){
+    private Summary updateSummaries(ExpenseEvent expenseEvent, Summary summary) {
         BigDecimal remuneration = summary.getRemuneration() == null ? new BigDecimal(0) : summary.getRemuneration();
         BigDecimal otherExpenses = summary.getOtherExpenses() == null ? new BigDecimal(0) : summary.getOtherExpenses();
         BigDecimal totalExpenses = summary.getTotalExpenses() == null ? new BigDecimal(0) : summary.getTotalExpenses();
