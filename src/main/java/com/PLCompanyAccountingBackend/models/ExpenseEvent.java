@@ -48,4 +48,19 @@ public class ExpenseEvent {
     @ManyToOne
     @JoinColumn(name = "contractor_id", nullable = false)
     private BusinessContractor businessContractor;
+
+    //Constructor for deep cloning
+    public ExpenseEvent(ExpenseEvent anotherExpenseEvent){
+        this.id = anotherExpenseEvent.id;
+        this.dateEconomicEvent = anotherExpenseEvent.dateEconomicEvent;
+        this.accountingDocumentNumber = anotherExpenseEvent.accountingDocumentNumber;
+        this.descriptionEconomicEvent = anotherExpenseEvent.descriptionEconomicEvent;
+        this.remuneration = anotherExpenseEvent.remuneration;
+        this.otherExpenses = anotherExpenseEvent.otherExpenses;
+        this.totalExpenses = anotherExpenseEvent.totalExpenses;
+        this.financialEconomicIssues = anotherExpenseEvent.financialEconomicIssues;
+        this.eventNotesComments = anotherExpenseEvent.eventNotesComments;
+        this.businessContractor = anotherExpenseEvent.businessContractor;
+
+    }
 }

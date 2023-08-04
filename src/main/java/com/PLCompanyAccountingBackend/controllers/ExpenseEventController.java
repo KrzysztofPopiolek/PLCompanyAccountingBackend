@@ -7,6 +7,7 @@ import com.PLCompanyAccountingBackend.models.MonthlySummary;
 import com.PLCompanyAccountingBackend.models.Summary;
 import com.PLCompanyAccountingBackend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class ExpenseEventController {
 
     @GetMapping("/getAllExpense&Event")
     public List<ExpenseEvent> getAllExpenseEvent() {
-        return expenseEventRepository.findAll();
+        return expenseEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
     }
 
     @GetMapping("/getExpense&Event/{id}")
@@ -67,17 +68,7 @@ public class ExpenseEventController {
     public void deleteExpenseEvent(@PathVariable Long id) {
         ExpenseEvent expenseEvent = expenseEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Event with provided ID does not exist."));
 
-        BigDecimal expenseRemuneration = expenseEvent.getRemuneration() == null ? new BigDecimal(0) : expenseEvent.getRemuneration().negate();
-        BigDecimal expenseOtherExpenses = expenseEvent.getOtherExpenses() == null ? new BigDecimal(0) : expenseEvent.getOtherExpenses().negate();
-        BigDecimal expenseFinancialEconomicIssues = expenseEvent.getFinancialEconomicIssues() == null ? new BigDecimal(0) : expenseEvent.getFinancialEconomicIssues().negate();
-
-        expenseEvent.setRemuneration(expenseRemuneration);
-        expenseEvent.setOtherExpenses(expenseOtherExpenses);
-        expenseEvent.setFinancialEconomicIssues(expenseFinancialEconomicIssues);
-        expenseEvent.setTotalExpenses((expenseRemuneration.add(expenseOtherExpenses)));
-
-        updateAnnualSummary(expenseEvent);
-        updateMonthlySummary(expenseEvent);
+        deleteEntryFromSummary(expenseEvent);
         expenseEventRepository.deleteById(id);
     }
 
@@ -85,9 +76,17 @@ public class ExpenseEventController {
     ExpenseEvent editExpenseEvent(@RequestBody ExpenseEvent newExpenseEvent, @PathVariable Long id) {
 
         return expenseEventRepository.findById(id).map(expenseEvent -> {
-            if (!businessContractorRepository.existsById(newExpenseEvent.getId())) {
+            if (!businessContractorRepository.existsById(newExpenseEvent.getBusinessContractor().getId())) {
                 throw new ResourceNotFoundException("Contractor not found");
             }
+
+            deleteEntryFromSummary(expenseEvent);
+
+            newExpenseEvent.setTotalExpenses(newExpenseEvent.getRemuneration().add(newExpenseEvent.getOtherExpenses()));
+
+            updateAnnualSummary(newExpenseEvent);
+            updateMonthlySummary(newExpenseEvent);
+
             expenseEvent.setDateEconomicEvent(newExpenseEvent.getDateEconomicEvent());
             expenseEvent.setAccountingDocumentNumber(newExpenseEvent.getAccountingDocumentNumber());
             expenseEvent.setDescriptionEconomicEvent(newExpenseEvent.getDescriptionEconomicEvent());
@@ -111,7 +110,7 @@ public class ExpenseEventController {
             int monthlySummariesYear = monthlySummary.getDate().getYear();
             int monthlySummariesMonth = monthlySummary.getDate().getMonthValue();
             if (expenseEventYear == monthlySummariesYear && expenseEventMonth == monthlySummariesMonth) {
-                MonthlySummary newMonthlySummary = (MonthlySummary) updateSummaries(expenseEvent, monthlySummary);
+                MonthlySummary newMonthlySummary = (MonthlySummary) addEntryToSummary(expenseEvent, monthlySummary);
                 monthlySummaryRepository.save(newMonthlySummary);
             }
         }
@@ -124,7 +123,7 @@ public class ExpenseEventController {
         for (AnnualSummary annualSummary : annualSummaries) {
             int annualSummariesYear = annualSummary.getDate().getYear();
             if (expenseEventYear == annualSummariesYear) {
-                AnnualSummary newAnnualSummary = (AnnualSummary) updateSummaries(expenseEvent, annualSummary);
+                AnnualSummary newAnnualSummary = (AnnualSummary) addEntryToSummary(expenseEvent, annualSummary);
                 annualSummaryRepository.save(newAnnualSummary);
                 return true;
             }
@@ -132,7 +131,7 @@ public class ExpenseEventController {
         return false;
     }
 
-    private Summary updateSummaries(ExpenseEvent expenseEvent, Summary summary) {
+    private Summary addEntryToSummary(ExpenseEvent expenseEvent, Summary summary) {
         BigDecimal remuneration = summary.getRemuneration() == null ? new BigDecimal(0) : summary.getRemuneration();
         BigDecimal otherExpenses = summary.getOtherExpenses() == null ? new BigDecimal(0) : summary.getOtherExpenses();
         BigDecimal totalExpenses = summary.getTotalExpenses() == null ? new BigDecimal(0) : summary.getTotalExpenses();
@@ -143,5 +142,20 @@ public class ExpenseEventController {
         summary.setTotalExpenses(totalExpenses.add(expenseEvent.getTotalExpenses()));
         summary.setFinancialEconomicIssues(financialEconomicIssues.add(expenseEvent.getFinancialEconomicIssues()));
         return summary;
+    }
+
+    private void deleteEntryFromSummary(ExpenseEvent expenseEvent) {
+        ExpenseEvent expenseEventForSummary = new ExpenseEvent(expenseEvent);
+        BigDecimal expenseRemuneration = expenseEvent.getRemuneration() == null ? new BigDecimal(0) : expenseEvent.getRemuneration().negate();
+        BigDecimal expenseOtherExpenses = expenseEvent.getOtherExpenses() == null ? new BigDecimal(0) : expenseEvent.getOtherExpenses().negate();
+        BigDecimal expenseFinancialEconomicIssues = expenseEvent.getFinancialEconomicIssues() == null ? new BigDecimal(0) : expenseEvent.getFinancialEconomicIssues().negate();
+
+        expenseEventForSummary.setRemuneration(expenseRemuneration);
+        expenseEventForSummary.setOtherExpenses(expenseOtherExpenses);
+        expenseEventForSummary.setFinancialEconomicIssues(expenseFinancialEconomicIssues);
+        expenseEventForSummary.setTotalExpenses((expenseRemuneration.add(expenseOtherExpenses)));
+
+        updateAnnualSummary(expenseEventForSummary);
+        updateMonthlySummary(expenseEventForSummary);
     }
 }
