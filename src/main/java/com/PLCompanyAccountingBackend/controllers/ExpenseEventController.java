@@ -7,6 +7,7 @@ import com.PLCompanyAccountingBackend.models.MonthlySummary;
 import com.PLCompanyAccountingBackend.models.Summary;
 import com.PLCompanyAccountingBackend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class ExpenseEventController {
 
     @GetMapping("/getAllExpense&Event")
     public List<ExpenseEvent> getAllExpenseEvent() {
-        return expenseEventRepository.findAll();
+        return expenseEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
     }
 
     @GetMapping("/getExpense&Event/{id}")
@@ -80,6 +81,19 @@ public class ExpenseEventController {
             if (!businessContractorRepository.existsById(newExpenseEvent.getId())) {
                 throw new ResourceNotFoundException("Contractor not found");
             }
+            //Deep cloning
+            ExpenseEvent expenseEventForSummary = new ExpenseEvent(newExpenseEvent);
+            BigDecimal expenseRemuneration = expenseEvent.getRemuneration() == null ? new BigDecimal(0) : expenseEvent.getRemuneration();
+            BigDecimal expenseOtherExpenses = expenseEvent.getOtherExpenses() == null ? new BigDecimal(0) : expenseEvent.getOtherExpenses();
+            BigDecimal expenseTotalExpenses = expenseEvent.getTotalExpenses() == null ? new BigDecimal(0) : expenseEvent.getTotalExpenses();
+            newExpenseEvent.setTotalExpenses(expenseRemuneration.add(expenseOtherExpenses));
+
+            expenseEventForSummary.setRemuneration(newExpenseEvent.getRemuneration().subtract(expenseRemuneration));
+            expenseEventForSummary.setOtherExpenses(newExpenseEvent.getOtherExpenses().subtract(expenseOtherExpenses));
+            expenseEventForSummary.setTotalExpenses(newExpenseEvent.getTotalExpenses().subtract(expenseTotalExpenses));
+
+            updateAnnualSummary(expenseEventForSummary);
+            updateMonthlySummary(expenseEventForSummary);
             expenseEvent.setDateEconomicEvent(newExpenseEvent.getDateEconomicEvent());
             expenseEvent.setAccountingDocumentNumber(newExpenseEvent.getAccountingDocumentNumber());
             expenseEvent.setDescriptionEconomicEvent(newExpenseEvent.getDescriptionEconomicEvent());
