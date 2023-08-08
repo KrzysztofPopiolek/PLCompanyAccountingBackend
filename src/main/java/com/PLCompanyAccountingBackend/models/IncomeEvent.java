@@ -1,21 +1,20 @@
 package com.PLCompanyAccountingBackend.models;
 
 import jakarta.persistence.*;
-
-import java.math.BigDecimal;
-import java.util.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "IncomeEvent")
+@Table(name = "IncomeEvents")
 public class IncomeEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

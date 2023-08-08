@@ -6,22 +6,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "ResearchDevelopmentActivitiesCostsEvents")
-public class ResearchDevelopmentActivitiesCostsEvent {
+@MappedSuperclass
+public class Event {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "Date of economic event - C.2", nullable = false)
-    private Date dateEconomicEvent;
+    private LocalDate dateEconomicEvent;
 
     @Column(name = "Accounting document number - C.3", nullable = false)
     private String accountingDocumentNumber;
@@ -29,13 +28,19 @@ public class ResearchDevelopmentActivitiesCostsEvent {
     @Column(name = "Description of economic event - C.6", nullable = false)
     private String descriptionEconomicEvent;
 
-    @Column(name = "Research and development activities costs - C.16")
-    private BigDecimal researchDevelopmentActivitiesCosts;
-
     @Column(name = "Events notes/comments - C.17")
     private String eventNotesComments;
 
     @ManyToOne
     @JoinColumn(name = "contractor_id", nullable = false)
     private BusinessContractor businessContractor;
+
+    public Event(Event otherEvent) {
+        this.id = otherEvent.id;
+        this.dateEconomicEvent = otherEvent.dateEconomicEvent;
+        this.accountingDocumentNumber = otherEvent.accountingDocumentNumber;
+        this.descriptionEconomicEvent = otherEvent.descriptionEconomicEvent;
+        this.eventNotesComments = otherEvent.eventNotesComments;
+        this.businessContractor = otherEvent.businessContractor;
+    }
 }

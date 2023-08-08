@@ -1,8 +1,9 @@
 package com.PLCompanyAccountingBackend.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "AnnualSummary")
+@Table(name = "AnnualSummaries")
 public class AnnualSummary extends Summary {
 }
