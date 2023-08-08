@@ -85,8 +85,11 @@ public class ExpenseEventController {
     ExpenseEvent editExpenseEvent(@RequestBody ExpenseEvent newExpenseEvent, @PathVariable Long id) {
 
         return expenseEventRepository.findById(id).map(expenseEvent -> {
-            boolean contractorExists = businessContractorService.checkIfContractorExists(expenseEvent.getBusinessContractor().getId());
-            if (!contractorExists) {
+            boolean contractorExists = businessContractorService.checkIfContractorExists(newExpenseEvent.getBusinessContractor().getId());
+            boolean taxYearExists = annualSummaryService.taxYearExists(newExpenseEvent.getDateEconomicEvent().getYear());
+            if (!taxYearExists) {
+                throw new ResourceNotFoundException("Tax year does not exist");
+            } else if (!contractorExists) {
                 throw new ResourceNotFoundException("Contractor not found");
             }
 
