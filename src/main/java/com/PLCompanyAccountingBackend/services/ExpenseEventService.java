@@ -25,6 +25,13 @@ public class ExpenseEventService implements EventServiceInterface {
         return expenseEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
     }
 
+    /**
+     * Creates an entry which will be added to the summary tables from the provided event.
+     *
+     * @param expenseEvent The event we added to the expenseEvent table.
+     * @param summary      The object which represents the current state of the summary table.
+     * @return A summary object which represents the new state of the summary table.
+     */
     public Summary createAddEntryForSummary(ExpenseEvent expenseEvent, Summary summary) {
         BigDecimal remuneration = summary.getRemuneration() == null ? new BigDecimal(0) : summary.getRemuneration();
         BigDecimal otherExpenses = summary.getOtherExpenses() == null ? new BigDecimal(0) : summary.getOtherExpenses();
@@ -38,6 +45,14 @@ public class ExpenseEventService implements EventServiceInterface {
         return summary;
     }
 
+    /**
+     * Creates an entry which will be added to the summary tables from the provided event. Value are negated so the
+     * entry is essentially deleted from the table.
+     *
+     * @param expenseEvent The event we deleted from the expenseEvent table.
+     * @param summary      The object which represents the current state of the summary table.
+     * @return A summary object which represents the new state of the summary table.
+     */
     public Summary createDeleteEntryForSummary(ExpenseEvent expenseEvent, Summary summary) {
         BigDecimal remuneration = summary.getRemuneration() == null ? new BigDecimal(0) : summary.getRemuneration();
         BigDecimal otherExpenses = summary.getOtherExpenses() == null ? new BigDecimal(0) : summary.getOtherExpenses();

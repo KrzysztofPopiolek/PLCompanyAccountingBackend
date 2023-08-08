@@ -13,12 +13,18 @@ public class AnnualSummaryService {
 
     private final ExpenseEventService expenseEventService;
 
-    public AnnualSummaryService(AnnualSummaryRepository annualSummaryRepository,
-                                ExpenseEventService expenseEventService) {
+    public AnnualSummaryService(AnnualSummaryRepository annualSummaryRepository, ExpenseEventService expenseEventService) {
         this.annualSummaryRepository = annualSummaryRepository;
         this.expenseEventService = expenseEventService;
     }
 
+    /**
+     * Updates the annual summary table in the DB with the event info.
+     *
+     * @param event        the event that was added to one of the other tables.
+     * @param isDeleteMode the action we are performing, if true we delete an entry from summary, otherwise we add the
+     *                     entry.
+     */
     public void updateAnnualSummary(Event event, boolean isDeleteMode) {
         int eventYear = event.getDateEconomicEvent().getYear();
         List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
@@ -39,6 +45,12 @@ public class AnnualSummaryService {
         }
     }
 
+    /**
+     * Checks if a tax year exists in the database.
+     *
+     * @param year the year to check.
+     * @return a boolean value, true if the tax year exists false otherwise.
+     */
     public boolean taxYearExists(int year) {
         List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
         for (AnnualSummary annualSummary : annualSummaries) {

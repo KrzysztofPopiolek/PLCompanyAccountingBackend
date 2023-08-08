@@ -19,6 +19,13 @@ public class MonthlySummaryService {
         this.expenseEventService = expenseEventService;
     }
 
+    /**
+     * Updates the monthly summary table in the DB with the event info.
+     *
+     * @param event        the event that was added to one of the other tables.
+     * @param isDeleteMode the action we are performing, if true we delete an entry from summary, otherwise we add the
+     *                     entry.
+     */
     public void updateMonthlySummary(Event event, boolean isDeleteMode) {
         int expenseEventYear = event.getDateEconomicEvent().getYear();
         int expenseEventMonth = event.getDateEconomicEvent().getMonthValue();
