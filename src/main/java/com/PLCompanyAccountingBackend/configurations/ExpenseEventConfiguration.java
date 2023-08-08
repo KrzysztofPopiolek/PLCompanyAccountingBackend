@@ -13,10 +13,8 @@ import org.springframework.context.annotation.Configuration;
 public class ExpenseEventConfiguration {
 
     @Bean
-    public ExpenseEventService expenseEventService(ExpenseEventRepository expenseEventRepository,
-                                                   AnnualSummaryService annualSummaryService,
-                                                   MonthlySummaryService monthlySummaryService) {
-        return new ExpenseEventService(expenseEventRepository, annualSummaryService, monthlySummaryService);
+    public ExpenseEventService expenseEventService(ExpenseEventRepository expenseEventRepository) {
+        return new ExpenseEventService(expenseEventRepository);
     }
 
 }

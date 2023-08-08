@@ -51,10 +51,13 @@ public class ExpenseEventController {
 
     @PostMapping("/addExpense&Event")
     public ExpenseEvent addBusinessExpense(@RequestBody ExpenseEvent expenseEvent) {
-        boolean taxYearExists;
-
+        expenseEvent.setId(0L);
+        boolean taxYearExists = annualSummaryService.taxYearExists(expenseEvent.getDateEconomicEvent().getYear());
         boolean contractorExists = businessContractorService.checkIfContractorExists(expenseEvent.getBusinessContractor().getId());
-        if(!contractorExists){
+
+        if (!taxYearExists) {
+            throw new ResourceNotFoundException("Tax year does not exist");
+        } else if (!contractorExists) {
             throw new ResourceNotFoundException("Contractor not found");
         }
 
@@ -62,13 +65,9 @@ public class ExpenseEventController {
         BigDecimal expenseOtherExpenses = expenseEvent.getOtherExpenses() == null ? new BigDecimal(0) : expenseEvent.getOtherExpenses();
 
         expenseEvent.setTotalExpenses(expenseRemuneration.add(expenseOtherExpenses));
-        taxYearExists = this.annualSummaryService.updateAnnualSummary(expenseEvent);
+        this.annualSummaryService.updateAnnualSummary(expenseEvent, false);
 
-        if (!taxYearExists) {
-            throw new ResourceNotFoundException("Tax year does not exist");
-        }
-
-        this.monthlySummaryService.updateMonthlySummary(expenseEvent);
+        this.monthlySummaryService.updateMonthlySummary(expenseEvent, false);
 
         return expenseEventRepository.save(expenseEvent);
     }
@@ -77,7 +76,8 @@ public class ExpenseEventController {
     public void deleteExpenseEvent(@PathVariable Long id) {
         ExpenseEvent expenseEvent = expenseEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Event with provided ID does not exist."));
 
-        this.expenseEventService.deleteEntryFromSummary(expenseEvent);
+        this.annualSummaryService.updateAnnualSummary(expenseEvent, true);
+        this.monthlySummaryService.updateMonthlySummary(expenseEvent, true);
         expenseEventRepository.deleteById(id);
     }
 
@@ -90,12 +90,13 @@ public class ExpenseEventController {
                 throw new ResourceNotFoundException("Contractor not found");
             }
 
-            this.expenseEventService.deleteEntryFromSummary(expenseEvent);
+            this.annualSummaryService.updateAnnualSummary(expenseEvent, true);
+            this.monthlySummaryService.updateMonthlySummary(expenseEvent, true);
 
             newExpenseEvent.setTotalExpenses(newExpenseEvent.getRemuneration().add(newExpenseEvent.getOtherExpenses()));
 
-            this.annualSummaryService.updateAnnualSummary(newExpenseEvent);
-            this.monthlySummaryService.updateMonthlySummary(newExpenseEvent);
+            this.annualSummaryService.updateAnnualSummary(newExpenseEvent, false);
+            this.monthlySummaryService.updateMonthlySummary(newExpenseEvent, false);
 
             expenseEvent.setDateEconomicEvent(newExpenseEvent.getDateEconomicEvent());
             expenseEvent.setAccountingDocumentNumber(newExpenseEvent.getAccountingDocumentNumber());

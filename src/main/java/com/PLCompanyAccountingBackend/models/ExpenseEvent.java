@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ExpenseEvent")
+@Table(name = "ExpenseEvents")
 public class ExpenseEvent extends Event{
 
     @Column(name = "Remuneration - C.12")

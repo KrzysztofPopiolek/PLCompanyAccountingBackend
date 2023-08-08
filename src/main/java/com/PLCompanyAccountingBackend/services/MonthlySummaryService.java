@@ -1,5 +1,6 @@
 package com.PLCompanyAccountingBackend.services;
 
+import com.PLCompanyAccountingBackend.models.AnnualSummary;
 import com.PLCompanyAccountingBackend.models.Event;
 import com.PLCompanyAccountingBackend.models.ExpenseEvent;
 import com.PLCompanyAccountingBackend.models.MonthlySummary;
@@ -19,7 +20,7 @@ public class MonthlySummaryService {
         this.expenseEventService = expenseEventService;
     }
 
-    public void updateMonthlySummary(Event event) {
+    public void updateMonthlySummary(Event event, boolean isDeleteMode) {
         int expenseEventYear = event.getDateEconomicEvent().getYear();
         int expenseEventMonth = event.getDateEconomicEvent().getMonthValue();
 
@@ -31,7 +32,11 @@ public class MonthlySummaryService {
             if (expenseEventYear == monthlySummariesYear && expenseEventMonth == monthlySummariesMonth) {
                 MonthlySummary newMonthlySummary = new MonthlySummary();
                 if(event instanceof ExpenseEvent){
-                    newMonthlySummary = (MonthlySummary) this.expenseEventService.addEntryToSummary((ExpenseEvent) event, monthlySummary);
+                    if(isDeleteMode){
+                        newMonthlySummary = (MonthlySummary) this.expenseEventService.createDeleteEntryForSummary((ExpenseEvent) event, monthlySummary);
+                    }else{
+                        newMonthlySummary = (MonthlySummary) this.expenseEventService.createAddEntryForSummary((ExpenseEvent) event, monthlySummary);
+                    }
                 } //etc.
                 monthlySummaryRepository.save(newMonthlySummary);
             }

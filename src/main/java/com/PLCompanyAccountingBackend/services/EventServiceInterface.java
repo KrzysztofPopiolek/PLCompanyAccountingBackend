@@ -4,8 +4,8 @@ import com.PLCompanyAccountingBackend.models.ExpenseEvent;
 import com.PLCompanyAccountingBackend.models.Summary;
 
 public interface EventServiceInterface {
-    public Summary addEntryToSummary(ExpenseEvent event, Summary summary);
+    public Summary createAddEntryForSummary(ExpenseEvent event, Summary summary);
 
-    public void deleteEntryFromSummary(ExpenseEvent expenseEvent);
+    public Summary createDeleteEntryForSummary(ExpenseEvent expenseEvent, Summary summary);
 
     }
