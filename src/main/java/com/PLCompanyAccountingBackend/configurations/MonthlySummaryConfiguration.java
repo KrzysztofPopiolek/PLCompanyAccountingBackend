@@ -13,7 +13,7 @@ public class MonthlySummaryConfiguration {
 
     @Bean
     public MonthlySummaryService monthlySummaryService(MonthlySummaryRepository monthlySummaryRepository,
-                                      ExpenseEventService expenseEventService) {
+                                                       ExpenseEventService expenseEventService) {
         return new MonthlySummaryService(monthlySummaryRepository, expenseEventService);
     }
 

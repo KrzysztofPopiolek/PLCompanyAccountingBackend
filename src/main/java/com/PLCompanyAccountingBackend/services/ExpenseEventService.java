@@ -1,7 +1,8 @@
 package com.PLCompanyAccountingBackend.services;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
-import com.PLCompanyAccountingBackend.models.*;
+import com.PLCompanyAccountingBackend.models.ExpenseEvent;
+import com.PLCompanyAccountingBackend.models.Summary;
 import com.PLCompanyAccountingBackend.repository.ExpenseEventRepository;
 import org.springframework.data.domain.Sort;
 
@@ -12,15 +13,15 @@ public class ExpenseEventService implements EventServiceInterface {
 
     private final ExpenseEventRepository expenseEventRepository;
 
-    public ExpenseEventService(ExpenseEventRepository expenseEventRepository){
+    public ExpenseEventService(ExpenseEventRepository expenseEventRepository) {
         this.expenseEventRepository = expenseEventRepository;
     }
 
-    public List<ExpenseEvent> getAllExpensesEvents_SortedByDate(){
+    public List<ExpenseEvent> getAllExpensesEvents_SortedByDate() {
         return expenseEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
     }
 
-    public ExpenseEvent getExpenseEvent_ById(Long id){
+    public ExpenseEvent getExpenseEvent_ById(Long id) {
         return expenseEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
     }
 

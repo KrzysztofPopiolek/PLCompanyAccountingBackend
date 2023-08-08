@@ -1,13 +1,14 @@
 package com.PLCompanyAccountingBackend.models;
 
-import jakarta.persistence.*;
-
-import java.math.BigDecimal;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -15,7 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "ExpenseEvents")
-public class ExpenseEvent extends Event{
+public class ExpenseEvent extends Event {
 
     @Column(name = "Remuneration - C.12")
     private BigDecimal remuneration;
@@ -29,7 +30,7 @@ public class ExpenseEvent extends Event{
     @Column(name = "Financial economic issues - C.15")
     private BigDecimal financialEconomicIssues;
 
-    public ExpenseEvent(ExpenseEvent otherExpenseEvent){
+    public ExpenseEvent(ExpenseEvent otherExpenseEvent) {
         super(otherExpenseEvent);
         this.remuneration = otherExpenseEvent.remuneration;
         this.otherExpenses = otherExpenseEvent.otherExpenses;

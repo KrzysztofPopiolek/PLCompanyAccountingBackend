@@ -1,7 +1,7 @@
 package com.PLCompanyAccountingBackend.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.PLCompanyAccountingBackend.models.BusinessContractor;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BusinessContractorRepository extends JpaRepository<BusinessContractor, Long> {
 }

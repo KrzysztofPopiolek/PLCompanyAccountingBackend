@@ -8,4 +8,4 @@ public interface EventServiceInterface {
 
     public Summary createDeleteEntryForSummary(ExpenseEvent expenseEvent, Summary summary);
 
-    }
+}

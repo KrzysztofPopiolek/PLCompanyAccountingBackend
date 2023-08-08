@@ -1,8 +1,8 @@
 package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
-import com.PLCompanyAccountingBackend.models.*;
-import com.PLCompanyAccountingBackend.repository.*;
+import com.PLCompanyAccountingBackend.models.ExpenseEvent;
+import com.PLCompanyAccountingBackend.repository.ExpenseEventRepository;
 import com.PLCompanyAccountingBackend.services.AnnualSummaryService;
 import com.PLCompanyAccountingBackend.services.BusinessContractorService;
 import com.PLCompanyAccountingBackend.services.ExpenseEventService;
@@ -32,7 +32,7 @@ public class ExpenseEventController {
     public ExpenseEventController(BusinessContractorService businessContractorService,
                                   ExpenseEventService expenseEventService,
                                   MonthlySummaryService monthlySummaryService,
-                                  AnnualSummaryService annualSummaryService){
+                                  AnnualSummaryService annualSummaryService) {
         this.businessContractorService = businessContractorService;
         this.expenseEventService = expenseEventService;
         this.monthlySummaryService = monthlySummaryService;
@@ -86,7 +86,7 @@ public class ExpenseEventController {
 
         return expenseEventRepository.findById(id).map(expenseEvent -> {
             boolean contractorExists = businessContractorService.checkIfContractorExists(expenseEvent.getBusinessContractor().getId());
-            if(!contractorExists){
+            if (!contractorExists) {
                 throw new ResourceNotFoundException("Contractor not found");
             }
 
