@@ -7,7 +7,9 @@ import com.PLCompanyAccountingBackend.services.BusinessContractorService;
 import com.PLCompanyAccountingBackend.services.IncomeEventService;
 import com.PLCompanyAccountingBackend.services.MonthlySummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,12 +41,11 @@ public class IncomeEventController {
     public List<IncomeEvent> getAllIncomeEvent() {
         return incomeEventService.getAllIncomeEvent_SortedByDate();
     }
-//
-//    @GetMapping("/getIncome&Event/{id}")
-//    public ResponseEntity<IncomeEvent> getIncomeEventById(@PathVariable Long id) {
-//        IncomeEvent incomeEvent = incomeEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
-//        return ResponseEntity.ok(incomeEvent);
-//    }
+
+    @GetMapping("/getIncome&Event/{id}")
+    public ResponseEntity<IncomeEvent> getIncomeEventById(@PathVariable Long id) {
+        return ResponseEntity.ok(incomeEventService.getIncomeEvent_ById(id));
+    }
 //
 //    @PostMapping("/addIncome&Event")
 //    public IncomeEvent addIncomeEvent(@RequestBody IncomeEvent incomeEvent) {

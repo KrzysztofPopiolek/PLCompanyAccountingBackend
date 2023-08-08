@@ -1,5 +1,6 @@
 package com.PLCompanyAccountingBackend.services;
 
+import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.IncomeEvent;
 import com.PLCompanyAccountingBackend.repository.IncomeEventRepository;
 import org.springframework.data.domain.Sort;
@@ -17,4 +18,7 @@ public class IncomeEventService {
         return incomeEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
     }
 
+    public IncomeEvent getIncomeEvent_ById(Long id) {
+        return incomeEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
+    }
 }
