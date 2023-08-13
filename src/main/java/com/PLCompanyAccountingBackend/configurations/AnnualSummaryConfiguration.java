@@ -2,7 +2,8 @@ package com.PLCompanyAccountingBackend.configurations;
 
 import com.PLCompanyAccountingBackend.repository.AnnualSummaryRepository;
 import com.PLCompanyAccountingBackend.services.AnnualSummaryService;
-import com.PLCompanyAccountingBackend.services.ExpenseEventService;
+import com.PLCompanyAccountingBackend.services.BusinessContractorService;
+import com.PLCompanyAccountingBackend.services.SummaryService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +14,9 @@ public class AnnualSummaryConfiguration {
 
     @Bean
     public AnnualSummaryService annualSummaryService(AnnualSummaryRepository annualSummaryRepository,
-                                                     ExpenseEventService expenseEventService) {
-        return new AnnualSummaryService(annualSummaryRepository, expenseEventService);
+                                                     BusinessContractorService businessContractorService,
+                                                     SummaryService summaryService) {
+        return new AnnualSummaryService(annualSummaryRepository, businessContractorService, summaryService);
     }
 
 }

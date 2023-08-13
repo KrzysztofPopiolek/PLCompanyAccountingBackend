@@ -1,13 +1,14 @@
 package com.PLCompanyAccountingBackend.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -15,19 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "IncomeEvents")
-public class IncomeEvent {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "Date of economic event - C.2", nullable = false)
-    private Date dateEconomicEvent;
-
-    @Column(name = "Accounting document number - C.3", nullable = false)
-    private String accountingDocumentNumber;
-
-    @Column(name = "Description of economic event - C.6", nullable = false)
-    private String descriptionEconomicEvent;
+public class IncomeEvent extends BusinessEvent {
 
     @Column(name = "Sale value - C.7")
     private BigDecimal saleValue;
@@ -38,10 +27,10 @@ public class IncomeEvent {
     @Column(name = "Total revenue - C.9", nullable = false)
     private BigDecimal totalRevenue;
 
-    @Column(name = "Events notes/comments - C.17")
-    private String eventNotesComments;
-
-    @ManyToOne
-    @JoinColumn(name = "contractor_id", nullable = false)
-    private BusinessContractor businessContractor;
+    public IncomeEvent(IncomeEvent otherIncomeEvent) {
+        super(otherIncomeEvent);
+        this.saleValue = otherIncomeEvent.saleValue;
+        this.otherIncome = otherIncomeEvent.otherIncome;
+        this.totalRevenue = otherIncomeEvent.totalRevenue;
+    }
 }

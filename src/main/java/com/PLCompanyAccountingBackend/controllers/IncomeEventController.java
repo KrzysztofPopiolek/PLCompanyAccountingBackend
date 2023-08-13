@@ -2,12 +2,15 @@ package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.IncomeEvent;
-import com.PLCompanyAccountingBackend.repository.BusinessContractorRepository;
 import com.PLCompanyAccountingBackend.repository.IncomeEventRepository;
+import com.PLCompanyAccountingBackend.services.AnnualSummaryService;
+import com.PLCompanyAccountingBackend.services.IncomeEventService;
+import com.PLCompanyAccountingBackend.services.MonthlySummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -16,45 +19,63 @@ public class IncomeEventController {
 
     @Autowired
     private IncomeEventRepository incomeEventRepository;
+    private final IncomeEventService incomeEventService;
+    private final MonthlySummaryService monthlySummaryService;
+    private final AnnualSummaryService annualSummaryService;
 
-    @Autowired
-    private BusinessContractorRepository businessContractorRepository;
+    public IncomeEventController(IncomeEventService incomeEventService,
+                                 MonthlySummaryService monthlySummaryService,
+                                 AnnualSummaryService annualSummaryService) {
+        this.incomeEventService = incomeEventService;
+        this.monthlySummaryService = monthlySummaryService;
+        this.annualSummaryService = annualSummaryService;
+    }
 
     @GetMapping("/getAllIncome&Event")
     public List<IncomeEvent> getAllIncomeEvent() {
-        return incomeEventRepository.findAll();
+        return incomeEventService.getAllIncomeEvent_SortedByDate();
     }
 
     @GetMapping("/getIncome&Event/{id}")
     public ResponseEntity<IncomeEvent> getIncomeEventById(@PathVariable Long id) {
-        IncomeEvent incomeEvent = incomeEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
-        return ResponseEntity.ok(incomeEvent);
+        return ResponseEntity.ok(incomeEventService.getIncomeEvent_ById(id));
     }
 
     @PostMapping("/addIncome&Event")
     public IncomeEvent addIncomeEvent(@RequestBody IncomeEvent incomeEvent) {
-        if (!businessContractorRepository.existsById(incomeEvent.getId())) {
-            throw new ResourceNotFoundException("Contractor not found");
-        }
+
+        incomeEvent.setId(0L);
+        annualSummaryService.checkContractorTaxYearExists(incomeEvent);
+
+        BigDecimal saleValue = incomeEvent.getSaleValue() == null ? new BigDecimal(0) : incomeEvent.getSaleValue();
+        BigDecimal otherIncome = incomeEvent.getOtherIncome() == null ? new BigDecimal(0) : incomeEvent.getOtherIncome();
+        incomeEvent.setTotalRevenue(saleValue.add(otherIncome));
+        this.annualSummaryService.updateAnnualSummary(incomeEvent, false);
+        this.monthlySummaryService.updateMonthlySummary(incomeEvent, false);
         return incomeEventRepository.save(incomeEvent);
     }
 
-    @DeleteMapping("/deleteIncome&Event/{id}")
+    @DeleteMapping("/deleteIncome&BusinessEvent/{id}")
     public void deleteIncomeEvent(@PathVariable Long id) {
-        if (incomeEventRepository.existsById(id)) {
-            incomeEventRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException("Item not found!");
-        }
+        IncomeEvent incomeEvent = incomeEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Event with provided ID does not exist."));
+
+        this.annualSummaryService.updateAnnualSummary(incomeEvent, true);
+        this.monthlySummaryService.updateMonthlySummary(incomeEvent, true);
+        incomeEventRepository.deleteById(id);
     }
 
-    @PutMapping("/editIncome&Event/{id}")
+    @PutMapping("/editIncome&BusinessEvent/{id}")
     IncomeEvent editIncomeEvent(@RequestBody IncomeEvent newIncomeEvent, @PathVariable Long id) {
         return incomeEventRepository.findById(id).map(
                 incomeEvent -> {
-                    if (!businessContractorRepository.existsById(newIncomeEvent.getId())) {
-                        throw new ResourceNotFoundException("Contractor not found");
-                    }
+                    annualSummaryService.checkContractorTaxYearExists(newIncomeEvent);
+
+                    this.annualSummaryService.updateAnnualSummary(incomeEvent, true);
+                    this.monthlySummaryService.updateMonthlySummary(incomeEvent, true);
+                    newIncomeEvent.setTotalRevenue(newIncomeEvent.getSaleValue().add(newIncomeEvent.getOtherIncome()));
+                    this.annualSummaryService.updateAnnualSummary(newIncomeEvent, false);
+                    this.monthlySummaryService.updateMonthlySummary(newIncomeEvent, false);
+
                     incomeEvent.setDateEconomicEvent(newIncomeEvent.getDateEconomicEvent());
                     incomeEvent.setAccountingDocumentNumber(newIncomeEvent.getAccountingDocumentNumber());
                     incomeEvent.setDescriptionEconomicEvent(newIncomeEvent.getDescriptionEconomicEvent());

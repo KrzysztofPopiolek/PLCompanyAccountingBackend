@@ -3,6 +3,7 @@ package com.PLCompanyAccountingBackend.controllers;
 import com.PLCompanyAccountingBackend.exceptions.ResourceAlreadyExistsException;
 import com.PLCompanyAccountingBackend.models.AnnualSummary;
 import com.PLCompanyAccountingBackend.models.MonthlySummary;
+import com.PLCompanyAccountingBackend.models.Summary;
 import com.PLCompanyAccountingBackend.repository.AnnualSummaryRepository;
 import com.PLCompanyAccountingBackend.repository.MonthlySummaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,9 @@ public class MonthlyAnnualSummaryController {
     private MonthlySummaryRepository monthlySummaryRepository;
 
     @PostMapping("/addMonthsAndYearToSummaries/{date}")
-    public AnnualSummary addMonthsAndYearToSummaries(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
-        for (AnnualSummary annualSummary : annualSummaries) {
+    public Summary addMonthsAndYearToSummaries(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        List<? extends Summary> annualSummaries = annualSummaryRepository.findAll();
+        for (Summary annualSummary : annualSummaries) {
             if (annualSummary.getDate().isEqual(date)) {
                 throw new ResourceAlreadyExistsException("Date exist");
             }

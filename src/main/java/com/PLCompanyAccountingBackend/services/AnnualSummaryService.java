@@ -1,8 +1,9 @@
 package com.PLCompanyAccountingBackend.services;
 
+import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.AnnualSummary;
-import com.PLCompanyAccountingBackend.models.Event;
-import com.PLCompanyAccountingBackend.models.ExpenseEvent;
+import com.PLCompanyAccountingBackend.models.BusinessEvent;
+import com.PLCompanyAccountingBackend.models.Summary;
 import com.PLCompanyAccountingBackend.repository.AnnualSummaryRepository;
 
 import java.util.List;
@@ -10,37 +11,33 @@ import java.util.List;
 public class AnnualSummaryService {
 
     private final AnnualSummaryRepository annualSummaryRepository;
+    private final BusinessContractorService businessContractorService;
+    private final SummaryService summaryService;
 
-    private final ExpenseEventService expenseEventService;
-
-    public AnnualSummaryService(AnnualSummaryRepository annualSummaryRepository, ExpenseEventService expenseEventService) {
+    public AnnualSummaryService(AnnualSummaryRepository annualSummaryRepository,
+                                BusinessContractorService businessContractorService,
+                                SummaryService summaryService) {
         this.annualSummaryRepository = annualSummaryRepository;
-        this.expenseEventService = expenseEventService;
+        this.businessContractorService = businessContractorService;
+        this.summaryService = summaryService;
     }
 
     /**
-     * Updates the annual summary table in the DB with the event info.
+     * Updates the annual summary table in the DB with the businessEvent info.
      *
-     * @param event        the event that was added to one of the other tables.
-     * @param isDeleteMode the action we are performing, if true we delete an entry from summary, otherwise we add the
-     *                     entry.
+     * @param businessEvent the businessEvent that was added to one of the other tables.
+     * @param deleteMode    the action we are performing, if true we delete an entry from summary, otherwise we add the
+     *                      entry.
      */
-    public void updateAnnualSummary(Event event, boolean isDeleteMode) {
-        int eventYear = event.getDateEconomicEvent().getYear();
-        List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
+    public void updateAnnualSummary(BusinessEvent businessEvent, boolean deleteMode) {
+        int eventYear = businessEvent.getDateEconomicEvent().getYear();
+        List<? extends Summary> summaries = annualSummaryRepository.findAll();
 
-        for (AnnualSummary annualSummary : annualSummaries) {
-            int annualSummariesYear = annualSummary.getDate().getYear();
+        for (Summary summary : summaries) {
+            int annualSummariesYear = summary.getDate().getYear();
             if (eventYear == annualSummariesYear) {
-                AnnualSummary newAnnualSummary = new AnnualSummary();
-                if (event instanceof ExpenseEvent) {
-                    if (isDeleteMode) {
-                        newAnnualSummary = (AnnualSummary) expenseEventService.createDeleteEntryForSummary((ExpenseEvent) event, annualSummary);
-                    } else {
-                        newAnnualSummary = (AnnualSummary) expenseEventService.createAddEntryForSummary((ExpenseEvent) event, annualSummary);
-                    }
-                } //etc.
-                annualSummaryRepository.save(newAnnualSummary);
+                AnnualSummary newSummary = (AnnualSummary) summaryService.createNewSummary(businessEvent, summary, deleteMode);
+                annualSummaryRepository.save(newSummary);
             }
         }
     }
@@ -51,14 +48,25 @@ public class AnnualSummaryService {
      * @param year the year to check.
      * @return a boolean value, true if the tax year exists false otherwise.
      */
-    public boolean taxYearExists(int year) {
-        List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
-        for (AnnualSummary annualSummary : annualSummaries) {
+    private boolean taxYearExists(int year) {
+        List<? extends Summary> annualSummaries = annualSummaryRepository.findAll();
+        for (Summary annualSummary : annualSummaries) {
             int annualSummariesYear = annualSummary.getDate().getYear();
             if (year == annualSummariesYear) {
                 return true;
             }
         }
         return false;
+    }
+
+    public void checkContractorTaxYearExists(BusinessEvent businessEvent) {
+        boolean taxYearExist = taxYearExists(businessEvent.getDateEconomicEvent().getYear());
+        boolean contractorExists = businessContractorService.checkIfContractorExists(businessEvent.getBusinessContractor().getId());
+
+        if (!taxYearExist) {
+            throw new ResourceNotFoundException("Tax year does not exist");
+        } else if (!contractorExists) {
+            throw new ResourceNotFoundException("Contractor not found");
+        }
     }
 }
