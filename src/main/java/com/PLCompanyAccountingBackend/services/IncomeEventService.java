@@ -24,26 +24,19 @@ public class IncomeEventService {
         return incomeEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
     }
 
-    public Summary createAddEntryForSummary(IncomeEvent incomeEvent, Summary summary) {
+    public Summary createEntryForSummary(IncomeEvent incomeEvent, Summary summary, Boolean deleteMode) {
         BigDecimal saleValue = summary.getSaleValue() == null ? new BigDecimal(0) : summary.getSaleValue();
         BigDecimal otherIncome = summary.getOtherIncome() == null ? new BigDecimal(0) : summary.getOtherIncome();
         BigDecimal totalRevenue = summary.getTotalRevenue() == null ? new BigDecimal(0) : summary.getTotalRevenue();
-
-        summary.setSaleValue(saleValue.add(incomeEvent.getSaleValue()));
-        summary.setOtherIncome(otherIncome.add(incomeEvent.getOtherIncome()));
-        summary.setTotalRevenue(totalRevenue.add(incomeEvent.getTotalRevenue()));
-        return summary;
-    }
-
-
-    public Summary createDeleteEntryForSummary(IncomeEvent incomeEvent, Summary summary) {
-        BigDecimal saleValue = summary.getSaleValue() == null ? new BigDecimal(0) : summary.getSaleValue();
-        BigDecimal otherIncome = summary.getOtherIncome() == null ? new BigDecimal(0) : summary.getOtherIncome();
-        BigDecimal totalRevenue = summary.getTotalRevenue() == null ? new BigDecimal(0) : summary.getTotalRevenue();
-
-        summary.setSaleValue(saleValue.add(incomeEvent.getSaleValue().negate()));
-        summary.setOtherIncome(otherIncome.add(incomeEvent.getOtherIncome().negate()));
-        summary.setTotalRevenue(totalRevenue.add(incomeEvent.getTotalRevenue().negate()));
+        if (deleteMode) {
+            summary.setSaleValue(saleValue.add(incomeEvent.getSaleValue().negate()));
+            summary.setOtherIncome(otherIncome.add(incomeEvent.getOtherIncome().negate()));
+            summary.setTotalRevenue(totalRevenue.add(incomeEvent.getTotalRevenue().negate()));
+        } else {
+            summary.setSaleValue(saleValue.add(incomeEvent.getSaleValue()));
+            summary.setOtherIncome(otherIncome.add(incomeEvent.getOtherIncome()));
+            summary.setTotalRevenue(totalRevenue.add(incomeEvent.getTotalRevenue()));
+        }
         return summary;
     }
 }

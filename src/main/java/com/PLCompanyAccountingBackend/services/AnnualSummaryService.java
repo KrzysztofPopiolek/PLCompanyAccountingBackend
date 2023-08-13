@@ -30,10 +30,10 @@ public class AnnualSummaryService {
      * Updates the annual summary table in the DB with the businessEvent info.
      *
      * @param businessEvent the businessEvent that was added to one of the other tables.
-     * @param isDeleteMode  the action we are performing, if true we delete an entry from summary, otherwise we add the
+     * @param deleteMode    the action we are performing, if true we delete an entry from summary, otherwise we add the
      *                      entry.
      */
-    public void updateAnnualSummary(BusinessEvent businessEvent, boolean isDeleteMode) {
+    public void updateAnnualSummary(BusinessEvent businessEvent, boolean deleteMode) {
         int eventYear = businessEvent.getDateEconomicEvent().getYear();
         List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
 
@@ -42,18 +42,10 @@ public class AnnualSummaryService {
             if (eventYear == annualSummariesYear) {
                 AnnualSummary newAnnualSummary = new AnnualSummary();
                 if (businessEvent instanceof ExpenseEvent) {
-                    if (isDeleteMode) {
-                        newAnnualSummary = (AnnualSummary) expenseEventService.createDeleteEntryForSummary((ExpenseEvent) businessEvent, annualSummary);
-                    } else {
-                        newAnnualSummary = (AnnualSummary) expenseEventService.createAddEntryForSummary((ExpenseEvent) businessEvent, annualSummary);
-                    }
+                    newAnnualSummary = (AnnualSummary) expenseEventService.createEntryForSummary((ExpenseEvent) businessEvent, annualSummary, deleteMode);
                 }
                 if (businessEvent instanceof IncomeEvent) {
-                    if (isDeleteMode) {
-                        newAnnualSummary = (AnnualSummary) incomeEventService.createDeleteEntryForSummary((IncomeEvent) businessEvent, annualSummary);
-                    } else {
-                        newAnnualSummary = (AnnualSummary) incomeEventService.createAddEntryForSummary((IncomeEvent) businessEvent, annualSummary);
-                    }
+                    newAnnualSummary = (AnnualSummary) incomeEventService.createEntryForSummary((IncomeEvent) businessEvent, annualSummary, deleteMode);
                 }
                 annualSummaryRepository.save(newAnnualSummary);
             }

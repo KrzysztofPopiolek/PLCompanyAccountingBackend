@@ -32,39 +32,25 @@ public class ExpenseEventService {
      * @param summary      The object which represents the current state of the summary table.
      * @return A summary object which represents the new state of the summary table.
      */
-    public Summary createAddEntryForSummary(ExpenseEvent expenseEvent, Summary summary) {
+
+
+    public Summary createEntryForSummary(ExpenseEvent expenseEvent, Summary summary, Boolean deleteMode) {
         BigDecimal remuneration = summary.getRemuneration() == null ? new BigDecimal(0) : summary.getRemuneration();
         BigDecimal otherExpenses = summary.getOtherExpenses() == null ? new BigDecimal(0) : summary.getOtherExpenses();
         BigDecimal totalExpenses = summary.getTotalExpenses() == null ? new BigDecimal(0) : summary.getTotalExpenses();
         BigDecimal financialEconomicIssues = summary.getFinancialEconomicIssues() == null ? new BigDecimal(0) : summary.getFinancialEconomicIssues();
 
-        summary.setRemuneration(remuneration.add(expenseEvent.getRemuneration()));
-        summary.setOtherExpenses(otherExpenses.add(expenseEvent.getOtherExpenses()));
-        summary.setTotalExpenses(totalExpenses.add(expenseEvent.getTotalExpenses()));
-        summary.setFinancialEconomicIssues(financialEconomicIssues.add(expenseEvent.getFinancialEconomicIssues()));
+        if (deleteMode) {
+            summary.setRemuneration(remuneration.add(expenseEvent.getRemuneration().negate()));
+            summary.setOtherExpenses(otherExpenses.add(expenseEvent.getOtherExpenses().negate()));
+            summary.setTotalExpenses(totalExpenses.add(expenseEvent.getTotalExpenses().negate()));
+            summary.setFinancialEconomicIssues(financialEconomicIssues.add(expenseEvent.getFinancialEconomicIssues().negate()));
+        } else {
+            summary.setRemuneration(remuneration.add(expenseEvent.getRemuneration()));
+            summary.setOtherExpenses(otherExpenses.add(expenseEvent.getOtherExpenses()));
+            summary.setTotalExpenses(totalExpenses.add(expenseEvent.getTotalExpenses()));
+            summary.setFinancialEconomicIssues(financialEconomicIssues.add(expenseEvent.getFinancialEconomicIssues()));
+        }
         return summary;
     }
-
-    /**
-     * Creates an entry which will be added to the summary tables from the provided event. Value are negated so the
-     * entry is essentially deleted from the table.
-     *
-     * @param expenseEvent The event we deleted from the expenseEvent table.
-     * @param summary      The object which represents the current state of the summary table.
-     * @return A summary object which represents the new state of the summary table.
-     */
-    public Summary createDeleteEntryForSummary(ExpenseEvent expenseEvent, Summary summary) {
-        BigDecimal remuneration = summary.getRemuneration() == null ? new BigDecimal(0) : summary.getRemuneration();
-        BigDecimal otherExpenses = summary.getOtherExpenses() == null ? new BigDecimal(0) : summary.getOtherExpenses();
-        BigDecimal totalExpenses = summary.getTotalExpenses() == null ? new BigDecimal(0) : summary.getTotalExpenses();
-        BigDecimal financialEconomicIssues = summary.getFinancialEconomicIssues() == null ? new BigDecimal(0) : summary.getFinancialEconomicIssues();
-
-        summary.setRemuneration(remuneration.add(expenseEvent.getRemuneration().negate()));
-        summary.setOtherExpenses(otherExpenses.add(expenseEvent.getOtherExpenses().negate()));
-        summary.setTotalExpenses(totalExpenses.add(expenseEvent.getTotalExpenses().negate()));
-        summary.setFinancialEconomicIssues(financialEconomicIssues.add(expenseEvent.getFinancialEconomicIssues().negate()));
-
-        return summary;
-    }
-
 }

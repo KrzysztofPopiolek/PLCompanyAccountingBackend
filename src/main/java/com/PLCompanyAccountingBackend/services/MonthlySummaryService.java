@@ -27,10 +27,10 @@ public class MonthlySummaryService {
      * Updates the monthly summary table in the DB with the businessEvent info.
      *
      * @param businessEvent the businessEvent that was added to one of the other tables.
-     * @param isDeleteMode  the action we are performing, if true we delete an entry from summary, otherwise we add the
+     * @param deleteMode    the action we are performing, if true we delete an entry from summary, otherwise we add the
      *                      entry.
      */
-    public void updateMonthlySummary(BusinessEvent businessEvent, boolean isDeleteMode) {
+    public void updateMonthlySummary(BusinessEvent businessEvent, boolean deleteMode) {
         int expenseEventYear = businessEvent.getDateEconomicEvent().getYear();
         int expenseEventMonth = businessEvent.getDateEconomicEvent().getMonthValue();
 
@@ -42,21 +42,13 @@ public class MonthlySummaryService {
             if (expenseEventYear == monthlySummariesYear && expenseEventMonth == monthlySummariesMonth) {
                 MonthlySummary newMonthlySummary = new MonthlySummary();
                 if (businessEvent instanceof ExpenseEvent) {
-                    if (isDeleteMode) {
-                        newMonthlySummary = (MonthlySummary) this.expenseEventService.createDeleteEntryForSummary((ExpenseEvent) businessEvent, monthlySummary);
-                    } else {
-                        newMonthlySummary = (MonthlySummary) this.expenseEventService.createAddEntryForSummary((ExpenseEvent) businessEvent, monthlySummary);
-                    }
-                } //etc.
+                    newMonthlySummary = (MonthlySummary) expenseEventService.createEntryForSummary((ExpenseEvent) businessEvent, monthlySummary, deleteMode);
+                }
                 if (businessEvent instanceof IncomeEvent) {
-                    if (isDeleteMode) {
-                        newMonthlySummary = (MonthlySummary) this.incomeEventService.createDeleteEntryForSummary((IncomeEvent) businessEvent, monthlySummary);
-                    } else {
-                        newMonthlySummary = (MonthlySummary) this.incomeEventService.createAddEntryForSummary((IncomeEvent) businessEvent, monthlySummary);
-                    }
+                    newMonthlySummary = (MonthlySummary) incomeEventService.createEntryForSummary((IncomeEvent) businessEvent, monthlySummary, deleteMode);
                 }
                 monthlySummaryRepository.save(newMonthlySummary);
-            }
+            }//etc.
         }
     }
 }
