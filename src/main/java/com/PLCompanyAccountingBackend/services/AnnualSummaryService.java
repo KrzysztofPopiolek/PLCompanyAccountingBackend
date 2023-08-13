@@ -1,5 +1,6 @@
 package com.PLCompanyAccountingBackend.services;
 
+import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.AnnualSummary;
 import com.PLCompanyAccountingBackend.models.BusinessEvent;
 import com.PLCompanyAccountingBackend.models.ExpenseEvent;
@@ -25,12 +26,6 @@ public class AnnualSummaryService {
         this.businessContractorService = businessContractorService;
     }
 
-//    public AnnualSummaryService(AnnualSummaryRepository annualSummaryRepository, ExpenseEventService expenseEventService, IncomeEventService incomeEventService) {
-//    }
-
-//    public AnnualSummaryService(AnnualSummaryRepository annualSummaryRepository, ExpenseEventService expenseEventService, IncomeEventService incomeEventService) {
-//    }
-
     /**
      * Updates the annual summary table in the DB with the businessEvent info.
      *
@@ -52,7 +47,6 @@ public class AnnualSummaryService {
                     } else {
                         newAnnualSummary = (AnnualSummary) expenseEventService.createAddEntryForSummary((ExpenseEvent) businessEvent, annualSummary);
                     }
-                    //etc.
                 }
                 if (businessEvent instanceof IncomeEvent) {
                     if (isDeleteMode) {
@@ -72,7 +66,7 @@ public class AnnualSummaryService {
      * @param year the year to check.
      * @return a boolean value, true if the tax year exists false otherwise.
      */
-    public boolean taxYearExists(int year) {
+    private boolean taxYearExists(int year) {
         List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
         for (AnnualSummary annualSummary : annualSummaries) {
             int annualSummariesYear = annualSummary.getDate().getYear();
@@ -83,25 +77,14 @@ public class AnnualSummaryService {
         return false;
     }
 
-//    public void checkContractorTaxYearExists(BusinessEvent businessEvent, BusinessContractorService businessContractorService){
-//        boolean taxYearExist = taxYearExists(businessEvent.getDateEconomicEvent().getYear());
-//        boolean contractorExists = businessContractorService.checkIfContractorExists(businessEvent.getBusinessContractor().getId());
-//
-//
-//        if (!taxYearExist) {
-//            throw new ResourceNotFoundException("Tax year does not exist");
-//        } else if (!contractorExists) {
-//            throw new ResourceNotFoundException("Contractor not found");
-//        }
-//    }
+    public void checkContractorTaxYearExists(BusinessEvent businessEvent) {
+        boolean taxYearExist = taxYearExists(businessEvent.getDateEconomicEvent().getYear());
+        boolean contractorExists = businessContractorService.checkIfContractorExists(businessEvent.getBusinessContractor().getId());
 
-//    boolean taxYearExists = annualSummaryService.taxYearExists(expenseEvent.getDateEconomicEvent().getYear());
-//    boolean contractorExists = businessContractorService.checkIfContractorExists(expenseEvent.getBusinessContractor().getId());
-//
-//        if (!taxYearExists) {
-//        throw new ResourceNotFoundException("Tax year does not exist");
-//    } else if (!contractorExists) {
-//        throw new ResourceNotFoundException("Contractor not found");
-//    }
-
+        if (!taxYearExist) {
+            throw new ResourceNotFoundException("Tax year does not exist");
+        } else if (!contractorExists) {
+            throw new ResourceNotFoundException("Contractor not found");
+        }
+    }
 }

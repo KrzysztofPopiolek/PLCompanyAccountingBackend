@@ -4,7 +4,6 @@ import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.IncomeEvent;
 import com.PLCompanyAccountingBackend.repository.IncomeEventRepository;
 import com.PLCompanyAccountingBackend.services.AnnualSummaryService;
-import com.PLCompanyAccountingBackend.services.BusinessContractorService;
 import com.PLCompanyAccountingBackend.services.IncomeEventService;
 import com.PLCompanyAccountingBackend.services.MonthlySummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +19,16 @@ public class IncomeEventController {
 
     @Autowired
     private IncomeEventRepository incomeEventRepository;
-    private final BusinessContractorService businessContractorService;
     private final IncomeEventService incomeEventService;
     private final MonthlySummaryService monthlySummaryService;
     private final AnnualSummaryService annualSummaryService;
-//    private final BusinessEvent businessEvent;
 
-    public IncomeEventController(BusinessContractorService businessContractorService, IncomeEventService incomeEventService,
-                                 MonthlySummaryService monthlySummaryService, AnnualSummaryService annualSummaryService) {
-        this.businessContractorService = businessContractorService;
+    public IncomeEventController(IncomeEventService incomeEventService,
+                                 MonthlySummaryService monthlySummaryService,
+                                 AnnualSummaryService annualSummaryService) {
         this.incomeEventService = incomeEventService;
         this.monthlySummaryService = monthlySummaryService;
         this.annualSummaryService = annualSummaryService;
-        //this.businessEvent = businessEvent;
     }
 
     @GetMapping("/getAllIncome&Event")
@@ -49,16 +45,7 @@ public class IncomeEventController {
     public IncomeEvent addIncomeEvent(@RequestBody IncomeEvent incomeEvent) {
 
         incomeEvent.setId(0L);
-//        annualSummaryService.checkContractorTaxYearExists(businessEvent, businessContractorService);
-
-        boolean taxYearExist = annualSummaryService.taxYearExists(incomeEvent.getDateEconomicEvent().getYear());
-        boolean contractorExists = businessContractorService.checkIfContractorExists(incomeEvent.getBusinessContractor().getId());
-
-        if (!taxYearExist) {
-            throw new ResourceNotFoundException("Tax year does not exist");
-        } else if (!contractorExists) {
-            throw new ResourceNotFoundException("Contractor not found");
-        }
+        annualSummaryService.checkContractorTaxYearExists(incomeEvent);
 
         BigDecimal saleValue = incomeEvent.getSaleValue() == null ? new BigDecimal(0) : incomeEvent.getSaleValue();
         BigDecimal otherIncome = incomeEvent.getOtherIncome() == null ? new BigDecimal(0) : incomeEvent.getOtherIncome();
@@ -81,13 +68,7 @@ public class IncomeEventController {
     IncomeEvent editIncomeEvent(@RequestBody IncomeEvent newIncomeEvent, @PathVariable Long id) {
         return incomeEventRepository.findById(id).map(
                 incomeEvent -> {
-                    boolean contractorExists = businessContractorService.checkIfContractorExists(newIncomeEvent.getBusinessContractor().getId());
-                    boolean taxYearExists = annualSummaryService.taxYearExists(newIncomeEvent.getDateEconomicEvent().getYear());
-                    if (!taxYearExists) {
-                        throw new ResourceNotFoundException("Tax year does not exist!");
-                    } else if (!contractorExists) {
-                        throw new ResourceNotFoundException("Contractor not found!");
-                    }
+                    annualSummaryService.checkContractorTaxYearExists(newIncomeEvent);
 
                     this.annualSummaryService.updateAnnualSummary(incomeEvent, true);
                     this.monthlySummaryService.updateMonthlySummary(incomeEvent, true);

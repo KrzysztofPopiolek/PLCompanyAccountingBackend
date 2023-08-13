@@ -4,7 +4,6 @@ import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.ExpenseEvent;
 import com.PLCompanyAccountingBackend.repository.ExpenseEventRepository;
 import com.PLCompanyAccountingBackend.services.AnnualSummaryService;
-import com.PLCompanyAccountingBackend.services.BusinessContractorService;
 import com.PLCompanyAccountingBackend.services.ExpenseEventService;
 import com.PLCompanyAccountingBackend.services.MonthlySummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api/v_1/")
 public class ExpenseEventController {
     @Autowired
     private ExpenseEventRepository expenseEventRepository;
-
-    private final BusinessContractorService businessContractorService;
 
     private final ExpenseEventService expenseEventService;
 
@@ -29,11 +25,9 @@ public class ExpenseEventController {
 
     private final AnnualSummaryService annualSummaryService;
 
-    public ExpenseEventController(BusinessContractorService businessContractorService,
-                                  ExpenseEventService expenseEventService,
+    public ExpenseEventController(ExpenseEventService expenseEventService,
                                   MonthlySummaryService monthlySummaryService,
                                   AnnualSummaryService annualSummaryService) {
-        this.businessContractorService = businessContractorService;
         this.expenseEventService = expenseEventService;
         this.monthlySummaryService = monthlySummaryService;
         this.annualSummaryService = annualSummaryService;
@@ -52,15 +46,7 @@ public class ExpenseEventController {
     @PostMapping("/addExpense&Event")
     public ExpenseEvent addExpenseEvent(@RequestBody ExpenseEvent expenseEvent) {
         expenseEvent.setId(0L);
-
-        boolean taxYearExists = annualSummaryService.taxYearExists(expenseEvent.getDateEconomicEvent().getYear());
-        boolean contractorExists = businessContractorService.checkIfContractorExists(expenseEvent.getBusinessContractor().getId());
-
-        if (!taxYearExists) {
-            throw new ResourceNotFoundException("Tax year does not exist");
-        } else if (!contractorExists) {
-            throw new ResourceNotFoundException("Contractor not found");
-        }
+        annualSummaryService.checkContractorTaxYearExists(expenseEvent);
 
         BigDecimal expenseRemuneration = expenseEvent.getRemuneration() == null ? new BigDecimal(0) : expenseEvent.getRemuneration();
         BigDecimal expenseOtherExpenses = expenseEvent.getOtherExpenses() == null ? new BigDecimal(0) : expenseEvent.getOtherExpenses();
@@ -86,13 +72,8 @@ public class ExpenseEventController {
     ExpenseEvent editExpenseEvent(@RequestBody ExpenseEvent newExpenseEvent, @PathVariable Long id) {
 
         return expenseEventRepository.findById(id).map(expenseEvent -> {
-            boolean contractorExists = businessContractorService.checkIfContractorExists(newExpenseEvent.getBusinessContractor().getId());
-            boolean taxYearExists = annualSummaryService.taxYearExists(newExpenseEvent.getDateEconomicEvent().getYear());
-            if (!taxYearExists) {
-                throw new ResourceNotFoundException("Tax year does not exist");
-            } else if (!contractorExists) {
-                throw new ResourceNotFoundException("Contractor not found");
-            }
+
+            annualSummaryService.checkContractorTaxYearExists(newExpenseEvent);
 
             this.annualSummaryService.updateAnnualSummary(expenseEvent, true);
             this.monthlySummaryService.updateMonthlySummary(expenseEvent, true);
