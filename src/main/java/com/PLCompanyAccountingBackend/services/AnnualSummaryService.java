@@ -3,8 +3,7 @@ package com.PLCompanyAccountingBackend.services;
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.AnnualSummary;
 import com.PLCompanyAccountingBackend.models.BusinessEvent;
-import com.PLCompanyAccountingBackend.models.ExpenseEvent;
-import com.PLCompanyAccountingBackend.models.IncomeEvent;
+import com.PLCompanyAccountingBackend.models.Summary;
 import com.PLCompanyAccountingBackend.repository.AnnualSummaryRepository;
 
 import java.util.List;
@@ -12,18 +11,15 @@ import java.util.List;
 public class AnnualSummaryService {
 
     private final AnnualSummaryRepository annualSummaryRepository;
-    private final ExpenseEventService expenseEventService;
-    private final IncomeEventService incomeEventService;
     private final BusinessContractorService businessContractorService;
+    private final SummaryService summaryService;
 
     public AnnualSummaryService(AnnualSummaryRepository annualSummaryRepository,
-                                ExpenseEventService expenseEventService,
-                                IncomeEventService incomeEventService,
-                                BusinessContractorService businessContractorService) {
+                                BusinessContractorService businessContractorService,
+                                SummaryService summaryService) {
         this.annualSummaryRepository = annualSummaryRepository;
-        this.expenseEventService = expenseEventService;
-        this.incomeEventService = incomeEventService;
         this.businessContractorService = businessContractorService;
+        this.summaryService = summaryService;
     }
 
     /**
@@ -35,19 +31,13 @@ public class AnnualSummaryService {
      */
     public void updateAnnualSummary(BusinessEvent businessEvent, boolean deleteMode) {
         int eventYear = businessEvent.getDateEconomicEvent().getYear();
-        List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
+        List<? extends Summary> summaries = annualSummaryRepository.findAll();
 
-        for (AnnualSummary annualSummary : annualSummaries) {
-            int annualSummariesYear = annualSummary.getDate().getYear();
+        for (Summary summary : summaries) {
+            int annualSummariesYear = summary.getDate().getYear();
             if (eventYear == annualSummariesYear) {
-                AnnualSummary newAnnualSummary = new AnnualSummary();
-                if (businessEvent instanceof ExpenseEvent) {
-                    newAnnualSummary = (AnnualSummary) expenseEventService.createEntryForSummary((ExpenseEvent) businessEvent, annualSummary, deleteMode);
-                }
-                if (businessEvent instanceof IncomeEvent) {
-                    newAnnualSummary = (AnnualSummary) incomeEventService.createEntryForSummary((IncomeEvent) businessEvent, annualSummary, deleteMode);
-                }
-                annualSummaryRepository.save(newAnnualSummary);
+                AnnualSummary newSummary = (AnnualSummary) summaryService.createNewSummary(businessEvent, summary, deleteMode);
+                annualSummaryRepository.save(newSummary);
             }
         }
     }
@@ -59,8 +49,8 @@ public class AnnualSummaryService {
      * @return a boolean value, true if the tax year exists false otherwise.
      */
     private boolean taxYearExists(int year) {
-        List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
-        for (AnnualSummary annualSummary : annualSummaries) {
+        List<? extends Summary> annualSummaries = annualSummaryRepository.findAll();
+        for (Summary annualSummary : annualSummaries) {
             int annualSummariesYear = annualSummary.getDate().getYear();
             if (year == annualSummariesYear) {
                 return true;

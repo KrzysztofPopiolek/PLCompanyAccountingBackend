@@ -28,6 +28,7 @@ public class BusinessContractorController {
 
     @PostMapping("/addBusinessContractor")
     public BusinessContractor addBusinessContractors(@RequestBody BusinessContractor businessContractors) {
+        businessContractors.setId(0L);
         return businessContractorRepository.save(businessContractors);
     }
 

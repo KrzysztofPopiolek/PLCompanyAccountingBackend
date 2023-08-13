@@ -1,9 +1,8 @@
 package com.PLCompanyAccountingBackend.services;
 
 import com.PLCompanyAccountingBackend.models.BusinessEvent;
-import com.PLCompanyAccountingBackend.models.ExpenseEvent;
-import com.PLCompanyAccountingBackend.models.IncomeEvent;
 import com.PLCompanyAccountingBackend.models.MonthlySummary;
+import com.PLCompanyAccountingBackend.models.Summary;
 import com.PLCompanyAccountingBackend.repository.MonthlySummaryRepository;
 
 import java.util.List;
@@ -11,16 +10,12 @@ import java.util.List;
 public class MonthlySummaryService {
 
     private final MonthlySummaryRepository monthlySummaryRepository;
-
-    private final ExpenseEventService expenseEventService;
-    private final IncomeEventService incomeEventService;
+    private final SummaryService summaryService;
 
     public MonthlySummaryService(MonthlySummaryRepository monthlySummaryRepository,
-                                 ExpenseEventService expenseEventService,
-                                 IncomeEventService incomeEventService) {
+                                 SummaryService summaryService) {
         this.monthlySummaryRepository = monthlySummaryRepository;
-        this.expenseEventService = expenseEventService;
-        this.incomeEventService = incomeEventService;
+        this.summaryService = summaryService;
     }
 
     /**
@@ -34,21 +29,15 @@ public class MonthlySummaryService {
         int expenseEventYear = businessEvent.getDateEconomicEvent().getYear();
         int expenseEventMonth = businessEvent.getDateEconomicEvent().getMonthValue();
 
-        List<MonthlySummary> monthlySummaries = monthlySummaryRepository.findAll();
+        List<? extends Summary> summaries = monthlySummaryRepository.findAll();
 
-        for (MonthlySummary monthlySummary : monthlySummaries) {
-            int monthlySummariesYear = monthlySummary.getDate().getYear();
-            int monthlySummariesMonth = monthlySummary.getDate().getMonthValue();
+        for (Summary summary : summaries) {
+            int monthlySummariesYear = summary.getDate().getYear();
+            int monthlySummariesMonth = summary.getDate().getMonthValue();
             if (expenseEventYear == monthlySummariesYear && expenseEventMonth == monthlySummariesMonth) {
-                MonthlySummary newMonthlySummary = new MonthlySummary();
-                if (businessEvent instanceof ExpenseEvent) {
-                    newMonthlySummary = (MonthlySummary) expenseEventService.createEntryForSummary((ExpenseEvent) businessEvent, monthlySummary, deleteMode);
-                }
-                if (businessEvent instanceof IncomeEvent) {
-                    newMonthlySummary = (MonthlySummary) incomeEventService.createEntryForSummary((IncomeEvent) businessEvent, monthlySummary, deleteMode);
-                }
-                monthlySummaryRepository.save(newMonthlySummary);
-            }//etc.
+                MonthlySummary newSummary = (MonthlySummary) summaryService.createNewSummary(businessEvent, summary, deleteMode);
+                monthlySummaryRepository.save(newSummary);
+            }
         }
     }
 }

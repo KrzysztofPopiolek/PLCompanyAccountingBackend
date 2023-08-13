@@ -1,7 +1,7 @@
 package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
-import com.PLCompanyAccountingBackend.models.MonthlySummary;
+import com.PLCompanyAccountingBackend.models.Summary;
 import com.PLCompanyAccountingBackend.repository.MonthlySummaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -23,9 +23,9 @@ public class MonthlySummaryController {
     private MonthlySummaryRepository monthlySummaryRepository;
 
     @GetMapping("/allMonthlySummary/{date}")
-    public List<MonthlySummary> getAllMonthlySummary(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        List<MonthlySummary> monthlySummaries = monthlySummaryRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
-        List<MonthlySummary> foundMonthlySummaries = new ArrayList<>();
+    public List<Summary> getAllMonthlySummary(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        List<? extends Summary> monthlySummaries = monthlySummaryRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
+        List<Summary> foundMonthlySummaries = new ArrayList<>();
         for (int i = 0; i < monthlySummaries.size(); i++) {
             if (monthlySummaries.get(i).getDate().isEqual(date)) {
                 for (int j = i; j < i + 12; j++) {
