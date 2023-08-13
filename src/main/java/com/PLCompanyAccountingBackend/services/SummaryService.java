@@ -1,19 +1,19 @@
 package com.PLCompanyAccountingBackend.services;
 
-import com.PLCompanyAccountingBackend.models.BusinessEvent;
-import com.PLCompanyAccountingBackend.models.ExpenseEvent;
-import com.PLCompanyAccountingBackend.models.IncomeEvent;
-import com.PLCompanyAccountingBackend.models.Summary;
+import com.PLCompanyAccountingBackend.models.*;
 
 public class SummaryService {
 
     private final ExpenseEventService expenseEventService;
     private final IncomeEventService incomeEventService;
+    private final OtherPurchaseCostsEventService otherPurchaseCostsEventService;
 
     public SummaryService(ExpenseEventService expenseEventService,
-                          IncomeEventService incomeEventService) {
+                          IncomeEventService incomeEventService,
+                          OtherPurchaseCostsEventService otherPurchaseCostsEventService) {
         this.expenseEventService = expenseEventService;
         this.incomeEventService = incomeEventService;
+        this.otherPurchaseCostsEventService = otherPurchaseCostsEventService;
     }
 
     public Summary createNewSummary(BusinessEvent businessEvent, Summary summary, Boolean deleteMode) {
@@ -21,7 +21,9 @@ public class SummaryService {
             return expenseEventService.createEntryForSummary((ExpenseEvent) businessEvent, summary, deleteMode);
         } else if (businessEvent instanceof IncomeEvent) {
             return incomeEventService.createEntryForSummary((IncomeEvent) businessEvent, summary, deleteMode);
-        }
-        throw new RuntimeException("Invalid object instance.");
+        }else if (businessEvent instanceof OtherPurchaseCostsEvent){
+            return otherPurchaseCostsEventService.createEntryForSummary((OtherPurchaseCostsEvent) businessEvent,summary,deleteMode);
+        } // etc:
+        throw new RuntimeException("Unhandled object instance in SummaryService.");
     }
 }
