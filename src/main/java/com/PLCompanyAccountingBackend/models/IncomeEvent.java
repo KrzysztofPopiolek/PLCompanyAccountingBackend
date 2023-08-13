@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 @Table(name = "IncomeEvents")
-public class IncomeEvent extends Event {
+public class IncomeEvent extends BusinessEvent {
 
     @Column(name = "Sale value - C.7")
     private BigDecimal saleValue;

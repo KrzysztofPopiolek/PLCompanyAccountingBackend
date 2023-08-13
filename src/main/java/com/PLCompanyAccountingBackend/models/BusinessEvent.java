@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
-public class Event {
+public class BusinessEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,12 +35,13 @@ public class Event {
     @JoinColumn(name = "contractor_id", nullable = false)
     private BusinessContractor businessContractor;
 
-    public Event(Event otherEvent) {
-        this.id = otherEvent.id;
-        this.dateEconomicEvent = otherEvent.dateEconomicEvent;
-        this.accountingDocumentNumber = otherEvent.accountingDocumentNumber;
-        this.descriptionEconomicEvent = otherEvent.descriptionEconomicEvent;
-        this.eventNotesComments = otherEvent.eventNotesComments;
-        this.businessContractor = otherEvent.businessContractor;
+    public BusinessEvent(BusinessEvent otherBusinessEvent) {
+        this.id = otherBusinessEvent.id;
+        this.dateEconomicEvent = otherBusinessEvent.dateEconomicEvent;
+        this.accountingDocumentNumber = otherBusinessEvent.accountingDocumentNumber;
+        this.descriptionEconomicEvent = otherBusinessEvent.descriptionEconomicEvent;
+        this.eventNotesComments = otherBusinessEvent.eventNotesComments;
+        this.businessContractor = otherBusinessEvent.businessContractor;
+
     }
 }

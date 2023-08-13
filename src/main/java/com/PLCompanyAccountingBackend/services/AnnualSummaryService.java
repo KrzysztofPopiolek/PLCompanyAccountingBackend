@@ -1,8 +1,9 @@
 package com.PLCompanyAccountingBackend.services;
 
 import com.PLCompanyAccountingBackend.models.AnnualSummary;
-import com.PLCompanyAccountingBackend.models.Event;
+import com.PLCompanyAccountingBackend.models.BusinessEvent;
 import com.PLCompanyAccountingBackend.models.ExpenseEvent;
+import com.PLCompanyAccountingBackend.models.IncomeEvent;
 import com.PLCompanyAccountingBackend.repository.AnnualSummaryRepository;
 
 import java.util.List;
@@ -10,36 +11,56 @@ import java.util.List;
 public class AnnualSummaryService {
 
     private final AnnualSummaryRepository annualSummaryRepository;
-
     private final ExpenseEventService expenseEventService;
+    private final IncomeEventService incomeEventService;
+    private final BusinessContractorService businessContractorService;
 
-    public AnnualSummaryService(AnnualSummaryRepository annualSummaryRepository, ExpenseEventService expenseEventService) {
+    public AnnualSummaryService(AnnualSummaryRepository annualSummaryRepository,
+                                ExpenseEventService expenseEventService,
+                                IncomeEventService incomeEventService,
+                                BusinessContractorService businessContractorService) {
         this.annualSummaryRepository = annualSummaryRepository;
         this.expenseEventService = expenseEventService;
+        this.incomeEventService = incomeEventService;
+        this.businessContractorService = businessContractorService;
     }
 
+//    public AnnualSummaryService(AnnualSummaryRepository annualSummaryRepository, ExpenseEventService expenseEventService, IncomeEventService incomeEventService) {
+//    }
+
+//    public AnnualSummaryService(AnnualSummaryRepository annualSummaryRepository, ExpenseEventService expenseEventService, IncomeEventService incomeEventService) {
+//    }
+
     /**
-     * Updates the annual summary table in the DB with the event info.
+     * Updates the annual summary table in the DB with the businessEvent info.
      *
-     * @param event        the event that was added to one of the other tables.
-     * @param isDeleteMode the action we are performing, if true we delete an entry from summary, otherwise we add the
-     *                     entry.
+     * @param businessEvent the businessEvent that was added to one of the other tables.
+     * @param isDeleteMode  the action we are performing, if true we delete an entry from summary, otherwise we add the
+     *                      entry.
      */
-    public void updateAnnualSummary(Event event, boolean isDeleteMode) {
-        int eventYear = event.getDateEconomicEvent().getYear();
+    public void updateAnnualSummary(BusinessEvent businessEvent, boolean isDeleteMode) {
+        int eventYear = businessEvent.getDateEconomicEvent().getYear();
         List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
 
         for (AnnualSummary annualSummary : annualSummaries) {
             int annualSummariesYear = annualSummary.getDate().getYear();
             if (eventYear == annualSummariesYear) {
                 AnnualSummary newAnnualSummary = new AnnualSummary();
-                if (event instanceof ExpenseEvent) {
+                if (businessEvent instanceof ExpenseEvent) {
                     if (isDeleteMode) {
-                        newAnnualSummary = (AnnualSummary) expenseEventService.createDeleteEntryForSummary((ExpenseEvent) event, annualSummary);
+                        newAnnualSummary = (AnnualSummary) expenseEventService.createDeleteEntryForSummary((ExpenseEvent) businessEvent, annualSummary);
                     } else {
-                        newAnnualSummary = (AnnualSummary) expenseEventService.createAddEntryForSummary((ExpenseEvent) event, annualSummary);
+                        newAnnualSummary = (AnnualSummary) expenseEventService.createAddEntryForSummary((ExpenseEvent) businessEvent, annualSummary);
                     }
-                } //etc.
+                    //etc.
+                }
+                if (businessEvent instanceof IncomeEvent) {
+                    if (isDeleteMode) {
+                        newAnnualSummary = (AnnualSummary) incomeEventService.createDeleteEntryForSummary((IncomeEvent) businessEvent, annualSummary);
+                    } else {
+                        newAnnualSummary = (AnnualSummary) incomeEventService.createAddEntryForSummary((IncomeEvent) businessEvent, annualSummary);
+                    }
+                }
                 annualSummaryRepository.save(newAnnualSummary);
             }
         }
@@ -61,4 +82,26 @@ public class AnnualSummaryService {
         }
         return false;
     }
+
+//    public void checkContractorTaxYearExists(BusinessEvent businessEvent, BusinessContractorService businessContractorService){
+//        boolean taxYearExist = taxYearExists(businessEvent.getDateEconomicEvent().getYear());
+//        boolean contractorExists = businessContractorService.checkIfContractorExists(businessEvent.getBusinessContractor().getId());
+//
+//
+//        if (!taxYearExist) {
+//            throw new ResourceNotFoundException("Tax year does not exist");
+//        } else if (!contractorExists) {
+//            throw new ResourceNotFoundException("Contractor not found");
+//        }
+//    }
+
+//    boolean taxYearExists = annualSummaryService.taxYearExists(expenseEvent.getDateEconomicEvent().getYear());
+//    boolean contractorExists = businessContractorService.checkIfContractorExists(expenseEvent.getBusinessContractor().getId());
+//
+//        if (!taxYearExists) {
+//        throw new ResourceNotFoundException("Tax year does not exist");
+//    } else if (!contractorExists) {
+//        throw new ResourceNotFoundException("Contractor not found");
+//    }
+
 }

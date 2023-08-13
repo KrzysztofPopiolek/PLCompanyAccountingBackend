@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class ExpenseEventService implements EventServiceInterface {
+public class ExpenseEventService {
 
     private final ExpenseEventRepository expenseEventRepository;
 

@@ -50,8 +50,9 @@ public class ExpenseEventController {
     }
 
     @PostMapping("/addExpense&Event")
-    public ExpenseEvent addBusinessExpense(@RequestBody ExpenseEvent expenseEvent) {
+    public ExpenseEvent addExpenseEvent(@RequestBody ExpenseEvent expenseEvent) {
         expenseEvent.setId(0L);
+
         boolean taxYearExists = annualSummaryService.taxYearExists(expenseEvent.getDateEconomicEvent().getYear());
         boolean contractorExists = businessContractorService.checkIfContractorExists(expenseEvent.getBusinessContractor().getId());
 
@@ -74,7 +75,7 @@ public class ExpenseEventController {
 
     @DeleteMapping("/deleteExpense&Event/{id}")
     public void deleteExpenseEvent(@PathVariable Long id) {
-        ExpenseEvent expenseEvent = expenseEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Event with provided ID does not exist."));
+        ExpenseEvent expenseEvent = expenseEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("BusinessEvent with provided ID does not exist."));
 
         this.annualSummaryService.updateAnnualSummary(expenseEvent, true);
         this.monthlySummaryService.updateMonthlySummary(expenseEvent, true);
