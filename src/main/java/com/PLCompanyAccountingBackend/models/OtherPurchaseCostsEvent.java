@@ -20,19 +20,19 @@ public class OtherPurchaseCostsEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Date of economic event - C.2", nullable = false)
+    @Column(name = "C2 - Date of economic event", nullable = false)
     private Date dateEconomicEvent;
 
-    @Column(name = "Accounting document number - C.3", nullable = false)
+    @Column(name = "C3 - Accounting document number", nullable = false)
     private String accountingDocumentNumber;
 
-    @Column(name = "Description of economic event - C.6", nullable = false)
+    @Column(name = "C6 - Description of economic event", nullable = false)
     private String descriptionEconomicEvent;
 
-    @Column(name = "Other purchase costs - C.11")
+    @Column(name = "C11 - Other purchase costs")
     private BigDecimal otherPurchaseCosts;
 
-    @Column(name = "Events notes/comments - C.17")
+    @Column(name = "C17 - Events notes/comments")
     private String eventNotesComments;
 
     @ManyToOne
