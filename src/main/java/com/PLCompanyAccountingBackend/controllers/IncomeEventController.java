@@ -1,7 +1,6 @@
 package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
-import com.PLCompanyAccountingBackend.models.BusinessEvent;
 import com.PLCompanyAccountingBackend.models.IncomeEvent;
 import com.PLCompanyAccountingBackend.repository.IncomeEventRepository;
 import com.PLCompanyAccountingBackend.services.AnnualSummaryService;
@@ -54,7 +53,6 @@ public class IncomeEventController {
 
         boolean taxYearExist = annualSummaryService.taxYearExists(incomeEvent.getDateEconomicEvent().getYear());
         boolean contractorExists = businessContractorService.checkIfContractorExists(incomeEvent.getBusinessContractor().getId());
-
 
         if (!taxYearExist) {
             throw new ResourceNotFoundException("Tax year does not exist");
