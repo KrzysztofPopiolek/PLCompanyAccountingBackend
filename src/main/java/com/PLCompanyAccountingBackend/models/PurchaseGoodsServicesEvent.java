@@ -16,26 +16,13 @@ import java.util.Date;
 @Entity
 @Table(name = "PurchaseGoodsServicesEvents")
 public class PurchaseGoodsServicesEvent {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @Column(name = "Date of economic event - C.2", nullable = false)
-    private Date dateEconomicEvent;
 
-    @Column(name = "Accounting document number - C.3", nullable = false)
-    private String accountingDocumentNumber;
-
-    @Column(name = "Description of economic event - C.6", nullable = false)
-    private String descriptionEconomicEvent;
-
-    @Column(name = "Purchase goods and services - C.10")
+    @Column(name = "C10 - Purchase goods and services")
     private BigDecimal purchaseGoodsServices;
 
-    @Column(name = "Events notes/comments - C.17")
-    private String eventNotesComments;
-
-    @ManyToOne
-    @JoinColumn(name = "contractor_id", nullable = false)
-    private BusinessContractor businessContractor;
+    public PurchaseGoodsServicesEvent(PurchaseGoodsServicesEvent otherPurchaseGoodsServicesEvent){
+        super(otherPurchaseGoodsServicesEvent);
+        this.purchaseGoodsServices = otherPurchaseGoodsServicesEvent.purchaseGoodsServices;
+    }
 }
