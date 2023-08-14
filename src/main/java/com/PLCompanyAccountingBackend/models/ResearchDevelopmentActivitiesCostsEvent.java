@@ -20,19 +20,19 @@ public class ResearchDevelopmentActivitiesCostsEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Date of economic event - C.2", nullable = false)
+    @Column(name = "C2 - Date of economic event", nullable = false)
     private Date dateEconomicEvent;
 
-    @Column(name = "Accounting document number - C.3", nullable = false)
+    @Column(name = "C3 - Accounting document number", nullable = false)
     private String accountingDocumentNumber;
 
-    @Column(name = "Description of economic event - C.6", nullable = false)
+    @Column(name = "C6 - Description of economic event", nullable = false)
     private String descriptionEconomicEvent;
 
-    @Column(name = "Research and development activities costs - C.16")
+    @Column(name = "C16 - Research and development activities costs")
     private BigDecimal researchDevelopmentActivitiesCosts;
 
-    @Column(name = "Events notes/comments - C.17")
+    @Column(name = "C17 - Events notes/comments")
     private String eventNotesComments;
 
     @ManyToOne

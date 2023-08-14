@@ -23,30 +23,30 @@ public abstract class Summary {
     @Column(name = "Date", nullable = false)
     private LocalDate date;
 
-    @Column(name = "Sale value - C.7")
+    @Column(name = "C7 - Sale value")
     private BigDecimal saleValue;
 
-    @Column(name = "Other income - C.8")
+    @Column(name = "C8 - Other income")
     private BigDecimal otherIncome;
 
-    @Column(name = "Total revenue - C.9")
+    @Column(name = "C9 - Total revenue")
     private BigDecimal totalRevenue;
 
-    @Column(name = "Purchase goods and services - C.10")
+    @Column(name = "C10 - Purchase goods and services")
     private BigDecimal purchaseGoodsServices;
 
-    @Column(name = "Other purchase costs - C.11")
+    @Column(name = "C11 - Other purchase costs")
     private BigDecimal otherPurchaseCosts;
 
-    @Column(name = "Remuneration - C.12")
+    @Column(name = "C12 - Remuneration")
     private BigDecimal remuneration;
 
-    @Column(name = "Other expenses - C.13")
+    @Column(name = "C13 - Other expenses")
     private BigDecimal otherExpenses;
 
-    @Column(name = "Total expenses - C.14")
+    @Column(name = "C14 - Total expenses")
     private BigDecimal totalExpenses;
 
-    @Column(name = "Financial economic issues - C.15")
+    @Column(name = "C15 - Financial economic issues")
     private BigDecimal financialEconomicIssues;
 }

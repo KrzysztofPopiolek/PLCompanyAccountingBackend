@@ -18,6 +18,7 @@ public class ExpenseEventService {
     }
 
     public List<ExpenseEvent> getAllExpensesEvents_SortedByDate() {
+        //return expenseEventRepository.findAll(Sort.by(Sort.Direction.DESC, "dateEconomicEvent"));
         return expenseEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
     }
 

@@ -18,16 +18,16 @@ import java.math.BigDecimal;
 @Table(name = "ExpenseEvents")
 public class ExpenseEvent extends BusinessEvent {
 
-    @Column(name = "Remuneration - C.12")
+    @Column(name = "C12 - Remuneration")
     private BigDecimal remuneration;
 
-    @Column(name = "Other expenses - C.13")
+    @Column(name = "C13 - Other expenses")
     private BigDecimal otherExpenses;
 
-    @Column(name = "Total expenses - C.14", nullable = false)
+    @Column(name = "C14 - Total expenses", nullable = false)
     private BigDecimal totalExpenses;
 
-    @Column(name = "Financial economic issues - C.15")
+    @Column(name = "C15 - Financial economic issues")
     private BigDecimal financialEconomicIssues;
 
     public ExpenseEvent(ExpenseEvent otherExpenseEvent) {

@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -15,8 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "PurchaseGoodsServicesEvents")
-public class PurchaseGoodsServicesEvent {
-
+public class PurchaseGoodsServicesEvent extends BusinessEvent{
 
     @Column(name = "C10 - Purchase goods and services")
     private BigDecimal purchaseGoodsServices;
