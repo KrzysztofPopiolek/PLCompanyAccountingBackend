@@ -17,9 +17,9 @@ public class BusinessContractor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Business/Contractors name - C.4", nullable = false)
+    @Column(name = "C4 - Business/Contractors name", nullable = false)
     private String businessContractorsName;
 
-    @Column(name = "Business/Contractors address - C.5", nullable = false)
+    @Column(name = "C5 - Business/Contractors address", nullable = false)
     private String businessContractorsAddress;
 }

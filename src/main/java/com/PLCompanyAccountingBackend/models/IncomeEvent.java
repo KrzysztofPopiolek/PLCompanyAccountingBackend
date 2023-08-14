@@ -18,13 +18,13 @@ import java.math.BigDecimal;
 @Table(name = "IncomeEvents")
 public class IncomeEvent extends BusinessEvent {
 
-    @Column(name = "Sale value - C.7")
+    @Column(name = "C7 - Sale value")
     private BigDecimal saleValue;
 
-    @Column(name = "Other income - C.8")
+    @Column(name = "C8 - Other income")
     private BigDecimal otherIncome;
 
-    @Column(name = "Total revenue - C.9", nullable = false)
+    @Column(name = "C9 - Total revenue", nullable = false)
     private BigDecimal totalRevenue;
 
     public IncomeEvent(IncomeEvent otherIncomeEvent) {
