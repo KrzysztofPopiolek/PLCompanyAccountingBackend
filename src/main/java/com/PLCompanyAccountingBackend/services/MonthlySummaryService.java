@@ -17,7 +17,6 @@ public class MonthlySummaryService {
         this.monthlySummaryRepository = monthlySummaryRepository;
         this.summaryService = summaryService;
     }
-
     /**
      * Updates the monthly summary table in the DB with the businessEvent info.
      *

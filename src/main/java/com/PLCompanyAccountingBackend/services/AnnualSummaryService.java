@@ -21,7 +21,6 @@ public class AnnualSummaryService {
         this.businessContractorService = businessContractorService;
         this.summaryService = summaryService;
     }
-
     /**
      * Updates the annual summary table in the DB with the businessEvent info.
      *
@@ -41,7 +40,6 @@ public class AnnualSummaryService {
             }
         }
     }
-
     /**
      * Checks if a tax year exists in the database.
      *

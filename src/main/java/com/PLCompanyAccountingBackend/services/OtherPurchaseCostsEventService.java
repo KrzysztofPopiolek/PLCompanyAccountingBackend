@@ -24,6 +24,13 @@ public class OtherPurchaseCostsEventService {
         return otherPurchaseCostsEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
     }
 
+    /**
+     * Creates an entry which will be added to the summary tables from the provided event.
+     *
+     * @param otherPurchaseCostsEvent The event we added to the otherPurchaseCostsEvent table.
+     * @param summary                 The object which represents the current state of the summary table.
+     * @return A summary object which represents the new state of the summary table.
+     */
     public Summary createEntryForSummary(OtherPurchaseCostsEvent otherPurchaseCostsEvent, Summary summary, Boolean deleteMode) {
         BigDecimal otherPurchaseCosts = summary.getOtherPurchaseCosts() == null ? new BigDecimal(0) : summary.getOtherPurchaseCosts();
 

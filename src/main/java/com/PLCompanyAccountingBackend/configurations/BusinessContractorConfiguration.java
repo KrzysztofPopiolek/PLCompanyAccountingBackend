@@ -14,5 +14,4 @@ public class BusinessContractorConfiguration {
     public BusinessContractorService businessContractorService(BusinessContractorRepository businessContractorRepository) {
         return new BusinessContractorService(businessContractorRepository);
     }
-
 }

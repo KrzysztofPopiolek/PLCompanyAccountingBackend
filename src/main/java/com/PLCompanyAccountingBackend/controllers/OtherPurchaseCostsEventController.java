@@ -59,16 +59,18 @@ public class OtherPurchaseCostsEventController {
         this.annualSummaryService.updateAnnualSummary(otherPurchaseCostsEvent, true);
         this.monthlySummaryService.updateMonthlySummary(otherPurchaseCostsEvent, true);
         otherPurchaseCostsEventRepository.deleteById(id);
-
     }
 
     @PutMapping("/editOtherPurchaseCosts&Event/{id}")
     OtherPurchaseCostsEvent editOtherPurchaseCostsEvent(@RequestBody OtherPurchaseCostsEvent newOtherPurchaseCostsEvent, @PathVariable Long id) {
         return otherPurchaseCostsEventRepository.findById(id).map(
                 otherPurchaseCostsEvent -> {
-                    annualSummaryService.checkContractorTaxYearExists(newOtherPurchaseCostsEvent);
+
                     this.annualSummaryService.updateAnnualSummary(otherPurchaseCostsEvent, true);
+                    this.monthlySummaryService.updateMonthlySummary(otherPurchaseCostsEvent, true);
+                    annualSummaryService.checkContractorTaxYearExists(newOtherPurchaseCostsEvent);
                     this.annualSummaryService.updateAnnualSummary(newOtherPurchaseCostsEvent, false);
+                    this.monthlySummaryService.updateMonthlySummary(newOtherPurchaseCostsEvent, false);
 
                     otherPurchaseCostsEvent.setDateEconomicEvent(newOtherPurchaseCostsEvent.getDateEconomicEvent());
                     otherPurchaseCostsEvent.setAccountingDocumentNumber(newOtherPurchaseCostsEvent.getAccountingDocumentNumber());

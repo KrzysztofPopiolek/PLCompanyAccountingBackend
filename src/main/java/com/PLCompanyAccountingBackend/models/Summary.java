@@ -49,4 +49,7 @@ public abstract class Summary {
 
     @Column(name = "C15 - Financial economic issues")
     private BigDecimal financialEconomicIssues;
+
+    @Column(name = "C16 - Research and development activities costs")
+    private BigDecimal researchDevelopmentActivitiesCosts;
 }

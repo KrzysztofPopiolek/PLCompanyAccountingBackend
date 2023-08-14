@@ -13,3 +13,4 @@ public class PurchaseGoodsServicesEventConfiguration {
     public PurchaseGoodsServicesEventService purchaseGoodsServicesEventService(PurchaseGoodsServicesEventRepository purchaseGoodsServicesEventRepository) {
         return new PurchaseGoodsServicesEventService(purchaseGoodsServicesEventRepository);
     }
+}
