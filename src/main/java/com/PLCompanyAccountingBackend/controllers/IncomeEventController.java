@@ -17,11 +17,11 @@ import java.util.List;
 @RequestMapping("/api/v_1/")
 public class IncomeEventController {
 
-    @Autowired
-    private IncomeEventRepository incomeEventRepository;
     private final IncomeEventService incomeEventService;
     private final MonthlySummaryService monthlySummaryService;
     private final AnnualSummaryService annualSummaryService;
+    @Autowired
+    private IncomeEventRepository incomeEventRepository;
 
     public IncomeEventController(IncomeEventService incomeEventService,
                                  MonthlySummaryService monthlySummaryService,

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan
 public class IncomeEventConfiguration {
     @Bean
-    public IncomeEventService incomeEventService(IncomeEventRepository incomeEventRepository){
+    public IncomeEventService incomeEventService(IncomeEventRepository incomeEventRepository) {
         return new IncomeEventService(incomeEventRepository);
     }
 }

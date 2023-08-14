@@ -10,18 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v_1/")
 public class OtherPurchaseCostsEventController {
-    @Autowired
-    private OtherPurchaseCostsEventRepository otherPurchaseCostsEventRepository;
-
     private final OtherPurchaseCostsEventService otherPurchaseCostsEventService;
     private final AnnualSummaryService annualSummaryService;
     private final MonthlySummaryService monthlySummaryService;
+    @Autowired
+    private OtherPurchaseCostsEventRepository otherPurchaseCostsEventRepository;
 
     public OtherPurchaseCostsEventController(OtherPurchaseCostsEventService otherPurchaseCostsEventService,
                                              AnnualSummaryService annualSummaryService,

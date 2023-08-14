@@ -21,8 +21,8 @@ public class SummaryService {
             return expenseEventService.createEntryForSummary((ExpenseEvent) businessEvent, summary, deleteMode);
         } else if (businessEvent instanceof IncomeEvent) {
             return incomeEventService.createEntryForSummary((IncomeEvent) businessEvent, summary, deleteMode);
-        }else if (businessEvent instanceof OtherPurchaseCostsEvent){
-            return otherPurchaseCostsEventService.createEntryForSummary((OtherPurchaseCostsEvent) businessEvent,summary,deleteMode);
+        } else if (businessEvent instanceof OtherPurchaseCostsEvent) {
+            return otherPurchaseCostsEventService.createEntryForSummary((OtherPurchaseCostsEvent) businessEvent, summary, deleteMode);
         } // etc:
         throw new RuntimeException("Unhandled object instance in SummaryService.");
     }

@@ -16,14 +16,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v_1/")
 public class ExpenseEventController {
+    private final ExpenseEventService expenseEventService;
+    private final MonthlySummaryService monthlySummaryService;
+    private final AnnualSummaryService annualSummaryService;
     @Autowired
     private ExpenseEventRepository expenseEventRepository;
-
-    private final ExpenseEventService expenseEventService;
-
-    private final MonthlySummaryService monthlySummaryService;
-
-    private final AnnualSummaryService annualSummaryService;
 
     public ExpenseEventController(ExpenseEventService expenseEventService,
                                   MonthlySummaryService monthlySummaryService,
