@@ -24,7 +24,6 @@ public class ResearchDevelopmentActivitiesCostsEventController {
     @Autowired
     private ResearchDevelopmentActivitiesCostsEventRepository researchDevelopmentActivitiesCostsEventRepository;
 
-
     public ResearchDevelopmentActivitiesCostsEventController(ResearchDevelopmentActivitiesCostsEventService researchDevelopmentActivitiesCostsEventService,
                                                              AnnualSummaryService annualSummaryService,
                                                              MonthlySummaryService monthlySummaryService) {
