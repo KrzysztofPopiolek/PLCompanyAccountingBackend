@@ -6,5 +6,4 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "MonthlySummaries")
 public class MonthlySummary extends Summary {
-
 }

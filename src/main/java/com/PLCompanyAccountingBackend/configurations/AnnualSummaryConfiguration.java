@@ -18,5 +18,4 @@ public class AnnualSummaryConfiguration {
                                                      SummaryService summaryService) {
         return new AnnualSummaryService(annualSummaryRepository, businessContractorService, summaryService);
     }
-
 }

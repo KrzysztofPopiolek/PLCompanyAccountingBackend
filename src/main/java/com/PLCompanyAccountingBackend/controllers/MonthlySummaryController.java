@@ -36,5 +36,4 @@ public class MonthlySummaryController {
         }
         throw new ResourceNotFoundException("Date not found");
     }
-
 }

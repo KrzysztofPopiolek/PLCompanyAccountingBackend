@@ -24,6 +24,13 @@ public class IncomeEventService {
         return incomeEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
     }
 
+    /**
+     * Creates an entry which will be added to the summary tables from the provided event.
+     *
+     * @param incomeEvent The event we added to the incomeEvent table.
+     * @param summary     The object which represents the current state of the summary table.
+     * @return A summary object which represents the new state of the summary table.
+     */
     public Summary createEntryForSummary(IncomeEvent incomeEvent, Summary summary, Boolean deleteMode) {
         BigDecimal saleValue = summary.getSaleValue() == null ? new BigDecimal(0) : summary.getSaleValue();
         BigDecimal otherIncome = summary.getOtherIncome() == null ? new BigDecimal(0) : summary.getOtherIncome();

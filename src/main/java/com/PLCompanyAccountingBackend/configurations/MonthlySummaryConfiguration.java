@@ -16,5 +16,4 @@ public class MonthlySummaryConfiguration {
                                                        SummaryService summaryService) {
         return new MonthlySummaryService(monthlySummaryRepository, summaryService);
     }
-
 }

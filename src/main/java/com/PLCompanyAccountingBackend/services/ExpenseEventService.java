@@ -18,14 +18,12 @@ public class ExpenseEventService {
     }
 
     public List<ExpenseEvent> getAllExpensesEvents_SortedByDate() {
-        //return expenseEventRepository.findAll(Sort.by(Sort.Direction.DESC, "dateEconomicEvent"));
         return expenseEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
     }
 
     public ExpenseEvent getExpenseEvent_ById(Long id) {
         return expenseEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
     }
-
     /**
      * Creates an entry which will be added to the summary tables from the provided event.
      *
@@ -33,8 +31,6 @@ public class ExpenseEventService {
      * @param summary      The object which represents the current state of the summary table.
      * @return A summary object which represents the new state of the summary table.
      */
-
-
     public Summary createEntryForSummary(ExpenseEvent expenseEvent, Summary summary, Boolean deleteMode) {
         BigDecimal remuneration = summary.getRemuneration() == null ? new BigDecimal(0) : summary.getRemuneration();
         BigDecimal otherExpenses = summary.getOtherExpenses() == null ? new BigDecimal(0) : summary.getOtherExpenses();

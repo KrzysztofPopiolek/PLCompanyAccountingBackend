@@ -14,5 +14,4 @@ public class ExpenseEventConfiguration {
     public ExpenseEventService expenseEventService(ExpenseEventRepository expenseEventRepository) {
         return new ExpenseEventService(expenseEventRepository);
     }
-
 }

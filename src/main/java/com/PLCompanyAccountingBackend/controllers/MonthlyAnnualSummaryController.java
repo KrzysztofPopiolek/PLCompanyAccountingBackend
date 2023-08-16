@@ -48,5 +48,4 @@ public class MonthlyAnnualSummaryController {
             date = date.plusMonths(1);
         }
     }
-
 }

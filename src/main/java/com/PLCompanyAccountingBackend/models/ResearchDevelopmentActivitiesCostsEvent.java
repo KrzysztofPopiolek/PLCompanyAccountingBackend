@@ -1,13 +1,14 @@
 package com.PLCompanyAccountingBackend.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -15,27 +16,12 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "ResearchDevelopmentActivitiesCostsEvents")
-public class ResearchDevelopmentActivitiesCostsEvent {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ResearchDevelopmentActivitiesCostsEvent extends BusinessEvent {
 
-    @Column(name = "C2 - Date of economic event", nullable = false)
-    private Date dateEconomicEvent;
-
-    @Column(name = "C3 - Accounting document number", nullable = false)
-    private String accountingDocumentNumber;
-
-    @Column(name = "C6 - Description of economic event", nullable = false)
-    private String descriptionEconomicEvent;
-
-    @Column(name = "C16 - Research and development activities costs")
+    @Column(name = "C16b - Research and development activities costs")
     private BigDecimal researchDevelopmentActivitiesCosts;
 
-    @Column(name = "C17 - Events notes/comments")
-    private String eventNotesComments;
-
-    @ManyToOne
-    @JoinColumn(name = "contractor_id", nullable = false)
-    private BusinessContractor businessContractor;
+    @Column(name = "C16a - Research and development activities description")
+    private String researchDevelopmentActivitiesDescription;
 }
+

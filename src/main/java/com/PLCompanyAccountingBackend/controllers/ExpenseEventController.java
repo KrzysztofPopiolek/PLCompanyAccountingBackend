@@ -68,28 +68,26 @@ public class ExpenseEventController {
     @PutMapping("/editExpense&Event/{id}")
     ExpenseEvent editExpenseEvent(@RequestBody ExpenseEvent newExpenseEvent, @PathVariable Long id) {
 
-        return expenseEventRepository.findById(id).map(expenseEvent -> {
+        return expenseEventRepository.findById(id).map(
+                expenseEvent -> {
+                    annualSummaryService.checkContractorTaxYearExists(newExpenseEvent);
+                    this.annualSummaryService.updateAnnualSummary(expenseEvent, true);
+                    this.monthlySummaryService.updateMonthlySummary(expenseEvent, true);
+                    newExpenseEvent.setTotalExpenses(newExpenseEvent.getRemuneration().add(newExpenseEvent.getOtherExpenses()));
+                    this.annualSummaryService.updateAnnualSummary(newExpenseEvent, false);
+                    this.monthlySummaryService.updateMonthlySummary(newExpenseEvent, false);
 
-            annualSummaryService.checkContractorTaxYearExists(newExpenseEvent);
-
-            this.annualSummaryService.updateAnnualSummary(expenseEvent, true);
-            this.monthlySummaryService.updateMonthlySummary(expenseEvent, true);
-
-            newExpenseEvent.setTotalExpenses(newExpenseEvent.getRemuneration().add(newExpenseEvent.getOtherExpenses()));
-
-            this.annualSummaryService.updateAnnualSummary(newExpenseEvent, false);
-            this.monthlySummaryService.updateMonthlySummary(newExpenseEvent, false);
-
-            expenseEvent.setDateEconomicEvent(newExpenseEvent.getDateEconomicEvent());
-            expenseEvent.setAccountingDocumentNumber(newExpenseEvent.getAccountingDocumentNumber());
-            expenseEvent.setDescriptionEconomicEvent(newExpenseEvent.getDescriptionEconomicEvent());
-            expenseEvent.setRemuneration(newExpenseEvent.getRemuneration());
-            expenseEvent.setOtherExpenses(newExpenseEvent.getOtherExpenses());
-            expenseEvent.setFinancialEconomicIssues(newExpenseEvent.getFinancialEconomicIssues());
-            expenseEvent.setTotalExpenses(newExpenseEvent.getTotalExpenses());
-            expenseEvent.setEventNotesComments(newExpenseEvent.getEventNotesComments());
-            expenseEvent.setBusinessContractor((newExpenseEvent.getBusinessContractor()));
-            return expenseEventRepository.save(expenseEvent);
-        }).orElseThrow(() -> new ResourceNotFoundException("Expenses and event not found!"));
+                    expenseEvent.setDateEconomicEvent(newExpenseEvent.getDateEconomicEvent());
+                    expenseEvent.setAccountingDocumentNumber(newExpenseEvent.getAccountingDocumentNumber());
+                    expenseEvent.setDescriptionEconomicEvent(newExpenseEvent.getDescriptionEconomicEvent());
+                    expenseEvent.setRemuneration(newExpenseEvent.getRemuneration());
+                    expenseEvent.setOtherExpenses(newExpenseEvent.getOtherExpenses());
+                    expenseEvent.setFinancialEconomicIssues(newExpenseEvent.getFinancialEconomicIssues());
+                    expenseEvent.setTotalExpenses(newExpenseEvent.getTotalExpenses());
+                    expenseEvent.setEventNotesComments(newExpenseEvent.getEventNotesComments());
+                    expenseEvent.setBusinessContractor((newExpenseEvent.getBusinessContractor()));
+                    return expenseEventRepository.save(expenseEvent);
+                }
+        ).orElseThrow(() -> new ResourceNotFoundException("Expenses and event not found!"));
     }
 }
