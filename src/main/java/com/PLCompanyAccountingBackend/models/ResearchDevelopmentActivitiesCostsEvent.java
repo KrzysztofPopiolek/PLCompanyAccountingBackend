@@ -18,11 +18,10 @@ import java.math.BigDecimal;
 @Table(name = "ResearchDevelopmentActivitiesCostsEvents")
 public class ResearchDevelopmentActivitiesCostsEvent extends BusinessEvent {
 
-    @Column(name = "C16 - Research and development activities costs")
+    @Column(name = "C16b - Research and development activities costs")
     private BigDecimal researchDevelopmentActivitiesCosts;
 
-    public ResearchDevelopmentActivitiesCostsEvent(ResearchDevelopmentActivitiesCostsEvent otherResearchDevelopmentActivitiesCostsEvent) {
-        super(otherResearchDevelopmentActivitiesCostsEvent);
-        this.researchDevelopmentActivitiesCosts = otherResearchDevelopmentActivitiesCostsEvent.researchDevelopmentActivitiesCosts;
-    }
+    @Column(name = "C16a - Research and development activities description")
+    private String researchDevelopmentActivitiesDescription;
 }
+

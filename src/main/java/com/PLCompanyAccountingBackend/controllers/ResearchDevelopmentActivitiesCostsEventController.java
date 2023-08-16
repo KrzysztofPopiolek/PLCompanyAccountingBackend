@@ -80,6 +80,7 @@ public class ResearchDevelopmentActivitiesCostsEventController {
                     researchDevelopmentActivitiesCostsEvent.setAccountingDocumentNumber(newResearchDevelopmentActivitiesCostsEvent.getAccountingDocumentNumber());
                     researchDevelopmentActivitiesCostsEvent.setDescriptionEconomicEvent(newResearchDevelopmentActivitiesCostsEvent.getDescriptionEconomicEvent());
                     researchDevelopmentActivitiesCostsEvent.setResearchDevelopmentActivitiesCosts(newResearchDevelopmentActivitiesCostsEvent.getResearchDevelopmentActivitiesCosts());
+                    researchDevelopmentActivitiesCostsEvent.setResearchDevelopmentActivitiesDescription(newResearchDevelopmentActivitiesCostsEvent.getResearchDevelopmentActivitiesDescription());
                     researchDevelopmentActivitiesCostsEvent.setEventNotesComments(newResearchDevelopmentActivitiesCostsEvent.getEventNotesComments());
                     researchDevelopmentActivitiesCostsEvent.setBusinessContractor(newResearchDevelopmentActivitiesCostsEvent.getBusinessContractor());
                     return researchDevelopmentActivitiesCostsEventRepository.save(researchDevelopmentActivitiesCostsEvent);
