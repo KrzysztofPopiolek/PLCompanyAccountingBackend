@@ -48,4 +48,5 @@ public class InventoryEntries {
         this.valuation = otherInventoryEntries.valuation;
         this.inventoryGeneralDetails = otherInventoryEntries.inventoryGeneralDetails;
     }
+
 }

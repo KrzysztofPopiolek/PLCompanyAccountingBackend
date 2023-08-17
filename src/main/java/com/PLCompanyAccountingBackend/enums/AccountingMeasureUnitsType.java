@@ -13,5 +13,4 @@ public enum AccountingMeasureUnitsType {
     public String getDisplayTypeName() {
         return displayTypeName;
     }
-
 }

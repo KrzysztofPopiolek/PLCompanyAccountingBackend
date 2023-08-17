@@ -36,6 +36,6 @@ public class InventoryGeneralDetails {
     @Column(name = "Inventory total sum", nullable = false)
     private BigDecimal totalInventory;
 
-    //AccountingMeasureUnits accountingMeasureUnits = AccountingMeasureUnits.SQUARE_CENTIMETER;
-    //AccountingMeasureUnitsType accountingMeasureUnitsType = AccountingMeasureUnitsType.LENGTH;
+    @Column(name = "Start/initial inventory", nullable = false)
+    private Boolean isStartInventory;
 }
