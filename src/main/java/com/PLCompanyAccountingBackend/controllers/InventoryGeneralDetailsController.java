@@ -35,6 +35,9 @@ public class InventoryGeneralDetailsController {
     @PostMapping("/addInventoryGeneralDetails")
     public InventoryGeneralDetails addInventoryGeneralDetails(@RequestBody InventoryGeneralDetails inventoryGeneralDetails) {
         inventoryGeneralDetails.setId(0L);
+
+
+
         return inventoryGeneralDetailsRepository.save(inventoryGeneralDetails);
     }
 
@@ -42,7 +45,7 @@ public class InventoryGeneralDetailsController {
     public void deleteInventoryGeneralDetails(@PathVariable Long id) {
 
         InventoryGeneralDetails inventoryGeneralDetails = inventoryGeneralDetailsRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("Event with provided ID does not exist"));
+                new ResourceNotFoundException("Inventory details, with provided ID does not exist"));
         inventoryGeneralDetailsRepository.deleteById(id);
     }
 
@@ -60,5 +63,4 @@ public class InventoryGeneralDetailsController {
                 }
         ).orElseThrow(() -> new ResourceNotFoundException("Inventory not found!"));
     }
-
 }
