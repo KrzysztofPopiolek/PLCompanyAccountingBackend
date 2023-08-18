@@ -1,8 +1,8 @@
 package com.PLCompanyAccountingBackend.controllers;
 
+import com.PLCompanyAccountingBackend.exceptions.RequestNotAcceptableException;
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.InventoryGeneralDetails;
-import com.PLCompanyAccountingBackend.models.InventoryEntries;
 import com.PLCompanyAccountingBackend.repository.InventoryGeneralDetailsRepository;
 import com.PLCompanyAccountingBackend.services.InventoryGeneralDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,15 @@ public class InventoryGeneralDetailsController {
 
     @PostMapping("/addInventoryGeneralDetails")
     public InventoryGeneralDetails addInventoryGeneralDetails(@RequestBody InventoryGeneralDetails inventoryGeneralDetails) {
+
+        if (!inventoryGeneralDetailsService.getLastInventoryGeneralDetails().getIsStartInventory() && !inventoryGeneralDetails.getIsStartInventory()) {
+            throw new RequestNotAcceptableException("Cannot create second entry in a row with false isStartInventory");
+        } else if (inventoryGeneralDetails.getInventoryDate().isBefore(inventoryGeneralDetailsService.getLastInventoryGeneralDetails().getInventoryDate())) {
+            throw new RequestNotAcceptableException("Cannot create inventory before an existing one");
+        }
+
         inventoryGeneralDetails.setId(0L);
+        inventoryGeneralDetails.setTotalInventory(new BigDecimal(0));
         return inventoryGeneralDetailsRepository.save(inventoryGeneralDetails);
     }
 

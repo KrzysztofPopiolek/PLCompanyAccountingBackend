@@ -43,7 +43,9 @@ public class InventoryEntriesController {
     @PostMapping("/addInventoryEntries")
     public InventoryEntries addInventoryEntries(@RequestBody InventoryEntries inventoryEntry) {
 
-        if (!inventoryGeneralDetailsService.getLastInventoryGeneralDetails().getIsStartInventory()) {
+        if (inventoryGeneralDetailsService.getAllInventoryGeneralDetails_SortedByDate().size() == 0) {
+            throw new ResourceNotFoundException("No entries in inventoryGeneralDetails");
+        } else if (!inventoryGeneralDetailsService.getLastInventoryGeneralDetails().getIsStartInventory()) {
             throw new ResourceIsLockedException("Inventory entries locked");
         }
         inventoryEntry.setId(0L);
