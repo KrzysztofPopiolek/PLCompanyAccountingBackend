@@ -13,7 +13,8 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Entity
+@Table(name = "InventoryEntries")
 public class InventoryEntries {
 
     @Id
