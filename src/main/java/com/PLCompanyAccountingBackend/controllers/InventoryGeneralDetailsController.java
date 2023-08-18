@@ -2,12 +2,14 @@ package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.InventoryGeneralDetails;
+import com.PLCompanyAccountingBackend.models.InventoryEntries;
 import com.PLCompanyAccountingBackend.repository.InventoryGeneralDetailsRepository;
 import com.PLCompanyAccountingBackend.services.InventoryGeneralDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -35,9 +37,6 @@ public class InventoryGeneralDetailsController {
     @PostMapping("/addInventoryGeneralDetails")
     public InventoryGeneralDetails addInventoryGeneralDetails(@RequestBody InventoryGeneralDetails inventoryGeneralDetails) {
         inventoryGeneralDetails.setId(0L);
-
-
-
         return inventoryGeneralDetailsRepository.save(inventoryGeneralDetails);
     }
 
