@@ -47,8 +47,8 @@ public class ExpenseEventController {
 
         BigDecimal expenseRemuneration = expenseEvent.getRemuneration() == null ? new BigDecimal(0) : expenseEvent.getRemuneration();
         BigDecimal expenseOtherExpenses = expenseEvent.getOtherExpenses() == null ? new BigDecimal(0) : expenseEvent.getOtherExpenses();
-
         expenseEvent.setTotalExpenses(expenseRemuneration.add(expenseOtherExpenses));
+
         this.annualSummaryService.updateAnnualSummary(expenseEvent, false);
 
         this.monthlySummaryService.updateMonthlySummary(expenseEvent, false);
