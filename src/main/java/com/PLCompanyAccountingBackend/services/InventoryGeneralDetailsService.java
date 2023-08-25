@@ -17,7 +17,7 @@ public class InventoryGeneralDetailsService {
     }
 
     public List<InventoryGeneralDetails> getAllInventoryGeneralDetails_SortedByDate() {
-        return inventoryGeneralDetailsRepository.findAll(Sort.by(Sort.Direction.ASC, "dateInventoryDetails"));
+        return inventoryGeneralDetailsRepository.findAll(Sort.by(Sort.Direction.ASC, "inventoryDate"));
     }
 
     public InventoryGeneralDetails getInventoryGeneralDetails_ById(Long id) {
@@ -27,6 +27,10 @@ public class InventoryGeneralDetailsService {
     public InventoryGeneralDetails getLastInventoryGeneralDetails() {
         List<InventoryGeneralDetails> allInventoryGeneralDetails = inventoryGeneralDetailsRepository.findAll();
         return allInventoryGeneralDetails.get(allInventoryGeneralDetails.size() - 1);
+    }
+
+    public boolean inventoryGeneralDetailsIsEmpty() {
+        return inventoryGeneralDetailsRepository.findAll().isEmpty();
     }
 
     public void addEntryToGeneralDetails(InventoryEntries inventoryEntry) {

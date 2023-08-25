@@ -15,10 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v_1/")
 public class InventoryGeneralDetailsController {
+    private final InventoryGeneralDetailsService inventoryGeneralDetailsService;
     @Autowired
     private InventoryGeneralDetailsRepository inventoryGeneralDetailsRepository;
-
-    private final InventoryGeneralDetailsService inventoryGeneralDetailsService;
 
     public InventoryGeneralDetailsController(InventoryGeneralDetailsService inventoryGeneralDetailsService) {
         this.inventoryGeneralDetailsService = inventoryGeneralDetailsService;
@@ -37,10 +36,16 @@ public class InventoryGeneralDetailsController {
     @PostMapping("/addInventoryGeneralDetails")
     public InventoryGeneralDetails addInventoryGeneralDetails(@RequestBody InventoryGeneralDetails inventoryGeneralDetails) {
 
-        if (!inventoryGeneralDetailsService.getLastInventoryGeneralDetails().getIsStartInventory() && !inventoryGeneralDetails.getIsStartInventory()) {
-            throw new RequestNotAcceptableException("Cannot create second entry in a row with false isStartInventory");
-        } else if (inventoryGeneralDetails.getInventoryDate().isBefore(inventoryGeneralDetailsService.getLastInventoryGeneralDetails().getInventoryDate())) {
-            throw new RequestNotAcceptableException("Cannot create inventory before an existing one");
+        if (inventoryGeneralDetailsService.inventoryGeneralDetailsIsEmpty()) {
+            if (!inventoryGeneralDetails.getIsStartInventory()) {
+                throw new RequestNotAcceptableException("Cannot create ending inventory as first entry");
+            }
+        } else {
+            if (!inventoryGeneralDetailsService.getLastInventoryGeneralDetails().getIsStartInventory() && !inventoryGeneralDetails.getIsStartInventory()) {
+                throw new RequestNotAcceptableException("Cannot create second entry in a row with false isStartInventory");
+            } else if (inventoryGeneralDetails.getInventoryDate().isBefore(inventoryGeneralDetailsService.getLastInventoryGeneralDetails().getInventoryDate())) {
+                throw new RequestNotAcceptableException("Cannot create inventory before an existing one");
+            }
         }
 
         inventoryGeneralDetails.setId(0L);

@@ -17,6 +17,11 @@ public class OtherPurchaseCostsEventService {
     }
 
     public List<OtherPurchaseCostsEvent> getAllOtherPurchaseCostsEvent_SortedByDate() {
+//        List<OtherPurchaseCostsEvent> otherPurchaseCostsEvents = otherPurchaseCostsEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
+//        if(!otherPurchaseCostsEvents.isEmpty()){
+//            return otherPurchaseCostsEvents;
+//        }   throw new ResourceNotFoundException("No entries in database!");
+//
         return otherPurchaseCostsEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
     }
 

@@ -18,12 +18,20 @@ public class ExpenseEventService {
     }
 
     public List<ExpenseEvent> getAllExpensesEvents_SortedByDate() {
+//        try {
+//            return expenseEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
+//        } catch (PropertyReferenceException exception) {
+//            return (List<ExpenseEvent>) new ResourceNotFoundException("Searched item not found!  KP");
+//        }
+
+        // dateEconomicEvent = expenseEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
         return expenseEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
     }
 
     public ExpenseEvent getExpenseEvent_ById(Long id) {
         return expenseEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
     }
+
     /**
      * Creates an entry which will be added to the summary tables from the provided event.
      *

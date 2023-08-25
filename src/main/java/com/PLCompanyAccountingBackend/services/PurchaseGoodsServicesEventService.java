@@ -1,4 +1,5 @@
 package com.PLCompanyAccountingBackend.services;
+
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.PurchaseGoodsServicesEvent;
 import com.PLCompanyAccountingBackend.models.Summary;
@@ -14,10 +15,16 @@ public class PurchaseGoodsServicesEventService {
     public PurchaseGoodsServicesEventService(PurchaseGoodsServicesEventRepository purchaseGoodsServicesEventRepository) {
         this.purchaseGoodsServicesEventRepository = purchaseGoodsServicesEventRepository;
     }
-
     public List<PurchaseGoodsServicesEvent> getAllPurchaseGoodsServicesEvent_SortedByDate() {
+//        List<PurchaseGoodsServicesEvent> purchaseGoodsServicesEvents = purchaseGoodsServicesEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
+//
+//        if(!purchaseGoodsServicesEvents.isEmpty()){
+//            return purchaseGoodsServicesEvents;
+//        }
+//        throw new ResourceNotFoundException("No entries in database!");
         return purchaseGoodsServicesEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
     }
+
 
     public PurchaseGoodsServicesEvent getPurchaseGoodsServicesEvent_ById(Long id) {
         return purchaseGoodsServicesEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
