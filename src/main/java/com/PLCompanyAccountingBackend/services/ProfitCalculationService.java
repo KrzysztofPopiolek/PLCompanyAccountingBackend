@@ -1,6 +1,7 @@
 package com.PLCompanyAccountingBackend.services;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
+import com.PLCompanyAccountingBackend.models.InventoryGeneralDetails;
 import com.PLCompanyAccountingBackend.models.ProfitCalculation;
 import com.PLCompanyAccountingBackend.repository.ProfitCalculationRepository;
 import org.springframework.data.domain.Sort;
@@ -27,4 +28,15 @@ public class ProfitCalculationService {
 //    public ProfitCalculation getProfitCalculation_ByDateProfitCalculation(Date dateProfitCalculation) {
 //        return profitCalculationRepository.findAll(dateProfitCalculation.getTime()).orElseThrow(() -> new ResourceNotFoundException("Searched calculation date not found!"));
 //    }
+
+    // ==========================================================================
+
+//    private final InventoryGeneralDetails inventoryGeneralDetails;
+
+
+    public void profitCalculationSummaryService() {
+
+
+    }
+
 }
