@@ -48,6 +48,10 @@ public class InventoryGeneralDetailsController {
             }
         }
 
+        //  tu wprowadziś metode wpisu/sumowanie Profit Calculation
+        //  inventoryGeneralDetails.setIsStartInventory();
+
+
         inventoryGeneralDetails.setId(0L);
         inventoryGeneralDetails.setTotalInventory(new BigDecimal(0));
         return inventoryGeneralDetailsRepository.save(inventoryGeneralDetails);
