@@ -62,7 +62,6 @@ public class InventoryEntriesController {
 
         return inventoryEntriesRepository.save(inventoryEntry);
     }
-
     @DeleteMapping("/deleteInventoryEntries/{id}")
     public void deleteInventoryEntries(@PathVariable Long id) {
         inventoryEntriesRepository.findById(id).orElseThrow(() ->
@@ -85,5 +84,4 @@ public class InventoryEntriesController {
                 }
         ).orElseThrow(() -> new ResourceNotFoundException("Inventory not found!"));
     }
-
 }

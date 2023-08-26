@@ -49,5 +49,4 @@ public class ProfitCalculationService {
 
         profitCalculationRepository.save(profitCalculation);
     }
-
 }

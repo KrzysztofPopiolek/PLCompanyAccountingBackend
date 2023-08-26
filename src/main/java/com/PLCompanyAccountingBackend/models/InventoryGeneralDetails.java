@@ -49,5 +49,4 @@ public class InventoryGeneralDetails {
         this.totalInventory = otherInventoryGeneralDetails.totalInventory;
         this.isStartInventory = otherInventoryGeneralDetails.isStartInventory;
     }
-
 }

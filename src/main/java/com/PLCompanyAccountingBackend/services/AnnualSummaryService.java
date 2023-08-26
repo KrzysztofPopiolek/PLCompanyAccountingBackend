@@ -58,7 +58,6 @@ public class AnnualSummaryService {
         }
         return false;
     }
-
     public void checkContractorTaxYearExists(BusinessEvent businessEvent) {
         boolean taxYearExist = taxYearExists(businessEvent.getDateEconomicEvent().getYear());
         boolean contractorExists = businessContractorService.checkIfContractorExists(businessEvent.getBusinessContractor().getId());
@@ -74,5 +73,4 @@ public class AnnualSummaryService {
         List<AnnualSummary> allAnnualSummaries = annualSummaryRepository.findAll();
         return allAnnualSummaries.get(allAnnualSummaries.size() - 1);
     }
-
 }

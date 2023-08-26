@@ -28,10 +28,4 @@ public class ProfitCalculationController {
     public ResponseEntity<ProfitCalculation> getProfitCalculationById(@PathVariable Long id) {
         return ResponseEntity.ok(profitCalculationService.getProfitCalculation_ById(id));
     }
-
-//    @GetMapping("/getProfitCalculation/{dateProfitCalculation}")
-//    public ResponseEntity<ProfitCalculation> getProfitCalculation_ByInventoryId(@PathVariable Date dateProfitCalculation) {
-//        return ResponseEntity.ok(profitCalculationService.getProfitCalculation_ByDateProfitCalculation(dateProfitCalculation));
-//    }
-
 }

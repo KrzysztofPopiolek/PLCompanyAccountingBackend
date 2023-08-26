@@ -42,6 +42,5 @@ public class BusinessEvent {
         this.descriptionEconomicEvent = otherBusinessEvent.descriptionEconomicEvent;
         this.eventNotesComments = otherBusinessEvent.eventNotesComments;
         this.businessContractor = otherBusinessEvent.businessContractor;
-
     }
 }
