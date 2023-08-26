@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan
 public class InventoryEntriesConfiguration {
     @Bean
-    public InventoryEntriesService inventoryEntriesService(InventoryEntriesRepository inventoryEntriesRepository){
+    public InventoryEntriesService inventoryEntriesService(InventoryEntriesRepository inventoryEntriesRepository) {
         return new InventoryEntriesService(inventoryEntriesRepository);
     }
 }

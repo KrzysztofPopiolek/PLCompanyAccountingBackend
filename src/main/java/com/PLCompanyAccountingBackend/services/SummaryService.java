@@ -1,6 +1,11 @@
 package com.PLCompanyAccountingBackend.services;
 
 import com.PLCompanyAccountingBackend.models.*;
+import com.PLCompanyAccountingBackend.repository.AnnualSummaryRepository;
+import com.PLCompanyAccountingBackend.repository.MonthlySummaryRepository;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public class SummaryService {
 
@@ -9,17 +14,23 @@ public class SummaryService {
     private final OtherPurchaseCostsEventService otherPurchaseCostsEventService;
     private final PurchaseGoodsServicesEventService purchaseGoodsServicesEventService;
     private final ResearchDevelopmentActivitiesCostsEventService researchDevelopmentActivitiesCostsEventService;
+    private final AnnualSummaryRepository annualSummaryRepository;
+    private final MonthlySummaryRepository monthlySummaryRepository;
 
     public SummaryService(ExpenseEventService expenseEventService,
                           IncomeEventService incomeEventService,
                           OtherPurchaseCostsEventService otherPurchaseCostsEventService,
                           PurchaseGoodsServicesEventService purchaseGoodsServicesEventService,
-                          ResearchDevelopmentActivitiesCostsEventService researchDevelopmentActivitiesCostsEventService) {
+                          ResearchDevelopmentActivitiesCostsEventService researchDevelopmentActivitiesCostsEventService,
+                          AnnualSummaryRepository annualSummaryRepository,
+                          MonthlySummaryRepository monthlySummaryRepository) {
         this.expenseEventService = expenseEventService;
         this.incomeEventService = incomeEventService;
         this.otherPurchaseCostsEventService = otherPurchaseCostsEventService;
         this.purchaseGoodsServicesEventService = purchaseGoodsServicesEventService;
         this.researchDevelopmentActivitiesCostsEventService = researchDevelopmentActivitiesCostsEventService;
+        this.annualSummaryRepository = annualSummaryRepository;
+        this.monthlySummaryRepository = monthlySummaryRepository;
     }
 
     public Summary createNewSummary(BusinessEvent businessEvent, Summary summary, Boolean deleteMode) {
@@ -35,5 +46,28 @@ public class SummaryService {
             return researchDevelopmentActivitiesCostsEventService.createEntryForSummary((ResearchDevelopmentActivitiesCostsEvent) businessEvent, summary, deleteMode);
         }
         throw new RuntimeException("Unhandled object instance in SummaryService.");
+    }
+
+    public Summary addMonthsAndYearToSummaries(LocalDate date) {
+        List<? extends Summary> annualSummaries = annualSummaryRepository.findAll();
+        for (Summary annualSummary : annualSummaries) {
+            if (annualSummary.getDate().isEqual(date)) {
+                // wpisać log z informacja że rok istnieje
+                return annualSummary;
+            }
+        }
+        addMonthsToSummary(date);
+        AnnualSummary newAnnualSummary = new AnnualSummary();
+        newAnnualSummary.setDate(date);
+        return annualSummaryRepository.save(newAnnualSummary);
+    }
+
+    private void addMonthsToSummary(LocalDate date) {
+        for (int i = 0; i < 12; i++) {
+            MonthlySummary newMonthlySummary = new MonthlySummary();
+            newMonthlySummary.setDate(date);
+            monthlySummaryRepository.save(newMonthlySummary);
+            date = date.plusMonths(1);
+        }
     }
 }

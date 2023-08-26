@@ -1,4 +1,5 @@
 package com.PLCompanyAccountingBackend.services;
+
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.PurchaseGoodsServicesEvent;
 import com.PLCompanyAccountingBackend.models.Summary;
@@ -31,12 +32,12 @@ public class PurchaseGoodsServicesEventService {
      * @return A summary object which represents the new state of the summary table.
      */
     public Summary createEntryForSummary(PurchaseGoodsServicesEvent purchaseGoodsServicesEvent, Summary summary, Boolean deleteMode) {
-        BigDecimal purchaseGoodsServices = summary.getPurchaseGoodsServices() == null ? new BigDecimal(0) : summary.getPurchaseGoodsServices();
+        BigDecimal purchaseGoodsServices = summary.getPurchaseGoodsMaterialsCost() == null ? new BigDecimal(0) : summary.getPurchaseGoodsMaterialsCost();
 
         if (deleteMode) {
-            summary.setPurchaseGoodsServices(purchaseGoodsServices.add(purchaseGoodsServicesEvent.getPurchaseGoodsServices().negate()));
+            summary.setPurchaseGoodsMaterialsCost(purchaseGoodsServices.add(purchaseGoodsServicesEvent.getPurchaseGoodsServices().negate()));
         } else {
-            summary.setPurchaseGoodsServices(purchaseGoodsServices.add(purchaseGoodsServicesEvent.getPurchaseGoodsServices()));
+            summary.setPurchaseGoodsMaterialsCost(purchaseGoodsServices.add(purchaseGoodsServicesEvent.getPurchaseGoodsServices()));
         }
         return summary;
     }

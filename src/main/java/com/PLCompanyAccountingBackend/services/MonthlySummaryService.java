@@ -17,6 +17,7 @@ public class MonthlySummaryService {
         this.monthlySummaryRepository = monthlySummaryRepository;
         this.summaryService = summaryService;
     }
+
     /**
      * Updates the monthly summary table in the DB with the businessEvent info.
      *
@@ -28,7 +29,7 @@ public class MonthlySummaryService {
         int expenseEventYear = businessEvent.getDateEconomicEvent().getYear();
         int expenseEventMonth = businessEvent.getDateEconomicEvent().getMonthValue();
 
-        List<? extends Summary> summaries = monthlySummaryRepository.findAll();
+        List<MonthlySummary> summaries = monthlySummaryRepository.findAll();
 
         for (Summary summary : summaries) {
             int monthlySummariesYear = summary.getDate().getYear();

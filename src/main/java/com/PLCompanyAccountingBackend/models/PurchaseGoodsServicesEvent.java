@@ -1,6 +1,8 @@
 package com.PLCompanyAccountingBackend.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,12 +16,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 @Table(name = "PurchaseGoodsServicesEvents")
-public class PurchaseGoodsServicesEvent extends BusinessEvent{
+public class PurchaseGoodsServicesEvent extends BusinessEvent {
 
     @Column(name = "C10 - Purchase goods and services")
     private BigDecimal purchaseGoodsServices;
 
-    public PurchaseGoodsServicesEvent(PurchaseGoodsServicesEvent otherPurchaseGoodsServicesEvent){
+    public PurchaseGoodsServicesEvent(PurchaseGoodsServicesEvent otherPurchaseGoodsServicesEvent) {
         super(otherPurchaseGoodsServicesEvent);
         this.purchaseGoodsServices = otherPurchaseGoodsServicesEvent.purchaseGoodsServices;
     }

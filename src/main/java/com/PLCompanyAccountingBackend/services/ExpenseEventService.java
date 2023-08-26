@@ -24,6 +24,7 @@ public class ExpenseEventService {
     public ExpenseEvent getExpenseEvent_ById(Long id) {
         return expenseEventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched item not found!"));
     }
+
     /**
      * Creates an entry which will be added to the summary tables from the provided event.
      *

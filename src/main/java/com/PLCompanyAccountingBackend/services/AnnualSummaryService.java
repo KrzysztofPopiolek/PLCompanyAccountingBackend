@@ -21,6 +21,7 @@ public class AnnualSummaryService {
         this.businessContractorService = businessContractorService;
         this.summaryService = summaryService;
     }
+
     /**
      * Updates the annual summary table in the DB with the businessEvent info.
      *
@@ -30,7 +31,7 @@ public class AnnualSummaryService {
      */
     public void updateAnnualSummary(BusinessEvent businessEvent, boolean deleteMode) {
         int eventYear = businessEvent.getDateEconomicEvent().getYear();
-        List<? extends Summary> summaries = annualSummaryRepository.findAll();
+        List<AnnualSummary> summaries = annualSummaryRepository.findAll();
 
         for (Summary summary : summaries) {
             int annualSummariesYear = summary.getDate().getYear();
@@ -40,6 +41,7 @@ public class AnnualSummaryService {
             }
         }
     }
+
     /**
      * Checks if a tax year exists in the database.
      *
@@ -47,7 +49,7 @@ public class AnnualSummaryService {
      * @return a boolean value, true if the tax year exists false otherwise.
      */
     private boolean taxYearExists(int year) {
-        List<? extends Summary> annualSummaries = annualSummaryRepository.findAll();
+        List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
         for (Summary annualSummary : annualSummaries) {
             int annualSummariesYear = annualSummary.getDate().getYear();
             if (year == annualSummariesYear) {
@@ -67,4 +69,10 @@ public class AnnualSummaryService {
             throw new ResourceNotFoundException("Contractor not found");
         }
     }
+
+    public AnnualSummary getLastAnnualSummary() {
+        List<AnnualSummary> allAnnualSummaries = annualSummaryRepository.findAll();
+        return allAnnualSummaries.get(allAnnualSummaries.size() - 1);
+    }
+
 }

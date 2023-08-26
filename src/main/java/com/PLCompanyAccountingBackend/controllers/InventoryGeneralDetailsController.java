@@ -5,23 +5,33 @@ import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.InventoryGeneralDetails;
 import com.PLCompanyAccountingBackend.repository.InventoryGeneralDetailsRepository;
 import com.PLCompanyAccountingBackend.services.InventoryGeneralDetailsService;
+import com.PLCompanyAccountingBackend.services.ProfitCalculationService;
+import com.PLCompanyAccountingBackend.services.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v_1/")
 public class InventoryGeneralDetailsController {
+    private final InventoryGeneralDetailsService inventoryGeneralDetailsService;
+    private final SummaryService summaryService;
+    private final ProfitCalculationService profitCalculationService;
+
     @Autowired
     private InventoryGeneralDetailsRepository inventoryGeneralDetailsRepository;
 
-    private final InventoryGeneralDetailsService inventoryGeneralDetailsService;
-
-    public InventoryGeneralDetailsController(InventoryGeneralDetailsService inventoryGeneralDetailsService) {
+    public InventoryGeneralDetailsController(InventoryGeneralDetailsService inventoryGeneralDetailsService,
+                                             SummaryService summaryService,
+                                             ProfitCalculationService profitCalculationService) {
         this.inventoryGeneralDetailsService = inventoryGeneralDetailsService;
+        this.summaryService = summaryService;
+        this.profitCalculationService = profitCalculationService;
     }
 
     @GetMapping("/getAllInventoryGeneralDetails")
@@ -37,10 +47,24 @@ public class InventoryGeneralDetailsController {
     @PostMapping("/addInventoryGeneralDetails")
     public InventoryGeneralDetails addInventoryGeneralDetails(@RequestBody InventoryGeneralDetails inventoryGeneralDetails) {
 
-        if (!inventoryGeneralDetailsService.getLastInventoryGeneralDetails().getIsStartInventory() && !inventoryGeneralDetails.getIsStartInventory()) {
-            throw new RequestNotAcceptableException("Cannot create second entry in a row with false isStartInventory");
-        } else if (inventoryGeneralDetails.getInventoryDate().isBefore(inventoryGeneralDetailsService.getLastInventoryGeneralDetails().getInventoryDate())) {
-            throw new RequestNotAcceptableException("Cannot create inventory before an existing one");
+        if (inventoryGeneralDetailsService.inventoryGeneralDetailsIsEmpty()) {
+            if (!inventoryGeneralDetails.getIsStartInventory()) {
+                throw new RequestNotAcceptableException("Cannot create ending inventory as first entry");
+            }
+        } else {
+            if (!inventoryGeneralDetailsService.getLastInventoryGeneralDetails().getIsStartInventory() && !inventoryGeneralDetails.getIsStartInventory()) {
+                throw new RequestNotAcceptableException("Cannot create second entry in a row with false isStartInventory");
+            } else if (inventoryGeneralDetails.getInventoryDate().isBefore(inventoryGeneralDetailsService.getLastInventoryGeneralDetails().getInventoryDate())) {
+                throw new RequestNotAcceptableException("Cannot create inventory before an existing one");
+            }
+        }
+
+        LocalDate currentInventoryDate = inventoryGeneralDetails.getInventoryDate();
+        currentInventoryDate = currentInventoryDate.with(TemporalAdjusters.firstDayOfYear());
+        summaryService.addMonthsAndYearToSummaries(currentInventoryDate);
+
+        if (!inventoryGeneralDetails.getIsStartInventory()) {
+            profitCalculationService.calculateProfit(inventoryGeneralDetails);
         }
 
         inventoryGeneralDetails.setId(0L);
@@ -51,7 +75,7 @@ public class InventoryGeneralDetailsController {
     @DeleteMapping("/deleteInventoryGeneralDetails/{id}")
     public void deleteInventoryGeneralDetails(@PathVariable Long id) {
 
-        InventoryGeneralDetails inventoryGeneralDetails = inventoryGeneralDetailsRepository.findById(id).orElseThrow(() ->
+        inventoryGeneralDetailsRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Inventory details, with provided ID does not exist"));
         inventoryGeneralDetailsRepository.deleteById(id);
     }

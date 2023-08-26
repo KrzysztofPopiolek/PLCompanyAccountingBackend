@@ -1,5 +1,7 @@
 package com.PLCompanyAccountingBackend.configurations;
 
+import com.PLCompanyAccountingBackend.repository.AnnualSummaryRepository;
+import com.PLCompanyAccountingBackend.repository.MonthlySummaryRepository;
 import com.PLCompanyAccountingBackend.services.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,8 +16,11 @@ public class SummaryConfiguration {
                                          IncomeEventService incomeEventService,
                                          OtherPurchaseCostsEventService otherPurchaseCostsEventService,
                                          PurchaseGoodsServicesEventService purchaseGoodsServicesEventService,
-                                         ResearchDevelopmentActivitiesCostsEventService researchDevelopmentActivitiesCostsEventService) {
+                                         ResearchDevelopmentActivitiesCostsEventService researchDevelopmentActivitiesCostsEventService,
+                                         AnnualSummaryRepository annualSummaryRepository,
+                                         MonthlySummaryRepository monthlySummaryRepository) {
         return new SummaryService(expenseEventService, incomeEventService, otherPurchaseCostsEventService,
-                purchaseGoodsServicesEventService, researchDevelopmentActivitiesCostsEventService);
+                purchaseGoodsServicesEventService, researchDevelopmentActivitiesCostsEventService,
+                annualSummaryRepository, monthlySummaryRepository);
     }
 }

@@ -65,8 +65,7 @@ public class InventoryEntriesController {
 
     @DeleteMapping("/deleteInventoryEntries/{id}")
     public void deleteInventoryEntries(@PathVariable Long id) {
-
-        InventoryEntries inventoryEntries = inventoryEntriesRepository.findById(id).orElseThrow(() ->
+        inventoryEntriesRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Inventory with provided ID does not exist"));
         inventoryEntriesRepository.deleteById(id);
     }
@@ -75,12 +74,13 @@ public class InventoryEntriesController {
     InventoryEntries editInventoryEntries(@RequestBody InventoryEntries newInventoryEntries, @PathVariable Long id) {
         return inventoryEntriesRepository.findById(id).map(
                 inventoryEntries -> {
+
+
                     inventoryEntries.setGoodsName(newInventoryEntries.getGoodsName());
                     inventoryEntries.setUnitsType(newInventoryEntries.getUnitsType());
                     inventoryEntries.setAmount(newInventoryEntries.getAmount());
                     inventoryEntries.setPricePerUnit(newInventoryEntries.getPricePerUnit());
                     inventoryEntries.setValuation(newInventoryEntries.getValuation());
-                    inventoryEntries.setInventoryGeneralDetails(newInventoryEntries.getInventoryGeneralDetails());
                     return inventoryEntriesRepository.save(inventoryEntries);
                 }
         ).orElseThrow(() -> new ResourceNotFoundException("Inventory not found!"));
