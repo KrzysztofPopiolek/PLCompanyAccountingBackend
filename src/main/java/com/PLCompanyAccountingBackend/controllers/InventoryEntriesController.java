@@ -76,7 +76,6 @@ public class InventoryEntriesController {
                 inventoryEntries -> {
 
 
-
                     inventoryEntries.setGoodsName(newInventoryEntries.getGoodsName());
                     inventoryEntries.setUnitsType(newInventoryEntries.getUnitsType());
                     inventoryEntries.setAmount(newInventoryEntries.getAmount());

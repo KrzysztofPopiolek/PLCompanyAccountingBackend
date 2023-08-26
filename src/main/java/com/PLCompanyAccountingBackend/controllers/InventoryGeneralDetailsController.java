@@ -5,22 +5,33 @@ import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.InventoryGeneralDetails;
 import com.PLCompanyAccountingBackend.repository.InventoryGeneralDetailsRepository;
 import com.PLCompanyAccountingBackend.services.InventoryGeneralDetailsService;
+import com.PLCompanyAccountingBackend.services.ProfitCalculationService;
+import com.PLCompanyAccountingBackend.services.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v_1/")
 public class InventoryGeneralDetailsController {
     private final InventoryGeneralDetailsService inventoryGeneralDetailsService;
+    private final SummaryService summaryService;
+    private final ProfitCalculationService profitCalculationService;
+
     @Autowired
     private InventoryGeneralDetailsRepository inventoryGeneralDetailsRepository;
 
-    public InventoryGeneralDetailsController(InventoryGeneralDetailsService inventoryGeneralDetailsService) {
+    public InventoryGeneralDetailsController(InventoryGeneralDetailsService inventoryGeneralDetailsService,
+                                             SummaryService summaryService,
+                                             ProfitCalculationService profitCalculationService) {
         this.inventoryGeneralDetailsService = inventoryGeneralDetailsService;
+        this.summaryService = summaryService;
+        this.profitCalculationService = profitCalculationService;
     }
 
     @GetMapping("/getAllInventoryGeneralDetails")
@@ -48,9 +59,13 @@ public class InventoryGeneralDetailsController {
             }
         }
 
-        //  tu wprowadziś metode wpisu/sumowanie Profit Calculation
-        //  inventoryGeneralDetails.setIsStartInventory();
+        LocalDate currentInventoryDate = inventoryGeneralDetails.getInventoryDate();
+        currentInventoryDate = currentInventoryDate.with(TemporalAdjusters.firstDayOfYear());
+        summaryService.addMonthsAndYearToSummaries(currentInventoryDate);
 
+        if (!inventoryGeneralDetails.getIsStartInventory()) {
+            profitCalculationService.profitCalculationSummaryService(inventoryGeneralDetails);
+        }
 
         inventoryGeneralDetails.setId(0L);
         inventoryGeneralDetails.setTotalInventory(new BigDecimal(0));
@@ -60,7 +75,7 @@ public class InventoryGeneralDetailsController {
     @DeleteMapping("/deleteInventoryGeneralDetails/{id}")
     public void deleteInventoryGeneralDetails(@PathVariable Long id) {
 
-        InventoryGeneralDetails inventoryGeneralDetails = inventoryGeneralDetailsRepository.findById(id).orElseThrow(() ->
+        inventoryGeneralDetailsRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Inventory details, with provided ID does not exist"));
         inventoryGeneralDetailsRepository.deleteById(id);
     }

@@ -23,8 +23,8 @@ public abstract class Summary {
     @Column(name = "Date", nullable = false)
     private LocalDate date;
 
-    @Column(name = "C7 - Sale value")
-    private BigDecimal saleValue;
+    @Column(name = "C7 - Sale goods and services value")
+    private BigDecimal saleGoodsAndServicesValue;
 
     @Column(name = "C8 - Other income")
     private BigDecimal otherIncome;
@@ -32,8 +32,8 @@ public abstract class Summary {
     @Column(name = "C9 - Total revenue")
     private BigDecimal totalRevenue;
 
-    @Column(name = "C10 - Purchase goods and services")
-    private BigDecimal purchaseGoodsServices;
+    @Column(name = "C10 - Purchase goods and materials cost")
+    private BigDecimal purchaseGoodsMaterialsCost;
 
     @Column(name = "C11 - Other purchase costs")
     private BigDecimal otherPurchaseCosts;

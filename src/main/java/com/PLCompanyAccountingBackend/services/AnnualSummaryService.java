@@ -69,4 +69,10 @@ public class AnnualSummaryService {
             throw new ResourceNotFoundException("Contractor not found");
         }
     }
+
+    public AnnualSummary getLastAnnualSummary() {
+        List<AnnualSummary> allAnnualSummaries = annualSummaryRepository.findAll();
+        return allAnnualSummaries.get(allAnnualSummaries.size() - 1);
+    }
+
 }
