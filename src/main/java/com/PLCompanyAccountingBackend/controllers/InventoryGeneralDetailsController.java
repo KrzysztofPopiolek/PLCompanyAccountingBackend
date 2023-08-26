@@ -64,7 +64,7 @@ public class InventoryGeneralDetailsController {
         summaryService.addMonthsAndYearToSummaries(currentInventoryDate);
 
         if (!inventoryGeneralDetails.getIsStartInventory()) {
-            profitCalculationService.profitCalculationSummaryService(inventoryGeneralDetails);
+            profitCalculationService.calculateProfit(inventoryGeneralDetails);
         }
 
         inventoryGeneralDetails.setId(0L);

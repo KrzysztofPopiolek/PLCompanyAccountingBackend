@@ -31,16 +31,7 @@ public class ProfitCalculationService {
         return profitCalculationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched calculation not found!"));
     }
 
-//    public ProfitCalculation getProfitCalculation_ByDateProfitCalculation(Date dateProfitCalculation) {
-//        return profitCalculationRepository.findAll(dateProfitCalculation.getTime()).orElseThrow(() -> new ResourceNotFoundException("Searched calculation date not found!"));
-//    }
-
-    // ==========================================================================
-
-//    private final InventoryGeneralDetails inventoryGeneralDetails;
-
-
-    public void profitCalculationSummaryService(InventoryGeneralDetails inventoryGeneralDetails) {
+    public void calculateProfit(InventoryGeneralDetails inventoryGeneralDetails) {
 
         BigDecimal costOfGettingIncome = new BigDecimal(0);
         ProfitCalculation profitCalculation = new ProfitCalculation();

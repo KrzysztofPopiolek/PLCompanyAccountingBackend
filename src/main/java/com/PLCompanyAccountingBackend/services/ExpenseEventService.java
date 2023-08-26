@@ -18,13 +18,6 @@ public class ExpenseEventService {
     }
 
     public List<ExpenseEvent> getAllExpensesEvents_SortedByDate() {
-//        try {
-//            return expenseEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
-//        } catch (PropertyReferenceException exception) {
-//            return (List<ExpenseEvent>) new ResourceNotFoundException("Searched item not found!  KP");
-//        }
-
-        // dateEconomicEvent = expenseEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
         return expenseEventRepository.findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
     }
 
