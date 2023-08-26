@@ -58,6 +58,7 @@ public class AnnualSummaryService {
         }
         return false;
     }
+
     public void checkContractorTaxYearExists(BusinessEvent businessEvent) {
         boolean taxYearExist = taxYearExists(businessEvent.getDateEconomicEvent().getYear());
         boolean contractorExists = businessContractorService.checkIfContractorExists(businessEvent.getBusinessContractor().getId());
