@@ -22,7 +22,7 @@ public class PurchaseGoodsServicesEvent extends BusinessEvent {
     private BigDecimal purchaseGoodsServices;
 
     public PurchaseGoodsServicesEvent(PurchaseGoodsServicesEvent otherPurchaseGoodsServicesEvent) {
-        super(otherPurchaseGoodsServicesEvent);
+
         this.purchaseGoodsServices = otherPurchaseGoodsServicesEvent.purchaseGoodsServices;
     }
 }

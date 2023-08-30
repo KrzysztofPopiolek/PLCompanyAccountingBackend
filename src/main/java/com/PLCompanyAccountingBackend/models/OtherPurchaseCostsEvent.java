@@ -22,7 +22,6 @@ public class OtherPurchaseCostsEvent extends BusinessEvent {
     private BigDecimal otherPurchaseCosts;
 
     public OtherPurchaseCostsEvent(OtherPurchaseCostsEvent otherOtherPurchaseCostsEvent) {
-        super(otherOtherPurchaseCostsEvent);
         this.otherPurchaseCosts = otherOtherPurchaseCostsEvent.otherPurchaseCosts;
     }
 }

@@ -31,7 +31,6 @@ public class ExpenseEvent extends BusinessEvent {
     private BigDecimal financialEconomicIssues;
 
     public ExpenseEvent(ExpenseEvent otherExpenseEvent) {
-        super(otherExpenseEvent);
         this.remuneration = otherExpenseEvent.remuneration;
         this.otherExpenses = otherExpenseEvent.otherExpenses;
         this.totalExpenses = otherExpenseEvent.totalExpenses;

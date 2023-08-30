@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
-public class BusinessEvent {
+public abstract class BusinessEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +34,4 @@ public class BusinessEvent {
     @ManyToOne
     @JoinColumn(name = "contractor_id", nullable = false)
     private BusinessContractor businessContractor;
-
-    public BusinessEvent(BusinessEvent otherBusinessEvent) {
-        this.id = otherBusinessEvent.id;
-        this.dateEconomicEvent = otherBusinessEvent.dateEconomicEvent;
-        this.accountingDocumentNumber = otherBusinessEvent.accountingDocumentNumber;
-        this.descriptionEconomicEvent = otherBusinessEvent.descriptionEconomicEvent;
-        this.eventNotesComments = otherBusinessEvent.eventNotesComments;
-        this.businessContractor = otherBusinessEvent.businessContractor;
-    }
 }

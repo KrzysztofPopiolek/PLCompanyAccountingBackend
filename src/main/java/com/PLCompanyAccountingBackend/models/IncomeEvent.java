@@ -3,17 +3,13 @@ package com.PLCompanyAccountingBackend.models;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "IncomeEvents")
 public class IncomeEvent extends BusinessEvent {
@@ -27,10 +23,14 @@ public class IncomeEvent extends BusinessEvent {
     @Column(name = "C9 - Total revenue", nullable = false)
     private BigDecimal totalRevenue;
 
-    public IncomeEvent(IncomeEvent otherIncomeEvent) {
-        super(otherIncomeEvent);
-        this.saleValue = otherIncomeEvent.saleValue;
-        this.otherIncome = otherIncomeEvent.otherIncome;
-        this.totalRevenue = otherIncomeEvent.totalRevenue;
+    @Builder
+    public IncomeEvent(Long id, LocalDate dateEconomicEvent, String accountingDocumentNumber, String descriptionEconomicEvent,
+                       String eventNotesComments, BusinessContractor businessContractor, BigDecimal saleValue, BigDecimal otherIncome,
+                       BigDecimal totalRevenue){
+        super(id, dateEconomicEvent, accountingDocumentNumber, descriptionEconomicEvent, eventNotesComments, businessContractor);
+        this.saleValue = saleValue;
+        this.otherIncome = otherIncome;
+        this.totalRevenue = totalRevenue;
     }
+
 }

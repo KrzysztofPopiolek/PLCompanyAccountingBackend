@@ -3,17 +3,13 @@ package com.PLCompanyAccountingBackend.models;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "ResearchDevelopmentActivitiesCostsEvents")
 public class ResearchDevelopmentActivitiesCostsEvent extends BusinessEvent {
@@ -23,5 +19,14 @@ public class ResearchDevelopmentActivitiesCostsEvent extends BusinessEvent {
 
     @Column(name = "C16a - Research and development activities description")
     private String researchDevelopmentActivitiesDescription;
+
+    @Builder
+    public ResearchDevelopmentActivitiesCostsEvent(Long id, LocalDate dateEconomicEvent, String accountingDocumentNumber, String descriptionEconomicEvent,
+                       String eventNotesComments, BusinessContractor businessContractor, BigDecimal researchDevelopmentActivitiesCosts,
+                                                   String researchDevelopmentActivitiesDescription){
+        super(id, dateEconomicEvent, accountingDocumentNumber, descriptionEconomicEvent, eventNotesComments, businessContractor);
+        this.researchDevelopmentActivitiesCosts = researchDevelopmentActivitiesCosts;
+        this.researchDevelopmentActivitiesDescription = researchDevelopmentActivitiesDescription;
+    }
 }
 
