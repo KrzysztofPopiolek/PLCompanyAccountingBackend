@@ -55,7 +55,7 @@ public class IncomeEventServiceTests {
                 incomeEventService.getIncomeEvent_ById(1L));
         Assertions.assertEquals("Searched item not found!", exception.getMessage());
     }
-    
+
     @Test
     public void getAllSortedByDate_valid_incomeEventsList() {
         List<IncomeEvent> mockIncomeEvent = new ArrayList<>(1);
@@ -118,6 +118,6 @@ public class IncomeEventServiceTests {
 
         assertThat(summary).usingRecursiveComparison().isEqualTo(expectedSummary);
     }
-    
+
 
 }

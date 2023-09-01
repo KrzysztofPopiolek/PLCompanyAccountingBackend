@@ -1,14 +1,12 @@
 package com.PLCompanyAccountingBackend.services_tests;
 
 import com.PLCompanyAccountingBackend.models.AnnualSummary;
-import com.PLCompanyAccountingBackend.models.BusinessEvent;
 import com.PLCompanyAccountingBackend.models.IncomeEvent;
 import com.PLCompanyAccountingBackend.models.Summary;
 import com.PLCompanyAccountingBackend.repository.AnnualSummaryRepository;
 import com.PLCompanyAccountingBackend.services.AnnualSummaryService;
 import com.PLCompanyAccountingBackend.services.BusinessContractorService;
 import com.PLCompanyAccountingBackend.services.SummaryService;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,6 +39,7 @@ public class AnnualSummaryServiceTests {
         annualSummaryService = new AnnualSummaryService(annualSummaryRepository, businessContractorService, summaryService);
 
     }
+
     @After
     public void releaseMocks() throws Exception {
         closeable.close();
@@ -48,7 +47,7 @@ public class AnnualSummaryServiceTests {
 
     @Test
     public void updateAnnualSummary_callsAnnualSummaryRepositorySave_exactlyOnce() {
-        LocalDate mockDate = LocalDate.of(2020,1,1);
+        LocalDate mockDate = LocalDate.of(2020, 1, 1);
 
         IncomeEvent mockBusinessEvent = IncomeEvent.builder().dateEconomicEvent(mockDate).build();
 
