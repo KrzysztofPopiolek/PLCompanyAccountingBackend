@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SuperBuilder
 @Table(name = "ExpenseEvents")
 public class ExpenseEvent extends BusinessEvent {
 
@@ -29,11 +31,4 @@ public class ExpenseEvent extends BusinessEvent {
 
     @Column(name = "C15 - Financial economic issues")
     private BigDecimal financialEconomicIssues;
-
-    public ExpenseEvent(ExpenseEvent otherExpenseEvent) {
-        this.remuneration = otherExpenseEvent.remuneration;
-        this.otherExpenses = otherExpenseEvent.otherExpenses;
-        this.totalExpenses = otherExpenseEvent.totalExpenses;
-        this.financialEconomicIssues = otherExpenseEvent.financialEconomicIssues;
-    }
 }

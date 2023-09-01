@@ -32,15 +32,15 @@ public class IncomeEventService {
      * @return A summary object which represents the new state of the summary table.
      */
     public Summary createEntryForSummary(IncomeEvent incomeEvent, Summary summary, Boolean deleteMode) {
-        BigDecimal saleValue = summary.getSaleGoodsAndServicesValue() == null ? new BigDecimal(0) : summary.getSaleGoodsAndServicesValue();
+        BigDecimal saleValue = summary.getSaleValue() == null ? new BigDecimal(0) : summary.getSaleValue();
         BigDecimal otherIncome = summary.getOtherIncome() == null ? new BigDecimal(0) : summary.getOtherIncome();
         BigDecimal totalRevenue = summary.getTotalRevenue() == null ? new BigDecimal(0) : summary.getTotalRevenue();
         if (deleteMode) {
-            summary.setSaleGoodsAndServicesValue(saleValue.add(incomeEvent.getSaleValue().negate()));
+            summary.setSaleValue(saleValue.add(incomeEvent.getSaleValue().negate()));
             summary.setOtherIncome(otherIncome.add(incomeEvent.getOtherIncome().negate()));
             summary.setTotalRevenue(totalRevenue.add(incomeEvent.getTotalRevenue().negate()));
         } else {
-            summary.setSaleGoodsAndServicesValue(saleValue.add(incomeEvent.getSaleValue()));
+            summary.setSaleValue(saleValue.add(incomeEvent.getSaleValue()));
             summary.setOtherIncome(otherIncome.add(incomeEvent.getOtherIncome()));
             summary.setTotalRevenue(totalRevenue.add(incomeEvent.getTotalRevenue()));
         }

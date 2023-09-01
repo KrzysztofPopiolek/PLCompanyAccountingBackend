@@ -32,7 +32,6 @@ public class AnnualSummaryService {
     public void updateAnnualSummary(BusinessEvent businessEvent, boolean deleteMode) {
         int eventYear = businessEvent.getDateEconomicEvent().getYear();
         List<AnnualSummary> summaries = annualSummaryRepository.findAll();
-
         for (Summary summary : summaries) {
             int annualSummariesYear = summary.getDate().getYear();
             if (eventYear == annualSummariesYear) {

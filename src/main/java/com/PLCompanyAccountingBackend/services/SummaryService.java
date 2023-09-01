@@ -48,17 +48,16 @@ public class SummaryService {
         throw new RuntimeException("Unhandled object instance in SummaryService.");
     }
 
-    public Summary addMonthsAndYearToSummaries(LocalDate date) {
-        List<? extends Summary> annualSummaries = annualSummaryRepository.findAll();
-        for (Summary annualSummary : annualSummaries) {
+    public AnnualSummary addMonthsAndYearToSummaries(LocalDate date) {
+        List<AnnualSummary> annualSummaries = annualSummaryRepository.findAll();
+        for (AnnualSummary annualSummary : annualSummaries) {
             if (annualSummary.getDate().isEqual(date)) {
                 // wpisać log z informacja że rok istnieje
                 return annualSummary;
             }
         }
         addMonthsToSummary(date);
-        AnnualSummary newAnnualSummary = new AnnualSummary();
-        newAnnualSummary.setDate(date);
+        AnnualSummary newAnnualSummary = AnnualSummary.builder().date(date).build();
         return annualSummaryRepository.save(newAnnualSummary);
     }
 
