@@ -1,6 +1,7 @@
 package com.PLCompanyAccountingBackend.services_tests;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
+import com.PLCompanyAccountingBackend.models.AnnualSummary;
 import com.PLCompanyAccountingBackend.models.ResearchDevelopmentActivitiesCostsEvent;
 import com.PLCompanyAccountingBackend.models.Summary;
 import com.PLCompanyAccountingBackend.repository.ResearchDevelopmentActivitiesCostsEventRepository;
@@ -71,11 +72,11 @@ public class ResearchDevelopmentActivitiesCostsEventServiceTests {
                 .researchDevelopmentActivitiesCosts(BigDecimal.ONE)
                 .build();
 
-        Summary mockSummary = Summary.builder()
+        AnnualSummary mockSummary = AnnualSummary.builder()
                 .researchDevelopmentActivitiesCosts(BigDecimal.ONE)
                 .build();
 
-        Summary expectedSummary = Summary.builder()
+        AnnualSummary expectedSummary = AnnualSummary.builder()
                 .researchDevelopmentActivitiesCosts(BigDecimal.ZERO)
                 .build();
 
@@ -92,11 +93,11 @@ public class ResearchDevelopmentActivitiesCostsEventServiceTests {
                 .researchDevelopmentActivitiesCosts(BigDecimal.ONE)
                 .build();
 
-        Summary mockSummary = Summary.builder()
+        AnnualSummary mockSummary = AnnualSummary.builder()
                 .researchDevelopmentActivitiesCosts(BigDecimal.ONE)
                 .build();
 
-        Summary expectedSummary = Summary.builder()
+        AnnualSummary expectedSummary = AnnualSummary.builder()
                 .researchDevelopmentActivitiesCosts(BigDecimal.TWO)
                 .build();
 

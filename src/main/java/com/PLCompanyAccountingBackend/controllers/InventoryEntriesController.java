@@ -2,7 +2,7 @@ package com.PLCompanyAccountingBackend.controllers;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceIsLockedException;
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
-import com.PLCompanyAccountingBackend.models.InventoryEntries;
+import com.PLCompanyAccountingBackend.models.InventoryEntry;
 import com.PLCompanyAccountingBackend.models.InventoryGeneralDetails;
 import com.PLCompanyAccountingBackend.repository.InventoryEntriesRepository;
 import com.PLCompanyAccountingBackend.services.InventoryEntriesService;
@@ -31,17 +31,17 @@ public class InventoryEntriesController {
     }
 
     @GetMapping("/getAllInventoryEntries")
-    public List<InventoryEntries> getAllInventoryEntries() {
+    public List<InventoryEntry> getAllInventoryEntries() {
         return inventoryEntriesService.getAllInventoryEntries();
     }
 
     @GetMapping("/getInventoryEntries/{id}")
-    public ResponseEntity<InventoryEntries> getInventoryEntriesById(@PathVariable Long id) {
+    public ResponseEntity<InventoryEntry> getInventoryEntriesById(@PathVariable Long id) {
         return ResponseEntity.ok(inventoryEntriesService.getInventoryEntries_ById(id));
     }
 
     @PostMapping("/addInventoryEntries")
-    public InventoryEntries addInventoryEntries(@RequestBody InventoryEntries inventoryEntry) {
+    public InventoryEntry addInventoryEntries(@RequestBody InventoryEntry inventoryEntry) {
 
         if (inventoryGeneralDetailsService.getAllInventoryGeneralDetails_SortedByDate().size() == 0) {
             throw new ResourceNotFoundException("No entries in inventoryGeneralDetails");
@@ -71,16 +71,16 @@ public class InventoryEntriesController {
     }
 
     @PutMapping("/editInventoryEntries/{id}")
-    InventoryEntries editInventoryEntries(@RequestBody InventoryEntries newInventoryEntries, @PathVariable Long id) {
+    InventoryEntry editInventoryEntries(@RequestBody InventoryEntry newInventoryEntry, @PathVariable Long id) {
         return inventoryEntriesRepository.findById(id).map(
                 inventoryEntries -> {
 
 
-                    inventoryEntries.setGoodsName(newInventoryEntries.getGoodsName());
-                    inventoryEntries.setUnitsType(newInventoryEntries.getUnitsType());
-                    inventoryEntries.setAmount(newInventoryEntries.getAmount());
-                    inventoryEntries.setPricePerUnit(newInventoryEntries.getPricePerUnit());
-                    inventoryEntries.setValuation(newInventoryEntries.getValuation());
+                    inventoryEntries.setGoodsName(newInventoryEntry.getGoodsName());
+                    inventoryEntries.setUnitsType(newInventoryEntry.getUnitsType());
+                    inventoryEntries.setAmount(newInventoryEntry.getAmount());
+                    inventoryEntries.setPricePerUnit(newInventoryEntry.getPricePerUnit());
+                    inventoryEntries.setValuation(newInventoryEntry.getValuation());
                     return inventoryEntriesRepository.save(inventoryEntries);
                 }
         ).orElseThrow(() -> new ResourceNotFoundException("Inventory not found!"));

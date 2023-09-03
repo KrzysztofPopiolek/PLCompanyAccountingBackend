@@ -1,6 +1,7 @@
 package com.PLCompanyAccountingBackend.services_tests;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
+import com.PLCompanyAccountingBackend.models.AnnualSummary;
 import com.PLCompanyAccountingBackend.models.IncomeEvent;
 import com.PLCompanyAccountingBackend.models.Summary;
 import com.PLCompanyAccountingBackend.repository.IncomeEventRepository;
@@ -75,13 +76,13 @@ public class IncomeEventServiceTests {
                 .totalRevenue(BigDecimal.TWO)
                 .build();
 
-        Summary mockSummary = Summary.builder()
+        AnnualSummary mockSummary = AnnualSummary.builder()
                 .saleValue(BigDecimal.ONE)
                 .otherIncome(BigDecimal.ONE)
                 .totalRevenue(BigDecimal.TWO)
                 .build();
 
-        Summary expectedSummary = Summary.builder()
+        AnnualSummary expectedSummary = AnnualSummary.builder()
                 .saleValue(BigDecimal.ZERO)
                 .otherIncome(BigDecimal.ZERO)
                 .totalRevenue(BigDecimal.ZERO)
@@ -102,13 +103,13 @@ public class IncomeEventServiceTests {
                 .totalRevenue(BigDecimal.TWO)
                 .build();
 
-        Summary mockSummary = Summary.builder()
+        AnnualSummary mockSummary = AnnualSummary.builder()
                 .saleValue(BigDecimal.ONE)
                 .otherIncome(BigDecimal.ONE)
                 .totalRevenue(BigDecimal.TWO)
                 .build();
 
-        Summary expectedSummary = Summary.builder()
+        AnnualSummary expectedSummary = AnnualSummary.builder()
                 .saleValue(BigDecimal.TWO)
                 .otherIncome(BigDecimal.TWO)
                 .totalRevenue(new BigDecimal(4))
@@ -118,6 +119,4 @@ public class IncomeEventServiceTests {
 
         assertThat(summary).usingRecursiveComparison().isEqualTo(expectedSummary);
     }
-
-
 }

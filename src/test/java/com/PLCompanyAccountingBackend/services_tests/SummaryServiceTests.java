@@ -56,7 +56,7 @@ public class SummaryServiceTests {
     @Test
     public void createNewSummary_expenseEvent_callsCreateEntryForSummary() {
         ExpenseEvent mockEvent = ExpenseEvent.builder().build();
-        Summary mockSummary = Summary.builder().build();
+        AnnualSummary mockSummary = AnnualSummary.builder().build();
         summaryService.createNewSummary(mockEvent, mockSummary, true);
         verify(expenseEventService, times(1)).createEntryForSummary(mockEvent, mockSummary, true);
     }
@@ -64,7 +64,7 @@ public class SummaryServiceTests {
     @Test
     public void createNewSummary_incomeEventEvent_callsCreateEntryForSummary() {
         IncomeEvent mockEvent = IncomeEvent.builder().build();
-        Summary mockSummary = Summary.builder().build();
+        AnnualSummary mockSummary = AnnualSummary.builder().build();
         summaryService.createNewSummary(mockEvent, mockSummary, true);
         verify(incomeEventService, times(1)).createEntryForSummary(mockEvent, mockSummary, true);
     }
@@ -72,7 +72,7 @@ public class SummaryServiceTests {
     @Test
     public void createNewSummary_otherPurchaseCostsEvent_callsCreateEntryForSummary() {
         OtherPurchaseCostsEvent mockEvent = OtherPurchaseCostsEvent.builder().build();
-        Summary mockSummary = Summary.builder().build();
+        AnnualSummary mockSummary = AnnualSummary.builder().build();
         summaryService.createNewSummary(mockEvent, mockSummary, true);
         verify(otherPurchaseCostsEventService, times(1)).createEntryForSummary(mockEvent, mockSummary, true);
     }
@@ -80,7 +80,7 @@ public class SummaryServiceTests {
     @Test
     public void createNewSummary_purchaseGoodsServicesEvent_callsCreateEntryForSummary() {
         PurchaseGoodsServicesEvent mockEvent = PurchaseGoodsServicesEvent.builder().build();
-        Summary mockSummary = Summary.builder().build();
+        AnnualSummary mockSummary = AnnualSummary.builder().build();
         summaryService.createNewSummary(mockEvent, mockSummary, true);
         verify(purchaseGoodsServicesEventService, times(1)).createEntryForSummary(mockEvent, mockSummary, true);
     }
@@ -88,7 +88,7 @@ public class SummaryServiceTests {
     @Test
     public void createNewSummary_researchDevelopmentActivitiesCostsEvent_callsCreateEntryForSummary() {
         ResearchDevelopmentActivitiesCostsEvent mockEvent = ResearchDevelopmentActivitiesCostsEvent.builder().build();
-        Summary mockSummary = Summary.builder().build();
+        AnnualSummary mockSummary = AnnualSummary.builder().build();
         summaryService.createNewSummary(mockEvent, mockSummary, true);
         verify(researchDevelopmentActivitiesCostsEventService, times(1)).createEntryForSummary(mockEvent, mockSummary, true);
     }

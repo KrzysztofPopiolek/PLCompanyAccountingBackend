@@ -1,7 +1,7 @@
 package com.PLCompanyAccountingBackend.services;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
-import com.PLCompanyAccountingBackend.models.InventoryEntries;
+import com.PLCompanyAccountingBackend.models.InventoryEntry;
 import com.PLCompanyAccountingBackend.repository.InventoryEntriesRepository;
 
 import java.util.List;
@@ -15,11 +15,11 @@ public class InventoryEntriesService {
 
     }
 
-    public List<InventoryEntries> getAllInventoryEntries() {
+    public List<InventoryEntry> getAllInventoryEntries() {
         return inventoryEntriesRepository.findAll();
     }
 
-    public InventoryEntries getInventoryEntries_ById(Long id) {
+    public InventoryEntry getInventoryEntries_ById(Long id) {
         return inventoryEntriesRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Searched inventory not found!"));
     }

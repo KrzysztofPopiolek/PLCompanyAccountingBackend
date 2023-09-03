@@ -4,6 +4,7 @@ import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.ResearchDevelopmentActivitiesCostsEvent;
 import com.PLCompanyAccountingBackend.repository.ResearchDevelopmentActivitiesCostsEventRepository;
 import com.PLCompanyAccountingBackend.services.AnnualSummaryService;
+import com.PLCompanyAccountingBackend.services.BusinessContractorService;
 import com.PLCompanyAccountingBackend.services.MonthlySummaryService;
 import com.PLCompanyAccountingBackend.services.ResearchDevelopmentActivitiesCostsEventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +21,19 @@ public class ResearchDevelopmentActivitiesCostsEventController {
     private final ResearchDevelopmentActivitiesCostsEventService researchDevelopmentActivitiesCostsEventService;
     private final AnnualSummaryService annualSummaryService;
     private final MonthlySummaryService monthlySummaryService;
+    private final BusinessContractorService businessContractorService;
 
     @Autowired
     private ResearchDevelopmentActivitiesCostsEventRepository researchDevelopmentActivitiesCostsEventRepository;
 
     public ResearchDevelopmentActivitiesCostsEventController(ResearchDevelopmentActivitiesCostsEventService researchDevelopmentActivitiesCostsEventService,
                                                              AnnualSummaryService annualSummaryService,
-                                                             MonthlySummaryService monthlySummaryService) {
+                                                             MonthlySummaryService monthlySummaryService,
+                                                             BusinessContractorService businessContractorService) {
         this.researchDevelopmentActivitiesCostsEventService = researchDevelopmentActivitiesCostsEventService;
         this.annualSummaryService = annualSummaryService;
         this.monthlySummaryService = monthlySummaryService;
+        this.businessContractorService = businessContractorService;
     }
 
     @GetMapping("/getAllResearchDevelopmentActivities&EventCosts")
@@ -46,7 +50,11 @@ public class ResearchDevelopmentActivitiesCostsEventController {
     public ResearchDevelopmentActivitiesCostsEvent addResearchDevelopmentActivitiesCostsEvent(
             @RequestBody ResearchDevelopmentActivitiesCostsEvent researchDevelopmentActivitiesCostsEvent) {
         researchDevelopmentActivitiesCostsEvent.setId(0L);
-        annualSummaryService.checkContractorTaxYearExists(researchDevelopmentActivitiesCostsEvent);
+        if (!annualSummaryService.taxYearExists(researchDevelopmentActivitiesCostsEvent.getDateEconomicEvent().getYear())) {
+            throw new ResourceNotFoundException("Tax year does not exist");
+        } else if (businessContractorService.checkIfContractorExists(researchDevelopmentActivitiesCostsEvent.getBusinessContractor().getId())) {
+            throw new ResourceNotFoundException("Contractor not found");
+        }
 
         this.annualSummaryService.updateAnnualSummary(researchDevelopmentActivitiesCostsEvent, false);
         this.monthlySummaryService.updateMonthlySummary(researchDevelopmentActivitiesCostsEvent, false);
@@ -72,7 +80,13 @@ public class ResearchDevelopmentActivitiesCostsEventController {
 
                     this.annualSummaryService.updateAnnualSummary(researchDevelopmentActivitiesCostsEvent, true);
                     this.monthlySummaryService.updateMonthlySummary(researchDevelopmentActivitiesCostsEvent, true);
-                    annualSummaryService.checkContractorTaxYearExists(newResearchDevelopmentActivitiesCostsEvent);
+
+                    if (!annualSummaryService.taxYearExists(newResearchDevelopmentActivitiesCostsEvent.getDateEconomicEvent().getYear())) {
+                        throw new ResourceNotFoundException("Tax year does not exist");
+                    } else if (businessContractorService.checkIfContractorExists(newResearchDevelopmentActivitiesCostsEvent.getBusinessContractor().getId())) {
+                        throw new ResourceNotFoundException("Contractor not found");
+                    }
+
                     this.annualSummaryService.updateAnnualSummary(newResearchDevelopmentActivitiesCostsEvent, false);
                     this.monthlySummaryService.updateMonthlySummary(newResearchDevelopmentActivitiesCostsEvent, false);
 

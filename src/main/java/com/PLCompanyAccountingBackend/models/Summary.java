@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @MappedSuperclass
 @SuperBuilder
-public class Summary {
+public abstract class Summary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

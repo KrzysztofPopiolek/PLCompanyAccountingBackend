@@ -1,10 +1,7 @@
 package com.PLCompanyAccountingBackend.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "InventoryGeneralDetails")
 public class InventoryGeneralDetails {
 
@@ -39,14 +37,4 @@ public class InventoryGeneralDetails {
     @Column(name = "Start/initial inventory", nullable = false)
     private Boolean isStartInventory;
 
-
-    public InventoryGeneralDetails(InventoryGeneralDetails otherInventoryGeneralDetails) {
-        this.id = otherInventoryGeneralDetails.id;
-        this.inventoryDate = otherInventoryGeneralDetails.inventoryDate;
-        this.inventoryBusinessName = otherInventoryGeneralDetails.inventoryBusinessName;
-        this.inventoryAuthorsName = otherInventoryGeneralDetails.inventoryAuthorsName;
-        this.inventoryCompanyOwnerOrManager = otherInventoryGeneralDetails.inventoryCompanyOwnerOrManager;
-        this.totalInventory = otherInventoryGeneralDetails.totalInventory;
-        this.isStartInventory = otherInventoryGeneralDetails.isStartInventory;
-    }
 }
