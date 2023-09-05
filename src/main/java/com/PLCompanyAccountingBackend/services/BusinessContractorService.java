@@ -11,9 +11,6 @@ public class BusinessContractorService {
     }
 
     public boolean checkIfContractorExists(Long id) {
-        if (!businessContractorRepository.existsById(id)) {
-            return false;
-        }
-        return true;
+        return businessContractorRepository.existsById(id);
     }
 }

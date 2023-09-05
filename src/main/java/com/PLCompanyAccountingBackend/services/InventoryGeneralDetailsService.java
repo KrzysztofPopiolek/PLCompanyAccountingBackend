@@ -1,7 +1,7 @@
 package com.PLCompanyAccountingBackend.services;
 
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
-import com.PLCompanyAccountingBackend.models.InventoryEntries;
+import com.PLCompanyAccountingBackend.models.InventoryEntry;
 import com.PLCompanyAccountingBackend.models.InventoryGeneralDetails;
 import com.PLCompanyAccountingBackend.repository.InventoryGeneralDetailsRepository;
 import org.springframework.data.domain.Sort;
@@ -33,7 +33,7 @@ public class InventoryGeneralDetailsService {
         return inventoryGeneralDetailsRepository.findAll().isEmpty();
     }
 
-    public void addEntryToGeneralDetails(InventoryEntries inventoryEntry) {
+    public void addEntryToGeneralDetails(InventoryEntry inventoryEntry) {
         InventoryGeneralDetails lastInventoryGeneralDetail = getLastInventoryGeneralDetails();
         BigDecimal totalInventory = lastInventoryGeneralDetail.getTotalInventory();
 

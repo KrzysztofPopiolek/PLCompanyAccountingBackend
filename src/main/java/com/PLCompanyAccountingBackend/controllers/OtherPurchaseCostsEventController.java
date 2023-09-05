@@ -4,6 +4,7 @@ import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.OtherPurchaseCostsEvent;
 import com.PLCompanyAccountingBackend.repository.OtherPurchaseCostsEventRepository;
 import com.PLCompanyAccountingBackend.services.AnnualSummaryService;
+import com.PLCompanyAccountingBackend.services.BusinessContractorService;
 import com.PLCompanyAccountingBackend.services.MonthlySummaryService;
 import com.PLCompanyAccountingBackend.services.OtherPurchaseCostsEventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,18 @@ public class OtherPurchaseCostsEventController {
     private final OtherPurchaseCostsEventService otherPurchaseCostsEventService;
     private final AnnualSummaryService annualSummaryService;
     private final MonthlySummaryService monthlySummaryService;
+    private final BusinessContractorService businessContractorService;
     @Autowired
     private OtherPurchaseCostsEventRepository otherPurchaseCostsEventRepository;
 
     public OtherPurchaseCostsEventController(OtherPurchaseCostsEventService otherPurchaseCostsEventService,
                                              AnnualSummaryService annualSummaryService,
-                                             MonthlySummaryService monthlySummaryService) {
+                                             MonthlySummaryService monthlySummaryService,
+                                             BusinessContractorService businessContractorService) {
         this.otherPurchaseCostsEventService = otherPurchaseCostsEventService;
         this.annualSummaryService = annualSummaryService;
         this.monthlySummaryService = monthlySummaryService;
+        this.businessContractorService = businessContractorService;
     }
 
     @GetMapping("/getAllOtherPurchaseCosts&Event")
@@ -43,7 +47,11 @@ public class OtherPurchaseCostsEventController {
     public OtherPurchaseCostsEvent addOtherPurchaseCostsEvent(@RequestBody OtherPurchaseCostsEvent otherPurchaseCostsEvent) {
         otherPurchaseCostsEvent.setId(0L);
 
-        annualSummaryService.checkContractorTaxYearExists(otherPurchaseCostsEvent);
+        if (!annualSummaryService.taxYearExists(otherPurchaseCostsEvent.getDateEconomicEvent().getYear())) {
+            throw new ResourceNotFoundException("Tax year does not exist");
+        } else if (businessContractorService.checkIfContractorExists(otherPurchaseCostsEvent.getBusinessContractor().getId())) {
+            throw new ResourceNotFoundException("Contractor not found");
+        }
 
         this.annualSummaryService.updateAnnualSummary(otherPurchaseCostsEvent, false);
         this.monthlySummaryService.updateMonthlySummary(otherPurchaseCostsEvent, false);
@@ -68,7 +76,11 @@ public class OtherPurchaseCostsEventController {
 
                     this.annualSummaryService.updateAnnualSummary(otherPurchaseCostsEvent, true);
                     this.monthlySummaryService.updateMonthlySummary(otherPurchaseCostsEvent, true);
-                    annualSummaryService.checkContractorTaxYearExists(newOtherPurchaseCostsEvent);
+                    if (!annualSummaryService.taxYearExists(newOtherPurchaseCostsEvent.getDateEconomicEvent().getYear())) {
+                        throw new ResourceNotFoundException("Tax year does not exist");
+                    } else if (businessContractorService.checkIfContractorExists(newOtherPurchaseCostsEvent.getBusinessContractor().getId())) {
+                        throw new ResourceNotFoundException("Contractor not found");
+                    }
                     this.annualSummaryService.updateAnnualSummary(newOtherPurchaseCostsEvent, false);
                     this.monthlySummaryService.updateMonthlySummary(newOtherPurchaseCostsEvent, false);
 

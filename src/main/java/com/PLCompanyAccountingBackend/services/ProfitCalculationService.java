@@ -15,6 +15,7 @@ public class ProfitCalculationService {
     private final InventoryGeneralDetailsService inventoryGeneralDetailsService;
     private final AnnualSummaryService annualSummaryService;
 
+
     public ProfitCalculationService(ProfitCalculationRepository profitCalculationRepository,
                                     InventoryGeneralDetailsService inventoryGeneralDetailsService,
                                     AnnualSummaryService annualSummaryService) {
@@ -31,7 +32,7 @@ public class ProfitCalculationService {
         return profitCalculationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Searched calculation not found!"));
     }
 
-    public void calculateProfit(InventoryGeneralDetails inventoryGeneralDetails) {
+    public ProfitCalculation calculateProfit(InventoryGeneralDetails inventoryGeneralDetails) {
 
         BigDecimal costOfGettingIncome = new BigDecimal(0);
         ProfitCalculation profitCalculation = new ProfitCalculation();
@@ -47,6 +48,10 @@ public class ProfitCalculationService {
         profitCalculation.setTotalDeductibleCosts(costOfGettingIncome);
         profitCalculation.setTotalProfit(annualSummaryService.getLastAnnualSummary().getTotalRevenue().subtract(costOfGettingIncome));
 
+        return profitCalculation;
+    }
+
+    public void saveProfitCalculation(ProfitCalculation profitCalculation) {
         profitCalculationRepository.save(profitCalculation);
     }
 }

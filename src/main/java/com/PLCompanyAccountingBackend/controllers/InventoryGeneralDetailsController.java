@@ -3,6 +3,7 @@ package com.PLCompanyAccountingBackend.controllers;
 import com.PLCompanyAccountingBackend.exceptions.RequestNotAcceptableException;
 import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.InventoryGeneralDetails;
+import com.PLCompanyAccountingBackend.models.ProfitCalculation;
 import com.PLCompanyAccountingBackend.repository.InventoryGeneralDetailsRepository;
 import com.PLCompanyAccountingBackend.services.InventoryGeneralDetailsService;
 import com.PLCompanyAccountingBackend.services.ProfitCalculationService;
@@ -64,7 +65,8 @@ public class InventoryGeneralDetailsController {
         summaryService.addMonthsAndYearToSummaries(currentInventoryDate);
 
         if (!inventoryGeneralDetails.getIsStartInventory()) {
-            profitCalculationService.calculateProfit(inventoryGeneralDetails);
+            ProfitCalculation profitCalculation = profitCalculationService.calculateProfit(inventoryGeneralDetails);
+            profitCalculationService.saveProfitCalculation(profitCalculation);
         }
 
         inventoryGeneralDetails.setId(0L);

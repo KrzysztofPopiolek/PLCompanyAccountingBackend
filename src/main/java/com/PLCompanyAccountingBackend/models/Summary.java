@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
+@SuperBuilder
 public abstract class Summary {
 
     @Id
@@ -23,8 +25,8 @@ public abstract class Summary {
     @Column(name = "Date", nullable = false)
     private LocalDate date;
 
-    @Column(name = "C7 - Sale goods and services value")
-    private BigDecimal saleGoodsAndServicesValue;
+    @Column(name = "C7 - Sale value")
+    private BigDecimal saleValue;
 
     @Column(name = "C8 - Other income")
     private BigDecimal otherIncome;

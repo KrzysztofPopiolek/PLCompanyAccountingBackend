@@ -27,7 +27,7 @@ public class BusinessContractorController {
     }
 
     @PostMapping("/addBusinessContractor")
-    public BusinessContractor addBusinessContractors(@RequestBody BusinessContractor businessContractors) {
+    public BusinessContractor addBusinessContractor(@RequestBody BusinessContractor businessContractors) {
         businessContractors.setId(0L);
         return businessContractorRepository.save(businessContractors);
     }
@@ -46,8 +46,8 @@ public class BusinessContractorController {
     BusinessContractor editBusinessContractor(@RequestBody BusinessContractor newBusinessContractor, @PathVariable Long id) {
         return businessContractorRepository.findById(id).map(
                 businessContractor -> {
-                    businessContractor.setBusinessContractorsName(newBusinessContractor.getBusinessContractorsName());
-                    businessContractor.setBusinessContractorsAddress(newBusinessContractor.getBusinessContractorsAddress());
+                    businessContractor.setBusinessContractorName(newBusinessContractor.getBusinessContractorName());
+                    businessContractor.setBusinessContractorAddress(newBusinessContractor.getBusinessContractorAddress());
                     return businessContractorRepository.save(businessContractor);
                 }
         ).orElseThrow(() -> new ResourceNotFoundException("Business contractor not found!"));

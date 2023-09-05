@@ -2,10 +2,7 @@ package com.PLCompanyAccountingBackend.models;
 
 import com.PLCompanyAccountingBackend.enums.AccountingMeasureUnits;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -14,8 +11,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "InventoryEntries")
-public class InventoryEntries {
+public class InventoryEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,14 +37,4 @@ public class InventoryEntries {
     @ManyToOne
     @JoinColumn(name = "Inventory_id", nullable = false)
     private InventoryGeneralDetails inventoryGeneralDetails;
-
-    public InventoryEntries(InventoryEntries otherInventoryEntries) {
-        this.id = otherInventoryEntries.id;
-        this.goodsName = otherInventoryEntries.goodsName;
-        this.unitsType = otherInventoryEntries.unitsType;
-        this.amount = otherInventoryEntries.amount;
-        this.pricePerUnit = otherInventoryEntries.pricePerUnit;
-        this.valuation = otherInventoryEntries.valuation;
-        this.inventoryGeneralDetails = otherInventoryEntries.inventoryGeneralDetails;
-    }
 }

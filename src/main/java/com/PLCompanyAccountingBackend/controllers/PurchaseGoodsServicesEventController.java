@@ -4,6 +4,7 @@ import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.PurchaseGoodsServicesEvent;
 import com.PLCompanyAccountingBackend.repository.PurchaseGoodsServicesEventRepository;
 import com.PLCompanyAccountingBackend.services.AnnualSummaryService;
+import com.PLCompanyAccountingBackend.services.BusinessContractorService;
 import com.PLCompanyAccountingBackend.services.MonthlySummaryService;
 import com.PLCompanyAccountingBackend.services.PurchaseGoodsServicesEventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +20,19 @@ public class PurchaseGoodsServicesEventController {
     private final AnnualSummaryService annualSummaryService;
     private final MonthlySummaryService monthlySummaryService;
     private final PurchaseGoodsServicesEventService purchaseGoodsServicesEventService;
+    private final BusinessContractorService businessContractorService;
 
     @Autowired
     private PurchaseGoodsServicesEventRepository purchaseGoodsServicesEventRepository;
 
     public PurchaseGoodsServicesEventController(AnnualSummaryService annualSummaryService,
                                                 MonthlySummaryService monthlySummaryService,
-                                                PurchaseGoodsServicesEventService purchaseGoodsServicesEventService) {
+                                                PurchaseGoodsServicesEventService purchaseGoodsServicesEventService,
+                                                BusinessContractorService businessContractorService) {
         this.annualSummaryService = annualSummaryService;
         this.monthlySummaryService = monthlySummaryService;
         this.purchaseGoodsServicesEventService = purchaseGoodsServicesEventService;
+        this.businessContractorService = businessContractorService;
     }
 
     @GetMapping("/getAllPurchaseGoodsServices")
@@ -44,7 +48,11 @@ public class PurchaseGoodsServicesEventController {
     @PostMapping("/addPurchaseGoodsServices")
     public PurchaseGoodsServicesEvent addPurchaseGoodsServicesEvent(@RequestBody PurchaseGoodsServicesEvent purchaseGoodsServicesEvent) {
         purchaseGoodsServicesEvent.setId(0L);
-        annualSummaryService.checkContractorTaxYearExists(purchaseGoodsServicesEvent);
+        if (!annualSummaryService.taxYearExists(purchaseGoodsServicesEvent.getDateEconomicEvent().getYear())) {
+            throw new ResourceNotFoundException("Tax year does not exist");
+        } else if (businessContractorService.checkIfContractorExists(purchaseGoodsServicesEvent.getBusinessContractor().getId())) {
+            throw new ResourceNotFoundException("Contractor not found");
+        }
 
         this.annualSummaryService.updateAnnualSummary(purchaseGoodsServicesEvent, false);
         this.monthlySummaryService.updateMonthlySummary(purchaseGoodsServicesEvent, false);
@@ -69,7 +77,13 @@ public class PurchaseGoodsServicesEventController {
 
                     this.annualSummaryService.updateAnnualSummary(purchaseGoodsServicesEvent, true);
                     this.monthlySummaryService.updateMonthlySummary(purchaseGoodsServicesEvent, true);
-                    annualSummaryService.checkContractorTaxYearExists(newPurchaseGoodsServicesEvent);
+
+                    if (!annualSummaryService.taxYearExists(newPurchaseGoodsServicesEvent.getDateEconomicEvent().getYear())) {
+                        throw new ResourceNotFoundException("Tax year does not exist");
+                    } else if (businessContractorService.checkIfContractorExists(newPurchaseGoodsServicesEvent.getBusinessContractor().getId())) {
+                        throw new ResourceNotFoundException("Contractor not found");
+                    }
+
                     this.annualSummaryService.updateAnnualSummary(newPurchaseGoodsServicesEvent, false);
                     this.monthlySummaryService.updateMonthlySummary(newPurchaseGoodsServicesEvent, false);
 

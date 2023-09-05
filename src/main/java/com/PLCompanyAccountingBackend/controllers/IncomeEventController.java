@@ -4,6 +4,7 @@ import com.PLCompanyAccountingBackend.exceptions.ResourceNotFoundException;
 import com.PLCompanyAccountingBackend.models.IncomeEvent;
 import com.PLCompanyAccountingBackend.repository.IncomeEventRepository;
 import com.PLCompanyAccountingBackend.services.AnnualSummaryService;
+import com.PLCompanyAccountingBackend.services.BusinessContractorService;
 import com.PLCompanyAccountingBackend.services.IncomeEventService;
 import com.PLCompanyAccountingBackend.services.MonthlySummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +21,18 @@ public class IncomeEventController {
     private final IncomeEventService incomeEventService;
     private final MonthlySummaryService monthlySummaryService;
     private final AnnualSummaryService annualSummaryService;
+    private final BusinessContractorService businessContractorService;
     @Autowired
     private IncomeEventRepository incomeEventRepository;
 
     public IncomeEventController(IncomeEventService incomeEventService,
                                  MonthlySummaryService monthlySummaryService,
-                                 AnnualSummaryService annualSummaryService) {
+                                 AnnualSummaryService annualSummaryService,
+                                 BusinessContractorService businessContractorService) {
         this.incomeEventService = incomeEventService;
         this.monthlySummaryService = monthlySummaryService;
         this.annualSummaryService = annualSummaryService;
+        this.businessContractorService = businessContractorService;
     }
 
     @GetMapping("/getAllIncome&Event")
@@ -45,7 +49,11 @@ public class IncomeEventController {
     public IncomeEvent addIncomeEvent(@RequestBody IncomeEvent incomeEvent) {
 
         incomeEvent.setId(0L);
-        annualSummaryService.checkContractorTaxYearExists(incomeEvent);
+        if (!annualSummaryService.taxYearExists(incomeEvent.getDateEconomicEvent().getYear())) {
+            throw new ResourceNotFoundException("Tax year does not exist");
+        } else if (businessContractorService.checkIfContractorExists(incomeEvent.getBusinessContractor().getId())) {
+            throw new ResourceNotFoundException("Contractor not found");
+        }
 
         BigDecimal saleValue = incomeEvent.getSaleValue() == null ? new BigDecimal(0) : incomeEvent.getSaleValue();
         BigDecimal otherIncome = incomeEvent.getOtherIncome() == null ? new BigDecimal(0) : incomeEvent.getOtherIncome();
@@ -68,7 +76,11 @@ public class IncomeEventController {
     IncomeEvent editIncomeEvent(@RequestBody IncomeEvent newIncomeEvent, @PathVariable Long id) {
         return incomeEventRepository.findById(id).map(
                 incomeEvent -> {
-                    annualSummaryService.checkContractorTaxYearExists(newIncomeEvent);
+                    if (!annualSummaryService.taxYearExists(newIncomeEvent.getDateEconomicEvent().getYear())) {
+                        throw new ResourceNotFoundException("Tax year does not exist");
+                    } else if (businessContractorService.checkIfContractorExists(newIncomeEvent.getBusinessContractor().getId())) {
+                        throw new ResourceNotFoundException("Contractor not found");
+                    }
 
                     this.annualSummaryService.updateAnnualSummary(incomeEvent, true);
                     this.monthlySummaryService.updateMonthlySummary(incomeEvent, true);
