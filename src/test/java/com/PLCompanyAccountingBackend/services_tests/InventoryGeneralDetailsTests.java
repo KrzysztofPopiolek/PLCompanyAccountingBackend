@@ -22,14 +22,13 @@ import static org.mockito.Mockito.*;
 
 public class InventoryGeneralDetailsTests {
 
-    @Mock
-    private InventoryGeneralDetailsRepository inventoryGeneralDetailsRepository;
-
-    private InventoryGeneralDetailsService inventoryGeneralDetailsService;
-
     @Captor
     ArgumentCaptor<InventoryGeneralDetails> inventoryGeneralDetailsArgumentCaptor;
+    @Mock
+    private InventoryGeneralDetailsRepository inventoryGeneralDetailsRepository;
+    private InventoryGeneralDetailsService inventoryGeneralDetailsService;
     private AutoCloseable closeable;
+
     @Before
     public void setup() {
         closeable = MockitoAnnotations.openMocks(this);
@@ -37,7 +36,7 @@ public class InventoryGeneralDetailsTests {
     }
 
     @After
-    public void releaseMocks() throws Exception{
+    public void releaseMocks() throws Exception {
         closeable.close();
     }
 
