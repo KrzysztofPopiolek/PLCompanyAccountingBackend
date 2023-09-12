@@ -46,6 +46,7 @@ public class ProfitCalculationServiceTests {
 
     @Test
     public void calculateProfit_savesCorrectProfitToRepo() {
+        //arrange
         LocalDate mockInventoryDate = LocalDate.of(2022, 1, 1);
         InventoryGeneralDetails mockLatestInventoryGeneralDetails = InventoryGeneralDetails.builder().inventoryDate(mockInventoryDate).totalInventory(BigDecimal.ONE).build();
         InventoryGeneralDetails mockLastInventoryGeneralDetails = InventoryGeneralDetails.builder().totalInventory(BigDecimal.ONE).build();
@@ -60,15 +61,13 @@ public class ProfitCalculationServiceTests {
         doReturn(mockLastInventoryGeneralDetails).when(inventoryGeneralDetailsService).getLastInventoryGeneralDetails();
         doReturn(mockLastAnnualSummary).when(annualSummaryService).getLastAnnualSummary();
 
+        //act
+        ProfitCalculation profitCalculation = profitCalculationService.calculateProfit(mockLatestInventoryGeneralDetails);
+        //assert
         ProfitCalculation expectedProfitCalculation = ProfitCalculation.builder().build();
-
         expectedProfitCalculation.setDateProfitCalculation(mockInventoryDate);
         expectedProfitCalculation.setTotalDeductibleCosts(BigDecimal.TWO);
         expectedProfitCalculation.setTotalProfit(new BigDecimal(8));
-
-        ProfitCalculation profitCalculation = profitCalculationService.calculateProfit(mockLatestInventoryGeneralDetails);
-
         assertThat(profitCalculation).usingRecursiveComparison().isEqualTo(expectedProfitCalculation);
-
     }
 }

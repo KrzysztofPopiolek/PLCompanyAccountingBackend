@@ -12,7 +12,6 @@ public class InventoryEntriesService {
 
     public InventoryEntriesService(InventoryEntriesRepository inventoryEntriesRepository) {
         this.inventoryEntriesRepository = inventoryEntriesRepository;
-
     }
 
     public List<InventoryEntry> getAllInventoryEntries() {

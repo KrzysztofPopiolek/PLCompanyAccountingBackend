@@ -24,11 +24,9 @@ import static org.mockito.Mockito.doReturn;
 
 public class IncomeEventServiceTests {
 
-
     private IncomeEventService incomeEventService;
     @Mock
     private IncomeEventRepository incomeEventRepository;
-
     private AutoCloseable closeable;
 
     @Before
@@ -44,30 +42,46 @@ public class IncomeEventServiceTests {
 
     @Test
     public void getById_ValidId_validIncomeEvent() {
+        //arrange
         IncomeEvent mockIncomeEvent = IncomeEvent.builder().build();
         doReturn(Optional.of(mockIncomeEvent)).when(incomeEventRepository).findById(1L);
+
+        //act
         IncomeEvent incomeEvent = incomeEventService.getIncomeEvent_ById(1L);
+
+        //assert
         Assertions.assertEquals(mockIncomeEvent, incomeEvent);
     }
 
     @Test
     public void getById_invalidId_throwsException() {
+        //arrange
+
+        //act
         Exception exception = Assertions.assertThrows(ResourceNotFoundException.class, () ->
                 incomeEventService.getIncomeEvent_ById(1L));
+
+        //assert
         Assertions.assertEquals("Searched item not found!", exception.getMessage());
     }
 
     @Test
     public void getAllSortedByDate_valid_incomeEventsList() {
+        //arrange
         List<IncomeEvent> mockIncomeEvent = new ArrayList<>(1);
         mockIncomeEvent.add(IncomeEvent.builder().build());
         doReturn(mockIncomeEvent).when(incomeEventRepository).findAll(Sort.by(Sort.Direction.ASC, "dateEconomicEvent"));
+
+        //act
         List<IncomeEvent> allIncomeEvent = incomeEventService.getAllIncomeEvent_SortedByDate();
+
+        //assert
         Assertions.assertEquals(mockIncomeEvent, allIncomeEvent);
     }
 
     @Test
     public void createEntryForSummary_deleteModeTrue_returnsSummaryObject() {
+        //arrange
         Boolean inDeleteMode = true;
 
         IncomeEvent mockIncomeEvent = IncomeEvent.builder()
@@ -82,19 +96,22 @@ public class IncomeEventServiceTests {
                 .totalRevenue(BigDecimal.TWO)
                 .build();
 
+        //act
+        Summary summary = incomeEventService.createEntryForSummary(mockIncomeEvent, mockSummary, inDeleteMode);
+
+        //assert
         AnnualSummary expectedSummary = AnnualSummary.builder()
                 .saleValue(BigDecimal.ZERO)
                 .otherIncome(BigDecimal.ZERO)
                 .totalRevenue(BigDecimal.ZERO)
                 .build();
 
-        Summary summary = incomeEventService.createEntryForSummary(mockIncomeEvent, mockSummary, inDeleteMode);
-
         assertThat(summary).usingRecursiveComparison().isEqualTo(expectedSummary);
     }
 
     @Test
     public void createEntryForSummary_deleteModeFalse_returnsSummaryObject() {
+        //arrange
         Boolean inDeleteMode = false;
 
         IncomeEvent mockIncomeEvent = IncomeEvent.builder()
@@ -109,13 +126,14 @@ public class IncomeEventServiceTests {
                 .totalRevenue(BigDecimal.TWO)
                 .build();
 
+        //act
+        Summary summary = incomeEventService.createEntryForSummary(mockIncomeEvent, mockSummary, inDeleteMode);
+        //assert
         AnnualSummary expectedSummary = AnnualSummary.builder()
                 .saleValue(BigDecimal.TWO)
                 .otherIncome(BigDecimal.TWO)
                 .totalRevenue(new BigDecimal(4))
                 .build();
-
-        Summary summary = incomeEventService.createEntryForSummary(mockIncomeEvent, mockSummary, inDeleteMode);
 
         assertThat(summary).usingRecursiveComparison().isEqualTo(expectedSummary);
     }
